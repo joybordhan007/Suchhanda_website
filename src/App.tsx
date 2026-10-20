@@ -4,6 +4,7 @@ import Blog from "./pages/Blog"
 import BlogDetails from "./pages/BlogDetails"
 import Contact from "./pages/Contact"
 import Home from "./pages/Home"
+import Reviews from "./pages/Reviews"
 import ServiceDetails from "./pages/ServiceDetails"
 import Work from "./pages/Work"
 
@@ -17,6 +18,7 @@ const routes = {
   "/blog": { component: Blog, height: 3287 },
   "/blog/article": { component: BlogDetails, height: 4259 },
   "/contact": { component: Contact, height: 3099 },
+  "/reviews": { component: Reviews, height: 2200 },
 } as const
 
 type RoutePath = keyof typeof routes
@@ -33,42 +35,94 @@ const linkMap: Record<string, RoutePath> = {
   blog: "/blog",
   "contact me": "/contact",
   "contact us": "/contact",
+  "explore me": "/work",
   "let's work together": "/contact",
   "let’s work together": "/contact",
   "read more": "/blog/article",
+  "view all": "/work",
+  "meta ads management": "/service",
+  "google ads management": "/service",
+  "pixel & tag manager": "/service",
+  "conversion rate optimization": "/service",
+  "ads audit & optimization": "/service",
+  "free consultation": "/contact",
 }
 
 export default function App() {
   const [path, setPath] = useState<RoutePath>(getRoute)
-  const [viewportWidth, setViewportWidth] = useState(window.innerWidth)
+  const [viewportWidth, setViewportWidth] = useState(document.documentElement.clientWidth)
   const [serviceOpen, setServiceOpen] = useState(false)
+  const [contentHeight, setContentHeight] = useState<number>(routes[getRoute()].height)
+  const route = routes[path]
 
   useEffect(() => {
-    const resize = () => setViewportWidth(window.innerWidth)
+    const resize = () => setViewportWidth(document.documentElement.clientWidth)
     const popstate = () => {
       setPath(getRoute())
       setServiceOpen(false)
       window.scrollTo(0, 0)
     }
+    const viewport = document.querySelector(".design-viewport")
+    const resizeObserver = new ResizeObserver(resize)
+    if (viewport) resizeObserver.observe(viewport)
     window.addEventListener("resize", resize)
     window.addEventListener("popstate", popstate)
     return () => {
+      resizeObserver.disconnect()
       window.removeEventListener("resize", resize)
       window.removeEventListener("popstate", popstate)
     }
   }, [])
 
+  useEffect(() => {
+    setContentHeight(route.height)
+    if (path !== "/reviews") return
+
+    const page = document.querySelector<HTMLElement>(".design-canvas > div")
+    if (!page) return
+
+    const resizeObserver = new ResizeObserver(() => {
+      setContentHeight(Math.max(route.height, page.scrollHeight))
+    })
+    resizeObserver.observe(page)
+    setContentHeight(Math.max(route.height, page.scrollHeight))
+    return () => resizeObserver.disconnect()
+  }, [path, route.height])
+
+  useEffect(() => {
+    const sections = document.querySelectorAll<HTMLElement>(".design-canvas > div > *")
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.setAttribute("data-scroll-visible", "true")
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.04 },
+    )
+
+    sections.forEach((section) => {
+      section.setAttribute("data-scroll-reveal", "true")
+      observer.observe(section)
+    })
+
+    return () => observer.disconnect()
+  }, [path])
+
   const scale = Math.min(1, viewportWidth / CANVAS_WIDTH)
-  const route = routes[path]
+  const canvasOffsetX = Math.max(0, (viewportWidth - CANVAS_WIDTH) / 2)
   const Page = route.component
   const canvasStyle = useMemo(
     () => ({
       width: CANVAS_WIDTH,
-      height: route.height,
+      height: contentHeight,
+      left: canvasOffsetX,
       transform: `scale(${scale})`,
       transformOrigin: "top left",
     }),
-    [route.height, scale],
+    [canvasOffsetX, contentHeight, scale],
   )
 
   const navigate = (next: RoutePath) => {
@@ -81,15 +135,20 @@ export default function App() {
   }
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const element = (event.target as HTMLElement).closest("a, button, [data-name='CTA']")
+    const target = event.target
+    if (!(target instanceof HTMLElement)) return
+    const element = target.closest("a, button, [data-name='CTA'], [data-path]")
     if (!element) return
     const label = (element.textContent || "").trim().toLowerCase()
-    if (label === "service") {
+    if (label.startsWith("service")) {
       event.preventDefault()
       setServiceOpen((open) => !open)
       return
     }
-    const direct = linkMap[label]
+    const requestedPath = element.getAttribute("data-path")
+    const direct = requestedPath && requestedPath in routes
+      ? (requestedPath as RoutePath)
+      : linkMap[label]
     const partial = Object.entries(linkMap).find(([text]) => label.includes(text))?.[1]
     if (direct || partial) {
       event.preventDefault()
@@ -98,30 +157,72 @@ export default function App() {
   }
 
   return (
-    <main
-      className="design-viewport"
-      style={{ height: route.height * scale }}
-      onClick={handleClick}
-    >
-      <div className="design-canvas" style={canvasStyle}>
-        <Page />
-        {serviceOpen && (
-          <nav className="service-menu" aria-label="Services">
-            {[
-              "Meta Ads Management",
-              "Google Ads Management",
-              "TikTok & YouTube Ads",
-              "Conversion Rate Optimization",
-              "Ads Audit & Optimization",
-            ].map((item) => (
-              <button key={item} onClick={() => navigate("/service")}>
-                <span>{item}</span>
-                <span aria-hidden="true">›</span>
-              </button>
-            ))}
-          </nav>
-        )}
-      </div>
-    </main>
+    <div className="app-shell" onClick={handleClick}>
+      <main
+        className="design-viewport"
+        style={{ height: contentHeight * scale }}
+      >
+        <div className="design-canvas" style={canvasStyle}>
+          <Page />
+        </div>
+      </main>
+      <nav
+        aria-label="Main navigation"
+        className="site-navbar"
+        style={{
+          left: viewportWidth / 2,
+          transform: `scale(${scale})`,
+          top: 31 * scale,
+        }}
+      >
+        <a aria-label="Suchhanda home" className="site-logo" data-path="/" href="/">
+          <img alt="Suchhanda" src="/assets/4a673.svg" />
+        </a>
+        <div className="site-nav-links">
+          <a aria-current={path === "/" ? "page" : undefined} data-path="/" href="/">
+            Home
+          </a>
+          <div className="site-service-navigation">
+            <button
+              aria-expanded={serviceOpen}
+              type="button"
+            >
+              Service
+              <img alt="" aria-hidden="true" className="service-chevron" src="/assets/05e02.svg" />
+            </button>
+            {serviceOpen && (
+              <div className="service-menu">
+                {[
+                  "Meta Ads Management",
+                  "Google Ads Management",
+                  "Pixel & Tag Manager",
+                  "Conversion Rate Optimization",
+                  "Ads Audit & Optimization",
+                ].map((item) => (
+                  <a data-path="/service" href="/service" key={item}>
+                    {item}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+          <a aria-current={path === "/work" ? "page" : undefined} data-path="/work" href="/work">
+            Work
+          </a>
+          <a aria-current={path === "/about" ? "page" : undefined} data-path="/about" href="/about">
+            About Me
+          </a>
+          <a aria-current={path === "/blog" ? "page" : undefined} data-path="/blog" href="/blog">
+            Blog
+          </a>
+          <a aria-current={path === "/reviews" ? "page" : undefined} data-path="/reviews" href="/reviews">
+            Reviews
+          </a>
+        </div>
+        <a className="site-contact-link" data-path="/contact" href="/contact">
+          Contact Me
+        </a>
+      </nav>
+    </div>
   )
 }

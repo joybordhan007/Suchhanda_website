@@ -77,7 +77,7 @@ export default function BlogDetails() {
             <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] relative shrink-0 text-[20px] whitespace-nowrap" data-node-id="1:1887">
               Virtual Try-Ons and AR Experiences
             </p>
-            <ol className="block font-['Inter:Regular'] font-normal leading-[0] list-decimal min-w-full relative shrink-0 text-[18px] w-[min-content]" data-node-id="1:1888" start="1">
+            <ol className="block font-['Inter:Regular'] font-normal leading-[0] list-decimal min-w-full relative shrink-0 text-[18px] w-[min-content]" data-node-id="1:1888" start={1}>
               <li className="mb-0 ms-[27px]">
                 <span className="leading-[1.2]">AR technology transforms online beauty shopping.</span>
               </li>
@@ -119,7 +119,7 @@ export default function BlogDetails() {
             <p className="leading-[1.5]">to discuss your vision.</p>
           </div>
         </div>
-        <div className="border border-solid border-white content-stretch flex gap-[4px] items-center justify-center p-[16px] relative rounded-[999px] shrink-0" data-node-id="1:1898" data-name="Component 2">
+        <div className="border border-solid border-white content-stretch flex gap-[4px] items-center justify-center p-[16px] relative rounded-[999px] shrink-0" data-name="CTA" data-path="/contact">
           <p className="[word-break:break-word] font-['Anuphan:Medium'] font-medium leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[0.64px] uppercase whitespace-nowrap" data-node-id="1:1899">{`Let's work Together`}</p>
           <div className="relative shrink-0 size-[20px]" data-node-id="1:1900" data-name="arrow-forward">
             <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForward} />
@@ -127,7 +127,7 @@ export default function BlogDetails() {
         </div>
       </div>
       <div className="-translate-x-1/2 absolute h-[495px] left-1/2 top-[3764px] w-[1920px]" data-node-id="1:1901" data-name="Frame">
-        <div className="absolute bg-[#f3f3f3] h-[495px] left-0 top-0 w-[1913px]" data-node-id="1:1902" />
+        <div className="absolute bg-[#f3f3f3] h-[495px] left-0 top-0 w-[1920px]" data-node-id="1:1902" />
         <div className="-translate-x-1/2 absolute content-stretch flex items-start justify-between left-[calc(50%-2.5px)] top-[153px] w-[1551px]" data-node-id="1:1903" data-name="Frame">
           <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0" data-node-id="1:1904" data-name="Frame">
             <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[429px]" data-node-id="1:1905" data-name="Frame">

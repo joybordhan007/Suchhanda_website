@@ -34,7 +34,7 @@ export default function ContactMe() {
         </div>
       </div>
       <div className="-translate-x-1/2 absolute h-[495px] left-1/2 top-[2604px] w-[1920px]" data-node-id="1:2030" data-name="Frame">
-        <div className="absolute bg-[#f3f3f3] h-[495px] left-0 top-0 w-[1913px]" data-node-id="1:2031" />
+        <div className="absolute bg-[#f3f3f3] h-[495px] left-0 top-0 w-[1920px]" data-node-id="1:2031" />
         <div className="-translate-x-1/2 absolute content-stretch flex items-start justify-between left-[calc(50%-2.5px)] top-[153px] w-[1551px]" data-node-id="1:2032" data-name="Frame">
           <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0" data-node-id="1:2033" data-name="Frame">
             <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[429px]" data-node-id="1:2034" data-name="Frame">

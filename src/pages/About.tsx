@@ -1,3 +1,5 @@
+import Stats from "../components/Stats"
+
 const assetPathPrefix = "/assets";
 const imgRectangle7466 = `${assetPathPrefix}/0be7f.png`;
 const imgImage1 = `${assetPathPrefix}/1b092.png`;
@@ -53,40 +55,7 @@ export default function AboutMe() {
           </div>
         </div>
       </div>
-      <div className="-translate-x-1/2 [word-break:break-word] absolute content-stretch flex gap-[60px] items-center leading-[0] left-1/2 text-black top-[768px]" data-node-id="1:1414" data-name="Frame">
-        <div className="bg-[#f0f0f0] content-stretch flex flex-col gap-[10px] items-center justify-center px-[78px] py-[10px] relative rounded-[5px] shrink-0 w-[345px]" data-node-id="1:1415" data-name="Frame">
-          <div className="flex flex-col font-['Noto_Sans:Bold'] font-bold justify-center relative shrink-0 text-[48px] text-center w-full" data-node-id="1:1416" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-            <p className="leading-[1.2]">3 +</p>
-          </div>
-          <div className="flex flex-col font-['Aileron:SemiBold'] justify-center not-italic relative shrink-0 text-[24px] w-full" data-node-id="1:1417">
-            <p className="leading-[1.2]">Years Experience</p>
-          </div>
-        </div>
-        <div className="bg-[#f0f0f0] content-stretch flex flex-col gap-[10px] items-center justify-center px-[78px] py-[10px] relative rounded-[5px] shrink-0 w-[345px]" data-node-id="1:1418" data-name="Frame">
-          <div className="flex flex-col font-['Noto_Sans:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[48px] text-center w-[min-content]" data-node-id="1:1419" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-            <p className="leading-[1.2]">500 +</p>
-          </div>
-          <div className="flex flex-col font-['Aileron:SemiBold'] justify-center not-italic relative shrink-0 text-[24px] whitespace-nowrap" data-node-id="1:1420">
-            <p className="leading-[1.2]">Project Completed</p>
-          </div>
-        </div>
-        <div className="bg-[#f0f0f0] content-stretch flex flex-col gap-[10px] items-center justify-center px-[78px] py-[10px] relative rounded-[5px] shrink-0 w-[345px]" data-node-id="1:1421" data-name="Frame">
-          <div className="flex flex-col font-['Noto_Sans:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[48px] text-center w-[min-content]" data-node-id="1:1422" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-            <p className="leading-[1.2]">2025</p>
-          </div>
-          <div className="flex flex-col font-['Aileron:SemiBold'] justify-center not-italic relative shrink-0 text-[24px] whitespace-nowrap" data-node-id="1:1423">
-            <p className="leading-[1.2]">Best Marketer Award</p>
-          </div>
-        </div>
-        <div className="bg-[#f0f0f0] content-stretch flex flex-col gap-[10px] items-center justify-center px-[78px] py-[10px] relative rounded-[5px] shrink-0 w-[345px]" data-node-id="1:1424" data-name="Frame">
-          <div className="flex flex-col font-['Noto_Sans:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[48px] text-center w-[min-content]" data-node-id="1:1425" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-            <p className="leading-[1.2]">100+</p>
-          </div>
-          <div className="flex flex-col font-['Aileron:SemiBold'] justify-center not-italic relative shrink-0 text-[24px] whitespace-nowrap" data-node-id="1:1426">
-            <p className="leading-[1.2]">Dedicated Service</p>
-          </div>
-        </div>
-      </div>
+      <Stats className="-translate-x-1/2 absolute left-1/2 top-[768px]" />
       <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[3086.34px] w-[1560px]" data-node-id="1:1427" data-name="Frame">
         <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-center leading-[0] not-italic relative shrink-0 text-center w-full" data-node-id="1:1428" data-name="Frame">
           <div className="flex flex-col font-['Inter:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[40px] text-white w-[min-content]" data-node-id="1:1429">
@@ -100,7 +69,7 @@ export default function AboutMe() {
             <p className="leading-[1.5]">to discuss your vision.</p>
           </div>
         </div>
-        <div className="border border-solid border-white content-stretch flex gap-[4px] items-center justify-center p-[16px] relative rounded-[999px] shrink-0" data-node-id="1:1431" data-name="Component 2">
+        <div className="border border-solid border-white content-stretch flex gap-[4px] items-center justify-center p-[16px] relative rounded-[999px] shrink-0" data-name="CTA" data-path="/contact">
           <p className="[word-break:break-word] font-['Anuphan:Medium'] font-medium leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[0.64px] uppercase whitespace-nowrap" data-node-id="1:1432">{`Let's work Together`}</p>
           <div className="relative shrink-0 size-[20px]" data-node-id="1:1433" data-name="arrow-forward">
             <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForward} />
@@ -108,7 +77,7 @@ export default function AboutMe() {
         </div>
       </div>
       <div className="-translate-x-1/2 absolute h-[495px] left-1/2 top-[3564.34px] w-[1920px]" data-node-id="1:1434" data-name="Frame">
-        <div className="absolute bg-[#f3f3f3] h-[495px] left-0 top-0 w-[1913px]" data-node-id="1:1435" />
+        <div className="absolute bg-[#f3f3f3] h-[495px] left-0 top-0 w-[1920px]" data-node-id="1:1435" />
         <div className="-translate-x-1/2 absolute content-stretch flex items-start justify-between left-[calc(50%-2.5px)] top-[153px] w-[1551px]" data-node-id="1:1436" data-name="Frame">
           <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0" data-node-id="1:1437" data-name="Frame">
             <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[429px]" data-node-id="1:1438" data-name="Frame">
