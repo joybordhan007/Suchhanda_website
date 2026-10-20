@@ -22,8 +22,6 @@ const imgImage = `${assetPathPrefix}/3c9a6.png`;
 const imgR32 = `${assetPathPrefix}/bbc34.png`;
 const imgWorkCard1 = `${assetPathPrefix}/cd2eb.png`;
 const imgWorkCard2 = `${assetPathPrefix}/4492d.png`;
-const imgWorkCard3 = `${assetPathPrefix}/29777.png`;
-const imgWorkCard4 = `${assetPathPrefix}/30d72.png`;
 const imgMeta = `${assetPathPrefix}/5ba1b.svg`;
 const imgArrowForward = `${assetPathPrefix}/16a89.svg`;
 const imgGroup6 = `${assetPathPrefix}/456b1.svg`;
@@ -46,7 +44,7 @@ type FrameProps = {
 
 function Frame({ className, property1 = "Default" }: FrameProps) {
   return (
-    <div className={className || "h-[40px] overflow-clip relative w-[1560px]"} data-node-id="1:6">
+    <div className={className || "h-[40px] overflow-clip relative w-[1280px]"} data-node-id="1:6">
       <div className="absolute h-[40px] left-0 overflow-clip top-0 w-[102px]" data-node-id="1:7" data-name="Nagad logo">
         <div className="absolute contents inset-[0_5.9%_0_4.31%]" data-node-id="1:8" data-name="g1438">
           <div className="absolute inset-[0_5.9%_0_4.31%]" data-node-id="1:9" data-name="g1406">
@@ -147,7 +145,7 @@ export default function Home() {
   return (
     <div className="bg-[#fefefe] relative size-full" data-node-id="1:347" data-name="Home">
       <div className="absolute h-[920px] left-0 overflow-clip top-0 w-[1920px]" data-node-id="1:348" data-name="Frame">
-        <div className="absolute content-stretch flex flex-col gap-[64px] items-start left-[204px] top-[288px] w-[906px]" data-node-id="1:349" data-name="Frame">
+        <div className="absolute content-stretch flex flex-col gap-[64px] items-start left-[320px] top-[288px] w-[700px]" data-node-id="1:349" data-name="Frame">
           <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-start leading-[0] relative shrink-0 w-full" data-node-id="1:350" data-name="Frame">
             <ul className="block font-['Inter:Regular'] font-normal not-italic relative shrink-0 text-[18px] text-black uppercase w-full" data-node-id="1:351">
               <li className="list-disc ms-[27px]">
@@ -155,16 +153,15 @@ export default function Home() {
               </li>
             </ul>
             <div className="content-stretch flex flex-col gap-[32px] items-start relative shrink-0 text-[#191919] w-full whitespace-pre-wrap" data-node-id="1:352" data-name="Frame">
-              <div className="font-['Noto_Sans:Bold'] font-bold relative shrink-0 text-[0px] w-[768px]" data-node-id="1:353" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
+              <div className="font-['Noto_Sans:Bold'] font-bold relative shrink-0 text-[0px] w-[700px]" data-node-id="1:353" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
                 <p className="font-['Noto_Serif:Bold'] leading-[1.2] mb-0 text-[64px]" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>{`High-Converting `}</p>
                 <p className="font-['Noto_Serif:Bold'] text-[64px]">
                   <span className="leading-[1.2] text-[#c7994b]" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>{`Meta & Google`}</span>
                   <span className="leading-[1.2]" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>{` Ads`}</span>
                 </p>
               </div>
-              <div className="font-['Noto_Sans:Regular'] font-normal min-w-full relative shrink-0 text-[24px] w-[min-content]" data-node-id="1:354" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-                <p className="leading-[1.4] mb-0">{`Helping brands connect with the right audience and achieve meaningful growth `}</p>
-                <p className="leading-[1.4]">through high-converting ads and data-driven marketing strategies</p>
+              <div className="font-['Noto_Sans:Regular'] font-normal relative shrink-0 text-[20px] w-full whitespace-nowrap" data-node-id="1:354" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
+                <p className="leading-[1.4]">Helping brands grow through high-converting ads and data-driven marketing.</p>
               </div>
             </div>
           </div>
@@ -188,8 +185,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <Stats className="absolute left-[180px] top-[980px]" />
-      <div className="absolute content-stretch flex flex-col gap-[56px] items-start left-[180px] top-[1297px] w-[1560px]" data-node-id="1:376" data-name="Frame">
+      <Stats className="absolute left-[320px] top-[980px]" />
+      <div className="absolute content-stretch flex flex-col gap-[56px] items-start left-[320px] top-[1297px] w-[1280px]" data-node-id="1:376" data-name="Frame">
         <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-full" data-node-id="1:377" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
           <p>
             <span className="leading-[1.2]">{`End-to-End Digital `}</span>
@@ -351,7 +348,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="absolute content-stretch flex flex-col gap-[56px] items-center left-[180px] top-[2184px] w-[1560px]" data-node-id="1:447" data-name="Frame">
+      <div className="absolute content-stretch flex flex-col gap-[56px] items-center left-[320px] top-[2184px] w-[1280px]" data-node-id="1:447" data-name="Frame">
         <div className="content-stretch flex flex-col gap-[56px] items-start relative shrink-0 w-full" data-node-id="1:448" data-name="Frame">
           <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-full" data-node-id="1:449" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
             <p>
@@ -367,14 +364,6 @@ export default function Home() {
               <img alt="" src={imgWorkCard2} />
             </a>
           </div>
-          <div className="content-stretch flex gap-[24px] items-start relative shrink-0 w-full" data-node-id="1:453" data-name="Frame">
-            <a aria-label="View Meta Ads campaign results" className="home-work-card" data-path="/work#work-card-3" href="/work#work-card-3">
-              <img alt="" src={imgWorkCard3} />
-            </a>
-            <a aria-label="View Google Ads campaign results" className="home-work-card" data-path="/work#work-card-4" href="/work#work-card-4">
-              <img alt="" src={imgWorkCard4} />
-            </a>
-          </div>
         </div>
         <div className="bg-[#091e39] content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-name="CTA" data-path="/work">
           <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[16px] text-white whitespace-nowrap" data-node-id="1:457">
@@ -382,18 +371,18 @@ export default function Home() {
           </p>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-start left-1/2 top-[3466px] w-[1560px]" data-node-id="1:458" data-name="Frame">
-        <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-[1560px]" data-node-id="1:459" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-start left-1/2 top-[3466px] w-[1280px]" data-node-id="1:458" data-name="Frame">
+        <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-[1280px]" data-node-id="1:459" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
           <p>
             <span className="leading-[1.2]">{`Trusted by `}</span>
             <span className="leading-[1.2] text-[#c7994b]">Businesses of all sizes</span>
           </p>
         </div>
-        <TrustedLogos className="h-[40px] shrink-0 w-[1560px]" />
+        <TrustedLogos className="h-[40px] shrink-0 w-[1280px]" />
       </div>
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[40px] items-center justify-center left-1/2 top-[3720px] w-[1560px]" data-node-id="1:461" data-name="Frame">
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[40px] items-center justify-center left-1/2 top-[3720px] w-[1280px]" data-node-id="1:461" data-name="Frame">
         <div className="content-stretch flex flex-col gap-[56px] items-start relative shrink-0 w-full" data-node-id="1:462" data-name="Frame">
-          <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-[1560px]" data-node-id="1:463" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
+          <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-[1280px]" data-node-id="1:463" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
             <p>
               <span className="leading-[1.2]">{`Trusted by `}</span>
               <span className="leading-[1.2] text-[#c7994b]">Businesses Proven by Results</span>
@@ -411,11 +400,8 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <a className="reviews-view-all" data-path="/reviews" href="/reviews">
-          View All Reviews
-        </a>
       </div>
-      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[4419.11px] w-[1560px]" data-node-id="1:473" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[4419.11px] w-[1280px]" data-node-id="1:473" data-name="Frame">
         <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-center leading-[0] not-italic relative shrink-0 text-center w-full" data-node-id="1:474" data-name="Frame">
           <div className="flex flex-col font-['Inter:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[40px] text-white w-[min-content]" data-node-id="1:475">
             <p>
@@ -436,7 +422,7 @@ export default function Home() {
         </div>
       </div>
       <Footer top={4897.11} />
-      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1560px]" data-node-id="1:562" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1280px]" data-node-id="1:562" data-name="Frame">
         <div className="h-[40px] relative shrink-0 w-[197px]" data-node-id="1:563" data-name="Text Logo 1">
           <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTextLogo2} />
         </div>

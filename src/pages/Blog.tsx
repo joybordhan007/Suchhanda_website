@@ -35,7 +35,7 @@ export default function Blog() {
           </p>
         </div>
       </div>
-      <a className="-translate-x-1/2 absolute content-stretch cursor-pointer flex flex-col gap-[56px] items-end left-1/2 top-[585px] w-[1560px]" data-node-id="1:1588" data-name="Frame" data-path="/blog/article" href="/blog/article">
+      <a className="-translate-x-1/2 absolute content-stretch cursor-pointer flex flex-col gap-[56px] items-end left-1/2 top-[585px] w-[1280px]" data-node-id="1:1588" data-name="Frame" data-path="/blog/article" href="/blog/article">
         <div className="content-stretch flex gap-[24px] items-center relative shrink-0 w-full" data-node-id="1:1589" data-name="Frame">
           <div className="bg-white content-stretch drop-shadow-[0px_2px_2px_rgba(0,0,0,0.1)] flex flex-col gap-[24px] items-center relative rounded-[8px] shrink-0 w-[504px]" data-node-id="1:1590" data-name="Component 45">
             <div className="h-[300px] relative rounded-tl-[8px] rounded-tr-[8px] shrink-0 w-[504px]" data-node-id="1:1591" data-name="Image">
@@ -394,7 +394,7 @@ export default function Blog() {
           </div>
         </div>
       </a>
-      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[2314px] w-[1560px]" data-node-id="1:1736" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[2314px] w-[1280px]" data-node-id="1:1736" data-name="Frame">
         <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-center leading-[0] not-italic relative shrink-0 text-center w-full" data-node-id="1:1737" data-name="Frame">
           <div className="flex flex-col font-['Inter:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[40px] text-white w-[min-content]" data-node-id="1:1738">
             <p>
@@ -415,7 +415,7 @@ export default function Blog() {
         </div>
       </div>
       <Footer top={2792} />
-      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1560px]" data-node-id="1:1825" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1280px]" data-node-id="1:1825" data-name="Frame">
         <div className="h-[40px] relative shrink-0 w-[197px]" data-node-id="1:1826" data-name="Text Logo 1">
           <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTextLogo2} />
         </div>

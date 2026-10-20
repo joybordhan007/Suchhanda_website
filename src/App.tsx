@@ -5,7 +5,6 @@ import BlogDetails from "./pages/BlogDetails"
 import Contact from "./pages/Contact"
 import Home from "./pages/Home"
 import PrivacyPolicy from "./pages/PrivacyPolicy"
-import Reviews from "./pages/Reviews"
 import ServiceDetails from "./pages/ServiceDetails"
 import TermsOfService from "./pages/TermsOfService"
 import Work from "./pages/Work"
@@ -20,7 +19,6 @@ const routes = {
   "/blog": { component: Blog, height: 3287 },
   "/blog/article": { component: BlogDetails, height: 4259 },
   "/contact": { component: Contact, height: 3099 },
-  "/reviews": { component: Reviews, height: 1200 },
   "/privacy-policy": { component: PrivacyPolicy, height: 2400 },
   "/terms-of-service": { component: TermsOfService, height: 2400 },
 } as const
@@ -37,7 +35,6 @@ const linkMap: Record<string, RoutePath> = {
   work: "/work",
   "about me": "/about",
   blog: "/blog",
-  reviews: "/reviews",
   "contact me": "/contact",
   "contact us": "/contact",
   "privacy policy": "/privacy-policy",
@@ -66,9 +63,17 @@ export default function App() {
   useEffect(() => {
     const resize = () => setViewportWidth(document.documentElement.clientWidth)
     const popstate = () => {
-      setPath(getRoute())
+      const nextPath = getRoute()
+      if (window.location.pathname !== nextPath) {
+        window.history.replaceState({}, "", nextPath)
+      }
+      setPath(nextPath)
       setServiceOpen(false)
       window.scrollTo(0, 0)
+    }
+    const currentPath = window.location.pathname.replace(/\/+$/, "") || "/"
+    if (!(currentPath in routes)) {
+      window.history.replaceState({}, "", "/")
     }
     const viewport = document.querySelector(".design-viewport")
     const resizeObserver = new ResizeObserver(resize)
@@ -84,17 +89,6 @@ export default function App() {
 
   useEffect(() => {
     setContentHeight(route.height)
-    if (path !== "/reviews") return
-
-    const page = document.querySelector<HTMLElement>(".design-canvas > div")
-    if (!page) return
-
-    const resizeObserver = new ResizeObserver(() => {
-      setContentHeight(Math.max(route.height, page.scrollHeight))
-    })
-    resizeObserver.observe(page)
-    setContentHeight(Math.max(route.height, page.scrollHeight))
-    return () => resizeObserver.disconnect()
   }, [path, route.height])
 
   useEffect(() => {
@@ -238,9 +232,6 @@ export default function App() {
           </a>
           <a aria-current={path === "/blog" ? "page" : undefined} data-path="/blog" href="/blog">
             Blog
-          </a>
-          <a aria-current={path === "/reviews" ? "page" : undefined} data-path="/reviews" href="/reviews">
-            Reviews
           </a>
         </div>
         <a className="site-contact-link" data-path="/contact" href="/contact">

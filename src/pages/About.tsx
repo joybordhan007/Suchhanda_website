@@ -57,7 +57,7 @@ export default function AboutMe() {
         </div>
       </div>
       <Stats className="-translate-x-1/2 absolute left-1/2 top-[768px]" />
-      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[3086.34px] w-[1560px]" data-node-id="1:1427" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[3086.34px] w-[1280px]" data-node-id="1:1427" data-name="Frame">
         <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-center leading-[0] not-italic relative shrink-0 text-center w-full" data-node-id="1:1428" data-name="Frame">
           <div className="flex flex-col font-['Inter:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[40px] text-white w-[min-content]" data-node-id="1:1429">
             <p>
@@ -99,7 +99,7 @@ export default function AboutMe() {
           </div>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-center left-1/2 top-[1823px] w-[1560px]" data-node-id="1:1529" data-name="Frame">
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-center left-1/2 top-[1823px] w-[1280px]" data-node-id="1:1529" data-name="Frame">
         <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] whitespace-nowrap" data-node-id="1:1530" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
           <p className="leading-[1.2]">Featured In</p>
         </div>
@@ -115,7 +115,7 @@ export default function AboutMe() {
           </div>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-center left-1/2 top-[2483px] w-[1560px]" data-node-id="1:1535" data-name="Frame">
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-center left-1/2 top-[2483px] w-[1280px]" data-node-id="1:1535" data-name="Frame">
         <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] whitespace-nowrap" data-node-id="1:1536" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
           <p className="leading-[1.2]">Certification &amp; Award</p>
         </div>
@@ -131,7 +131,7 @@ export default function AboutMe() {
           </div>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1560px]" data-node-id="1:1541" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1280px]" data-node-id="1:1541" data-name="Frame">
         <div className="h-[40px] relative shrink-0 w-[197px]" data-node-id="1:1542" data-name="Text Logo 1">
           <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTextLogo2} />
         </div>

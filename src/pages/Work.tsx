@@ -37,7 +37,7 @@ type FrameProps = {
 
 function Frame({ className, property1 = "Default" }: FrameProps) {
   return (
-    <div className={className || "h-[40px] overflow-clip relative w-[1560px]"} data-node-id="1:6">
+    <div className={className || "h-[40px] overflow-clip relative w-[1280px]"} data-node-id="1:6">
       <div className="absolute h-[40px] left-0 overflow-clip top-0 w-[102px]" data-node-id="1:7" data-name="Nagad logo">
         <div className="absolute contents inset-[0_5.9%_0_4.31%]" data-node-id="1:8" data-name="g1438">
           <div className="absolute inset-[0_5.9%_0_4.31%]" data-node-id="1:9" data-name="g1406">
@@ -167,18 +167,18 @@ export default function Work() {
         </div>
       </div>
       <Stats className="-translate-x-1/2 absolute left-1/2 top-[768px]" />
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-start left-1/2 top-[4009px] w-[1560px]" data-node-id="1:1196" data-name="Frame">
-        <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-[1560px]" data-node-id="1:1197" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-start left-1/2 top-[4009px] w-[1280px]" data-node-id="1:1196" data-name="Frame">
+        <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-[1280px]" data-node-id="1:1197" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
           <p>
             <span className="leading-[1.2]">{`Trusted by `}</span>
             <span className="leading-[1.2] text-[#c7994b]">Businesses of all sizes</span>
           </p>
         </div>
-        <TrustedLogos className="h-[40px] shrink-0 w-[1560px]" />
+        <TrustedLogos className="h-[40px] shrink-0 w-[1280px]" />
       </div>
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[40px] items-center justify-center left-1/2 top-[4263px] w-[1560px]" data-node-id="1:1199" data-name="Frame">
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[40px] items-center justify-center left-1/2 top-[4263px] w-[1280px]" data-node-id="1:1199" data-name="Frame">
         <div className="content-stretch flex flex-col gap-[56px] items-start relative shrink-0 w-full" data-node-id="1:1200" data-name="Frame">
-          <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-[1560px]" data-node-id="1:1201" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
+          <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-[1280px]" data-node-id="1:1201" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
             <p>
               <span className="leading-[1.2]">{`Trusted by `}</span>
               <span className="leading-[1.2] text-[#c7994b]">Businesses Proven by Results</span>
@@ -203,7 +203,7 @@ export default function Work() {
           <div className="bg-[#fff9df] relative rounded-[999px] shrink-0 size-[12px]" data-node-id="1:1210" />
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[4962.11px] w-[1560px]" data-node-id="1:1211" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[4962.11px] w-[1280px]" data-node-id="1:1211" data-name="Frame">
         <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-center leading-[0] not-italic relative shrink-0 text-center w-full" data-node-id="1:1212" data-name="Frame">
           <div className="flex flex-col font-['Inter:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[40px] text-white w-[min-content]" data-node-id="1:1213">
             <p>
@@ -224,7 +224,7 @@ export default function Work() {
         </div>
       </div>
       <Footer top={5440.11} />
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[80px] items-start left-1/2 top-[1005px] w-[1560px]" data-node-id="1:1300" data-name="Frame">
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[80px] items-start left-1/2 top-[1005px] w-[1280px]" data-node-id="1:1300" data-name="Frame">
         <div className="content-stretch flex gap-[24px] items-center relative shrink-0 w-full" data-node-id="1:1301" data-name="Frame">
           <div className="work-case-card bg-[#f5f5f5] content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex flex-col gap-[32px] items-start relative rounded-[24px] shrink-0 w-[768px]" data-node-id="1:1302" data-name="Frame" id="work-card-1">
             <div className="h-[450px] relative rounded-[24px] shrink-0 w-full" data-node-id="1:1303">
@@ -354,7 +354,7 @@ export default function Work() {
           </div>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1560px]" data-node-id="1:1361" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1280px]" data-node-id="1:1361" data-name="Frame">
         <div className="h-[40px] relative shrink-0 w-[197px]" data-node-id="1:1362" data-name="Text Logo 1">
           <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTextLogo2} />
         </div>

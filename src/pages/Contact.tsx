@@ -31,7 +31,7 @@ export default function ContactMe() {
         </div>
       </div>
       <Footer top={2604} />
-      <div className="-translate-x-1/2 absolute content-stretch flex gap-[24px] items-center left-1/2 px-[180px] top-[511px] w-[1920px]" data-node-id="1:2112" data-name="Frame">
+      <div className="-translate-x-1/2 absolute content-stretch flex gap-[24px] items-center left-1/2 px-[320px] top-[511px] w-[1920px]" data-node-id="1:2112" data-name="Frame">
         <div className="flex flex-row items-center self-stretch" data-node-id="1:2113">
           <div className="bg-white content-stretch flex flex-col gap-[120px] h-full items-start overflow-clip px-[24px] py-[32px] relative rounded-[8px] shadow-[0px_2px_8px_0px_rgba(0,0,0,0.1)] shrink-0 w-[504px]" data-name="contact">
             <div className="absolute left-[-75px] size-[286px] top-[-54px]" data-node-id="1:2114">
@@ -191,20 +191,20 @@ export default function ContactMe() {
           </div>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-center justify-center leading-[0] left-1/2 top-[1541px] w-[1560px]" data-node-id="1:2167" data-name="Frame">
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-center justify-center leading-[0] left-1/2 top-[1541px] w-[1280px]" data-node-id="1:2167" data-name="Frame">
         <p className="[word-break:break-word] font-['Noto_Serif:Bold'] font-bold relative shrink-0 text-[#191919] text-[64px] whitespace-nowrap" data-node-id="1:2168" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
           <span className="leading-[1.2]">{`VIEW ON `}</span>
           <span className="leading-[1.2] text-[#c7994b]">GOOGLE MAPS</span>
         </p>
         <iframe
-          className="h-[730px] w-[1560px] rounded-[8px] border-0"
+          className="h-[730px] w-[1280px] rounded-[8px] border-0"
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
           src={`https://www.google.com/maps?q=${encodeURIComponent(BUSINESS_ADDRESS)}&output=embed`}
           title={`Map showing ${BUSINESS_ADDRESS}`}
         />
       </div>
-      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1560px]" data-node-id="1:2181" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1280px]" data-node-id="1:2181" data-name="Frame">
         <div className="h-[40px] relative shrink-0 w-[197px]" data-node-id="1:2182" data-name="Text Logo 1">
           <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTextLogo2} />
         </div>

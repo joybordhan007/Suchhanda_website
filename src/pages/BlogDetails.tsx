@@ -16,7 +16,7 @@ const imgArrowDownSimple = `${assetPathPrefix}/05e02.svg`;
 export default function BlogDetails() {
   return (
     <div className="bg-[#fefefe] relative size-full" data-node-id="1:1867" data-name="Blog details">
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[64px] items-center left-[calc(50%+1.5px)] top-[210px] w-[1293px]" data-node-id="1:1868" data-name="Blog Post">
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[64px] items-center left-[calc(50%+1.5px)] top-[210px] w-[1280px]" data-node-id="1:1868" data-name="Blog Post">
         <div className="content-stretch flex flex-col items-center justify-center relative shrink-0 w-[826px]" data-node-id="1:1869" data-name="Header Text">
           <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-center justify-center relative shrink-0 text-center w-full" data-node-id="1:1870" data-name="Text Wrapper">
             <p className="font-['Nunito_Sans:SemiBold'] font-semibold leading-[normal] relative shrink-0 text-[#c7994b] text-[14px] uppercase whitespace-nowrap" data-node-id="1:1871" style={{ fontVariationSettings: '"YTLC" 500, "wdth" 100' }}>
@@ -107,7 +107,7 @@ export default function BlogDetails() {
           </p>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[3286px] w-[1560px]" data-node-id="1:1894" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[3286px] w-[1280px]" data-node-id="1:1894" data-name="Frame">
         <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-center leading-[0] not-italic relative shrink-0 text-center w-full" data-node-id="1:1895" data-name="Frame">
           <div className="flex flex-col font-['Inter:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[40px] text-white w-[min-content]" data-node-id="1:1896">
             <p>
@@ -128,7 +128,7 @@ export default function BlogDetails() {
         </div>
       </div>
       <Footer top={3764} />
-      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1560px]" data-node-id="1:1983" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1280px]" data-node-id="1:1983" data-name="Frame">
         <div className="h-[40px] relative shrink-0 w-[197px]" data-node-id="1:1984" data-name="Text Logo 1">
           <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTextLogo2} />
         </div>

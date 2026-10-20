@@ -46,7 +46,7 @@ export default function ServiceDetails() {
         </div>
       </div>
       <Footer top={2382} />
-      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1560px]" data-node-id="1:966" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1280px]" data-node-id="1:966" data-name="Frame">
         <div className="h-[40px] relative shrink-0 w-[197px]" data-node-id="1:967" data-name="Text Logo 1">
           <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTextLogo2} />
         </div>
@@ -78,7 +78,7 @@ export default function ServiceDetails() {
           </p>
         </a>
       </div>
-      <div className="absolute content-stretch flex gap-[24px] items-center left-[180px] top-[735px] w-[1560px]" data-node-id="1:1008" data-name="Frame">
+      <div className="absolute content-stretch flex gap-[24px] items-center left-[320px] top-[735px] w-[1280px]" data-node-id="1:1008" data-name="Frame">
         <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-[504px]" data-node-id="1:1009" data-name="Frame">
           <div className="content-stretch flex gap-[19px] items-center relative shrink-0" data-node-id="1:1010" data-name="Frame">
             <div className="bg-[#c7994b] h-px relative shrink-0 w-[30px]" data-node-id="1:1011" />
@@ -199,7 +199,7 @@ export default function ServiceDetails() {
           </div>
         </div>
       </div>
-      <div className="absolute content-stretch flex gap-[24px] items-center left-[180px] top-[1346px] w-[1560px]" data-node-id="1:1093" data-name="Frame">
+      <div className="absolute content-stretch flex gap-[24px] items-center left-[320px] top-[1346px] w-[1280px]" data-node-id="1:1093" data-name="Frame">
         <div className="h-[380px] relative shrink-0 w-[502px]" data-node-id="1:1094">
           <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgRectangle7468} />
         </div>
@@ -295,7 +295,7 @@ export default function ServiceDetails() {
           </div>
         </div>
       </div>
-      <div className="absolute bg-[#191919] content-stretch flex gap-[24px] items-center left-[180px] p-[40px] rounded-[2px] top-[1876px] w-[1560px]" data-node-id="1:1128" data-name="Frame">
+      <div className="absolute bg-[#191919] content-stretch flex gap-[24px] items-center left-[320px] p-[40px] rounded-[2px] top-[1876px] w-[1280px]" data-node-id="1:1128" data-name="Frame">
         <div className="content-stretch flex flex-col gap-[57px] items-start relative shrink-0 w-[745px]" data-node-id="1:1129" data-name="Frame">
           <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:1130" data-name="Frame">
             <div className="content-stretch flex gap-[19px] items-center relative shrink-0" data-node-id="1:1131" data-name="Frame">

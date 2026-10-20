@@ -1,6 +1,5 @@
 type FooterProps = {
   top?: number
-  flow?: boolean
 }
 
 export const BUSINESS_ADDRESS = "Mirpur 2, Dhaka, Bangladesh"
@@ -11,7 +10,6 @@ const quickLinks = [
   ["Work", "/work"],
   ["About Me", "/about"],
   ["Blog", "/blog"],
-  ["Reviews", "/reviews"],
 ] as const
 
 const supportLinks = [
@@ -45,15 +43,15 @@ function FooterLinks({
   )
 }
 
-export default function Footer({ top = 0, flow = false }: FooterProps) {
+export default function Footer({ top = 0 }: FooterProps) {
   return (
     <footer
-      className={`site-footer ${flow ? "site-footer-flow" : "site-footer-absolute"}`}
-      style={flow ? undefined : { top }}
+      className="site-footer site-footer-absolute"
+      style={{ top }}
     >
       <div className="site-footer-content">
         <div className="site-footer-brand">
-          <div className="h-[70px] w-[344px]">
+          <div className="h-[70px] w-[280px]">
             <img alt="Suchhanda Mondol" className="h-full w-full object-contain object-left" src="/assets/5d363.svg" />
           </div>
           <p>
