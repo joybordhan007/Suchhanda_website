@@ -1,5 +1,5 @@
 import Footer from "../components/Footer"
-const assetPathPrefix = "/assets";
+import { assetPathPrefix } from "../paths";
 const imgHeroImage = `${assetPathPrefix}/289f9.png`;
 const imgImage = `${assetPathPrefix}/ef7b7.png`;
 const imgArrowForward = `${assetPathPrefix}/b3d9b.svg`;

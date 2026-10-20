@@ -1,14 +1,16 @@
+import { asset } from "../paths"
+
 const logos = [
-  { src: "/assets/5c6b9.svg", name: "Nagad" },
-  { src: "/assets/e6b17.svg", name: "BRAC" },
-  { src: "/assets/a7d41.svg", name: "Google" },
-  { src: "/assets/54b41.svg", name: "bKash" },
-  { src: "/assets/3aaae.svg", name: "Facebook" },
-  { src: "/assets/e9a13.svg", name: "WhatsApp" },
-  { src: "/assets/24766.svg", name: "YouTube" },
-  { src: "/assets/e19b7.svg", name: "TikTok" },
-  { src: "/assets/3efa1.svg", name: "Microsoft Teams" },
-  { src: "/assets/975d6.svg", name: "Twitter" },
+  { src: asset("5c6b9.svg"), name: "Nagad" },
+  { src: asset("e6b17.svg"), name: "BRAC" },
+  { src: asset("a7d41.svg"), name: "Google" },
+  { src: asset("54b41.svg"), name: "bKash" },
+  { src: asset("3aaae.svg"), name: "Facebook" },
+  { src: asset("e9a13.svg"), name: "WhatsApp" },
+  { src: asset("24766.svg"), name: "YouTube" },
+  { src: asset("e19b7.svg"), name: "TikTok" },
+  { src: asset("3efa1.svg"), name: "Microsoft Teams" },
+  { src: asset("975d6.svg"), name: "Twitter" },
 ]
 
 export default function TrustedLogos({ className = "" }: { className?: string }) {

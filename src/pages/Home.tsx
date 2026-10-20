@@ -2,7 +2,7 @@ import Stats from "../components/Stats"
 import Footer from "../components/Footer"
 import TrustedLogos from "../components/TrustedLogos"
 
-const assetPathPrefix = "/assets";
+import { assetPathPrefix, withBase } from "../paths";
 const imgG1406 = `${assetPathPrefix}/5c6b9.svg`;
 const imgBracLogoLogo = `${assetPathPrefix}/e6b17.svg`;
 const imgGroup = `${assetPathPrefix}/a7d41.svg`;
@@ -349,10 +349,10 @@ export default function Home() {
             </p>
           </div>
           <div className="content-stretch flex gap-[24px] items-start relative shrink-0 w-full" data-node-id="1:450" data-name="Frame">
-            <a aria-label="View Meta Ads campaign" className="home-work-card" data-path="/work#work-card-1" href="/work#work-card-1">
+            <a aria-label="View Meta Ads campaign" className="home-work-card" data-path="/work#work-card-1" href={withBase("/work#work-card-1")}>
               <img alt="" src={imgWorkCard1} />
             </a>
-            <a aria-label="View Google Ads campaign" className="home-work-card" data-path="/work#work-card-2" href="/work#work-card-2">
+            <a aria-label="View Google Ads campaign" className="home-work-card" data-path="/work#work-card-2" href={withBase("/work#work-card-2")}>
               <img alt="" src={imgWorkCard2} />
             </a>
           </div>

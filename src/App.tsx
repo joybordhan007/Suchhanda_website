@@ -8,6 +8,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy"
 import ServiceDetails from "./pages/ServiceDetails"
 import TermsOfService from "./pages/TermsOfService"
 import Work from "./pages/Work"
+import { asset, stripBase, withBase } from "./paths"
 
 const CANVAS_WIDTH = 1920
 
@@ -25,9 +26,13 @@ const routes = {
 
 type RoutePath = keyof typeof routes
 
+function isRoute(path: string | null | undefined): path is RoutePath {
+  return !!path && path in routes
+}
+
 function getRoute(): RoutePath {
-  const path = window.location.pathname.replace(/\/+$/, "") || "/"
-  return path in routes ? path as RoutePath : "/"
+  const path = stripBase(window.location.pathname)
+  return isRoute(path) ? path : "/"
 }
 
 const linkMap: Record<string, RoutePath> = {
@@ -57,27 +62,30 @@ export default function App() {
   const [viewportWidth, setViewportWidth] = useState(
     document.documentElement.clientWidth,
   )
-  const [pendingHash, setPendingHash] = useState("")
+  const [pendingHash, setPendingHash] = useState(() =>
+    window.location.hash.slice(1),
+  )
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isServiceMenuOpen, setIsServiceMenuOpen] = useState(false)
-  const [contentHeight, setContentHeight] = useState<number>(
-    routes[getRoute()].height,
-  )
   const route = routes[path]
+  const contentHeight = route.height
 
   useEffect(() => {
     const resize = () => setViewportWidth(document.documentElement.clientWidth)
     const popstate = () => {
       const nextPath = getRoute()
-      if (window.location.pathname !== nextPath) {
-        window.history.replaceState({}, "", nextPath)
+      const hash = window.location.hash
+      if (window.location.pathname !== withBase(nextPath)) {
+        window.history.replaceState({}, "", `${withBase(nextPath)}${hash}`)
       }
       setPath(nextPath)
-      window.scrollTo(0, 0)
+      setIsMobileMenuOpen(false)
+      setIsServiceMenuOpen(false)
+      if (hash) setPendingHash(hash.slice(1))
+      else window.scrollTo(0, 0)
     }
-    const currentPath = window.location.pathname.replace(/\/+$/, "") || "/"
-    if (!(currentPath in routes)) {
-      window.history.replaceState({}, "", "/")
+    if (!isRoute(stripBase(window.location.pathname))) {
+      window.history.replaceState({}, "", withBase("/"))
     }
     const viewport = document.querySelector(".design-viewport")
     const resizeObserver = new ResizeObserver(resize)
@@ -90,10 +98,6 @@ export default function App() {
       window.removeEventListener("popstate", popstate)
     }
   }, [])
-
-  useEffect(() => {
-    setContentHeight(route.height)
-  }, [path, route.height])
 
   useEffect(() => {
     const page = document.querySelector<HTMLElement>(".design-canvas > div")
@@ -145,8 +149,8 @@ export default function App() {
 
   useEffect(() => {
     if (!pendingHash) return
-    const frame = requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => {
         document.getElementById(pendingHash)?.scrollIntoView({
           behavior: "smooth",
           block: "start",
@@ -172,32 +176,49 @@ export default function App() {
   )
 
   const navigate = (next: RoutePath, hash = "") => {
+    setIsMobileMenuOpen(false)
+    setIsServiceMenuOpen(false)
     if (next !== path || hash) {
-      window.history.pushState({}, "", `${next}${hash}`)
+      window.history.pushState({}, "", `${withBase(next)}${hash}`)
       setPath(next)
       setPendingHash(hash.slice(1))
-      setIsMobileMenuOpen(false)
-      setIsServiceMenuOpen(false)
       if (!hash) window.scrollTo(0, 0)
     }
   }
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    // Let the browser handle new-tab/window clicks and form submits.
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return
+    }
     const target = event.target
-    if (!(target instanceof HTMLElement)) return
+    if (!(target instanceof Element)) return
     const element = target.closest("a, button, [data-name='CTA'], [data-path]")
     if (!element) return
+    if (element.getAttribute("target") === "_blank") return
+    if (element instanceof HTMLButtonElement && element.type === "submit") {
+      return
+    }
     const label = (element.textContent || "").trim().toLowerCase()
-    const requestedPath =
-      element.getAttribute("data-path") || element.getAttribute("href")
-    const [requestedRoute, requestedHash = ""] = requestedPath?.split("#") ?? []
-    const direct =
-      requestedRoute && requestedRoute in routes
-        ? requestedRoute as RoutePath
-        : linkMap[label]
-    const partial = Object.entries(linkMap).find(([text]) =>
-      label.includes(text),
-    )?.[1]
+    // data-path holds the route itself; href already includes the base path.
+    const dataPath = element.getAttribute("data-path")
+    const href = element.getAttribute("href")
+    const [requestedPath = "", requestedHash = ""] = (
+      dataPath ?? (href?.startsWith("/") ? href : "")
+    ).split("#")
+    const requestedRoute = dataPath ? requestedPath : stripBase(requestedPath)
+    const direct = isRoute(requestedRoute) ? requestedRoute : linkMap[label]
+    // Prefer the longest matching label so "let's work together" wins over "work".
+    const partial = Object.entries(linkMap)
+      .filter(([text]) => label.includes(text))
+      .sort(([a], [b]) => b.length - a.length)[0]?.[1]
     if (direct || partial) {
       event.preventDefault()
       navigate(
@@ -230,9 +251,9 @@ export default function App() {
           aria-label="Suchhanda home"
           className="site-logo"
           data-path="/"
-          href="/"
+          href={withBase("/")}
         >
-          <img alt="Suchhanda" src="/assets/4a673.svg" />
+          <img alt="Suchhanda" src={asset("4a673.svg")} />
         </a>
         <button
           aria-controls="primary-navigation-links"
@@ -253,7 +274,7 @@ export default function App() {
           <a
             aria-current={path === "/" ? "page" : undefined}
             data-path="/"
-            href="/"
+            href={withBase("/")}
           >
             Home
           </a>
@@ -272,7 +293,7 @@ export default function App() {
                 alt=""
                 aria-hidden="true"
                 className="service-chevron"
-                src="/assets/05e02.svg"
+                src={asset("05e02.svg")}
               />
             </button>
             <div className="service-menu" id="service-navigation-links">
@@ -285,7 +306,7 @@ export default function App() {
               ].map((item) => (
                 <a
                   data-path="/service"
-                  href="/service"
+                  href={withBase("/service")}
                   key={item}
                   onClick={(event) => event.currentTarget.blur()}
                 >
@@ -297,28 +318,28 @@ export default function App() {
           <a
             aria-current={path === "/work" ? "page" : undefined}
             data-path="/work"
-            href="/work"
+            href={withBase("/work")}
           >
             Work
           </a>
           <a
             aria-current={path === "/about" ? "page" : undefined}
             data-path="/about"
-            href="/about"
+            href={withBase("/about")}
           >
             About Me
           </a>
           <a
             aria-current={path === "/blog" ? "page" : undefined}
             data-path="/blog"
-            href="/blog"
+            href={withBase("/blog")}
           >
             Blog
           </a>
           <a
             className="site-contact-link"
             data-path="/contact"
-            href="/contact"
+            href={withBase("/contact")}
           >
             Contact Me
           </a>

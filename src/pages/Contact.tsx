@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react"
 import Footer, { BUSINESS_ADDRESS } from "../components/Footer"
-const assetPathPrefix = "/assets"
+import { assetPathPrefix } from "../paths"
 const imgTelephone11 = `${assetPathPrefix}/9aeb0.png`
 const imgEllipse123 = `${assetPathPrefix}/78707.svg`
 const imgEllipse121 = `${assetPathPrefix}/e44b5.svg`
@@ -491,12 +491,12 @@ export default function ContactMe() {
             disabled={submitStatus === "sending"}
             type="submit"
           >
-            <p
-              className="[word-break:break-word] font-['Aileron:SemiBold'] leading-[1.2] not-italic relative shrink-0 text-[16px] text-white whitespace-nowrap"
+            <span
+              className="[word-break:break-word] block font-['Aileron:SemiBold'] leading-[1.2] not-italic relative shrink-0 text-[16px] text-white whitespace-nowrap"
               data-node-id="1:2166"
             >
               {submitStatus === "sending" ? "Sending..." : "Send Inquiry"}
-            </p>
+            </span>
           </button>
           {submitStatus !== "idle" && submitStatus !== "sending" && (
             <p

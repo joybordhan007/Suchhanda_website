@@ -1,5 +1,5 @@
 import Footer from "../components/Footer"
-const assetPathPrefix = "/assets";
+import { assetPathPrefix } from "../paths";
 const imgRectangle7468 = `${assetPathPrefix}/aa9cc.png`;
 const imgTextLogo2 = `${assetPathPrefix}/4a673.svg`;
 const imgArrowDownSimple = `${assetPathPrefix}/05e02.svg`;

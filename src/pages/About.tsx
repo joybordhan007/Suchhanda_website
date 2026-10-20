@@ -1,7 +1,7 @@
 import Footer from "../components/Footer"
 import Stats from "../components/Stats"
 
-const assetPathPrefix = "/assets";
+import { assetPathPrefix } from "../paths";
 const imgRectangle7466 = `${assetPathPrefix}/0be7f.png`;
 const imgImage1 = `${assetPathPrefix}/1b092.png`;
 const imgImage2 = `${assetPathPrefix}/233a8.png`;

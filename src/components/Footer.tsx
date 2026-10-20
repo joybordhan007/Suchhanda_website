@@ -1,3 +1,5 @@
+import { asset, withBase } from "../paths"
+
 type FooterProps = {
   top?: number
 }
@@ -33,7 +35,7 @@ function FooterLinks({
       <ul className="flex flex-col items-start gap-[16px]">
         {links.map(([label, href]) => (
           <li key={href}>
-            <a className="footer-link" data-path={href} href={href}>
+            <a className="footer-link" data-path={href} href={withBase(href)}>
               {label}
             </a>
           </li>
@@ -52,7 +54,7 @@ export default function Footer({ top = 0 }: FooterProps) {
             <img
               alt="Suchhanda Mondol"
               className="h-full w-full object-contain object-left"
-              src="/assets/5d363.svg"
+              src={asset("5d363.svg")}
             />
           </div>
           <p>
@@ -70,7 +72,7 @@ export default function Footer({ top = 0 }: FooterProps) {
               rel="noreferrer"
               target="_blank"
             >
-              <img alt="" src="/assets/4aa89.svg" />
+              <img alt="" src={asset("4aa89.svg")} />
             </a>
             <a
               aria-label="LinkedIn"
@@ -78,7 +80,7 @@ export default function Footer({ top = 0 }: FooterProps) {
               rel="noreferrer"
               target="_blank"
             >
-              <img alt="" src="/assets/0684a.svg" />
+              <img alt="" src={asset("0684a.svg")} />
             </a>
             <a
               aria-label="WhatsApp"
@@ -86,7 +88,7 @@ export default function Footer({ top = 0 }: FooterProps) {
               rel="noreferrer"
               target="_blank"
             >
-              <img alt="" src="/assets/a4902.svg" />
+              <img alt="" src={asset("a4902.svg")} />
             </a>
           </div>
         </div>

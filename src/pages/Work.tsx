@@ -2,7 +2,7 @@ import Footer from "../components/Footer"
 import Stats from "../components/Stats"
 import TrustedLogos from "../components/TrustedLogos"
 
-const assetPathPrefix = "/assets";
+import { assetPathPrefix } from "../paths";
 const imgG1406 = `${assetPathPrefix}/5c6b9.svg`;
 const imgBracLogoLogo = `${assetPathPrefix}/e6b17.svg`;
 const imgGroup = `${assetPathPrefix}/a7d41.svg`;
