@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react"
+import { lazy, Suspense, useEffect, useMemo, useState, type ComponentType } from "react"
+import { loadContent, useContentReady, useSiteContent } from "./content/store"
 import About from "./pages/About"
 import Blog from "./pages/Blog"
 import BlogDetails from "./pages/BlogDetails"
@@ -10,32 +11,58 @@ import TermsOfService from "./pages/TermsOfService"
 import Work from "./pages/Work"
 import { asset, stripBase, withBase } from "./paths"
 
+const AdminApp = lazy(() => import("./admin/AdminApp"))
+
 const CANVAS_WIDTH = 1920
+// The design's 1280px content column sits 320px in from each canvas edge.
+const DESIGN_CONTENT_WIDTH = 1280
+const DESIGN_GUTTER = (CANVAS_WIDTH - DESIGN_CONTENT_WIDTH) / 2
+// Fixed gap between the content and the screen edge on every non-mobile screen.
+// Keep in sync with --site-side-margin in index.css.
+const SIDE_MARGIN = 130
 
-const routes = {
-  "/": { component: Home, height: 4735 },
-  "/service": { component: ServiceDetails, height: 2877 },
-  "/work": { component: Work, height: 5201 },
-  "/about": { component: About, height: 4059 },
-  "/blog": { component: Blog, height: 3287 },
-  "/blog/article": { component: BlogDetails, height: 4259 },
-  "/contact": { component: Contact, height: 3099 },
-  "/privacy-policy": { component: PrivacyPolicy, height: 2400 },
-  "/terms-of-service": { component: TermsOfService, height: 2400 },
-} as const
+// Pages with a fixed height are absolutely positioned design canvases; "auto" pages
+// flow normally and are measured, so their height follows their content.
+const pages = {
+  home: { component: Home, height: 4735 },
+  service: { component: ServiceDetails, height: "auto" },
+  work: { component: Work, height: "auto" },
+  about: { component: About, height: 4059 },
+  blog: { component: Blog, height: "auto" },
+  post: { component: BlogDetails, height: "auto" },
+  contact: { component: Contact, height: 3099 },
+  privacy: { component: PrivacyPolicy, height: 2400 },
+  terms: { component: TermsOfService, height: 2400 },
+} as const satisfies Record<string, { component: ComponentType<{ slug?: string }>; height: number | "auto" }>
 
-type RoutePath = keyof typeof routes
+type PageKey = keyof typeof pages
+type Match = { page: PageKey; slug?: string }
 
-function isRoute(path: string | null | undefined): path is RoutePath {
-  return !!path && path in routes
+const staticRoutes: Record<string, PageKey> = {
+  "/": "home",
+  "/service": "service",
+  "/work": "work",
+  "/about": "about",
+  "/blog": "blog",
+  "/contact": "contact",
+  "/privacy-policy": "privacy",
+  "/terms-of-service": "terms",
 }
 
-function getRoute(): RoutePath {
+function matchPath(path: string | null | undefined): Match | null {
+  if (!path) return null
+  if (path in staticRoutes) return { page: staticRoutes[path] }
+  const detail = path.match(/^\/(service|blog)\/([a-z0-9-]+)$/)
+  if (detail) return { page: detail[1] === "service" ? "service" : "post", slug: detail[2] }
+  return null
+}
+
+function getPath() {
   const path = stripBase(window.location.pathname)
-  return isRoute(path) ? path : "/"
+  return matchPath(path) ? (path as string) : "/"
 }
 
-const linkMap: Record<string, RoutePath> = {
+const linkMap: Record<string, string> = {
   home: "/",
   work: "/work",
   "about me": "/about",
@@ -47,18 +74,28 @@ const linkMap: Record<string, RoutePath> = {
   "explore me": "/work",
   "let's work together": "/contact",
   "let’s work together": "/contact",
-  "read more": "/blog/article",
   "view all": "/work",
-  "meta ads management": "/service",
-  "google ads management": "/service",
-  "pixel & tag manager": "/service",
-  "conversion rate optimization": "/service",
-  "ads audit & optimization": "/service",
   "free consultation": "/contact",
 }
 
+function isAdminPath() {
+  const path = stripBase(window.location.pathname)
+  return path === "/admin" || !!path?.startsWith("/admin/")
+}
+
 export default function App() {
-  const [path, setPath] = useState<RoutePath>(getRoute)
+  if (isAdminPath()) {
+    return (
+      <Suspense fallback={null}>
+        <AdminApp />
+      </Suspense>
+    )
+  }
+  return <Site />
+}
+
+function Site() {
+  const [path, setPath] = useState(getPath)
   const [viewportWidth, setViewportWidth] = useState(
     document.documentElement.clientWidth,
   )
@@ -67,13 +104,46 @@ export default function App() {
   )
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isServiceMenuOpen, setIsServiceMenuOpen] = useState(false)
-  const route = routes[path]
-  const contentHeight = route.height
+  const [measured, setMeasured] = useState<{ path: string; height: number } | null>(null)
+  const ready = useContentReady()
+  const content = useSiteContent()
+  const match = matchPath(path) ?? { page: "home" }
+  const page = pages[match.page]
+  const contentHeight =
+    page.height === "auto"
+      ? measured?.path === path
+        ? measured.height
+        : 3000
+      : page.height
+
+  useEffect(() => {
+    void loadContent()
+  }, [])
+
+  // Measure flowing pages so the scaled canvas is exactly as tall as the page.
+  useEffect(() => {
+    if (!ready || page.height !== "auto") return
+    const element = document.querySelector<HTMLElement>(".design-canvas > div")
+    if (!element) return
+    const observer = new ResizeObserver(() =>
+      setMeasured({ path, height: Math.ceil(element.offsetHeight) }),
+    )
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [path, page.height, ready])
+
+  useEffect(() => {
+    const siteTitle = "Suchhanda Mondol | Performance Marketing"
+    const service = match.page === "service" ? content.services.find((item) => item.slug === match.slug) : null
+    const post = match.page === "post" ? content.blog.find((item) => item.slug === match.slug) : null
+    const name = service?.title ?? post?.title
+    document.title = name ? `${name} | Suchhanda Mondol` : siteTitle
+  }, [content, match.page, match.slug])
 
   useEffect(() => {
     const resize = () => setViewportWidth(document.documentElement.clientWidth)
     const popstate = () => {
-      const nextPath = getRoute()
+      const nextPath = getPath()
       const hash = window.location.hash
       if (window.location.pathname !== withBase(nextPath)) {
         window.history.replaceState({}, "", `${withBase(nextPath)}${hash}`)
@@ -84,7 +154,7 @@ export default function App() {
       if (hash) setPendingHash(hash.slice(1))
       else window.scrollTo(0, 0)
     }
-    if (!isRoute(stripBase(window.location.pathname))) {
+    if (!matchPath(stripBase(window.location.pathname))) {
       window.history.replaceState({}, "", withBase("/"))
     }
     const viewport = document.querySelector(".design-viewport")
@@ -121,7 +191,7 @@ export default function App() {
     sections.forEach(({ element }, order) => {
       element.style.setProperty("--mobile-section-order", String(order))
     })
-  }, [path])
+  }, [path, ready])
 
   useEffect(() => {
     const sections = document.querySelectorAll<HTMLElement>(
@@ -145,10 +215,10 @@ export default function App() {
     })
 
     return () => observer.disconnect()
-  }, [path])
+  }, [path, ready])
 
   useEffect(() => {
-    if (!pendingHash) return
+    if (!pendingHash || !ready) return
     let frame = requestAnimationFrame(() => {
       frame = requestAnimationFrame(() => {
         document.getElementById(pendingHash)?.scrollIntoView({
@@ -159,11 +229,12 @@ export default function App() {
       })
     })
     return () => cancelAnimationFrame(frame)
-  }, [path, pendingHash])
+  }, [path, pendingHash, ready])
 
-  const scale = Math.min(1, viewportWidth / CANVAS_WIDTH)
-  const canvasOffsetX = Math.max(0, (viewportWidth - CANVAS_WIDTH) / 2)
-  const Page = route.component
+  // Scale the design so its content column fills the screen minus the side margins.
+  const scale = Math.max(0, viewportWidth - SIDE_MARGIN * 2) / DESIGN_CONTENT_WIDTH
+  const canvasOffsetX = SIDE_MARGIN - DESIGN_GUTTER * scale
+  const Page: ComponentType<{ slug?: string }> = page.component
   const canvasStyle = useMemo(
     () => ({
       width: CANVAS_WIDTH,
@@ -175,7 +246,7 @@ export default function App() {
     [canvasOffsetX, contentHeight, scale],
   )
 
-  const navigate = (next: RoutePath, hash = "") => {
+  const navigate = (next: string, hash = "") => {
     setIsMobileMenuOpen(false)
     setIsServiceMenuOpen(false)
     if (next !== path || hash) {
@@ -214,7 +285,7 @@ export default function App() {
       dataPath ?? (href?.startsWith("/") ? href : "")
     ).split("#")
     const requestedRoute = dataPath ? requestedPath : stripBase(requestedPath)
-    const direct = isRoute(requestedRoute) ? requestedRoute : linkMap[label]
+    const direct = matchPath(requestedRoute) ? requestedRoute : linkMap[label]
     // Prefer the longest matching label so "let's work together" wins over "work".
     const partial = Object.entries(linkMap)
       .filter(([text]) => label.includes(text))
@@ -235,7 +306,7 @@ export default function App() {
         style={{ height: contentHeight * scale }}
       >
         <div className="design-canvas" style={canvasStyle}>
-          <Page />
+          {ready && <Page key={path} slug={match.slug} />}
         </div>
       </main>
       <nav
@@ -297,20 +368,15 @@ export default function App() {
               />
             </button>
             <div className="service-menu" id="service-navigation-links">
-              {[
-                "Meta Ads Management",
-                "Google Ads Management",
-                "Pixel & Tag Manager",
-                "Conversion Rate Optimization",
-                "Ads Audit & Optimization",
-              ].map((item) => (
+              {content.services.map((service) => (
                 <a
-                  data-path="/service"
-                  href={withBase("/service")}
-                  key={item}
+                  aria-current={path === `/service/${service.slug}` ? "page" : undefined}
+                  data-path={`/service/${service.slug}`}
+                  href={withBase(`/service/${service.slug}`)}
+                  key={service.id}
                   onClick={(event) => event.currentTarget.blur()}
                 >
-                  {item}
+                  {service.title}
                 </a>
               ))}
             </div>

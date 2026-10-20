@@ -13,6 +13,21 @@ export function asset(file: string) {
   return `${assetPathPrefix}/${file}`
 }
 
+// Image URL from content: "/uploads/x.png" and "/assets/x.png" live on this site,
+// anything else must be an http(s) link.
+export function mediaUrl(src: string | undefined) {
+  if (!src) return ""
+  if (src.startsWith("/")) return withBase(src)
+  return /^https?:\/\//i.test(src) ? src : ""
+}
+
+// Link from content, limited to schemes that are safe to put in an href.
+export function safeHref(url: string | undefined) {
+  if (!url) return "#"
+  if (url.startsWith("/")) return withBase(url)
+  return /^(https?:|mailto:|tel:)/i.test(url.trim()) ? url.trim() : "#"
+}
+
 // "/work#card" -> "/sub/work#card"
 export function withBase(route: string) {
   return `${basePath}${route}`

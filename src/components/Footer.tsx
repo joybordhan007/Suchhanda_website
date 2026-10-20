@@ -1,10 +1,9 @@
-import { asset, withBase } from "../paths"
+import { useSiteContent } from "../content/store"
+import { asset, mediaUrl, safeHref, withBase } from "../paths"
 
 type FooterProps = {
   top?: number
 }
-
-export const BUSINESS_ADDRESS = "Mirpur 2, Dhaka, Bangladesh"
 
 const quickLinks = [
   ["Home", "/"],
@@ -45,9 +44,15 @@ function FooterLinks({
   )
 }
 
-export default function Footer({ top = 0 }: FooterProps) {
+export default function Footer({ top }: FooterProps) {
+  const { settings } = useSiteContent()
+  // Pages laid out in normal flow omit `top`; the design-canvas pages position it absolutely.
+  const isAbsolute = top !== undefined
   return (
-    <footer className="site-footer site-footer-absolute" style={{ top }}>
+    <footer
+      className={`site-footer${isAbsolute ? " site-footer-absolute" : " site-footer-flow"}`}
+      style={isAbsolute ? { top } : undefined}
+    >
       <div className="site-footer-content">
         <div className="site-footer-brand">
           <div className="site-footer-logo">
@@ -58,7 +63,7 @@ export default function Footer({ top = 0 }: FooterProps) {
             />
           </div>
           <p>
-            I’m Suchhanda Mondol — helping brands scale faster with
+            I’m {settings.ownerName} — helping brands scale faster with
             high-converting ads, precise tracking, and performance-driven
             strategy that delivers real, lasting results.
           </p>
@@ -66,30 +71,24 @@ export default function Footer({ top = 0 }: FooterProps) {
             aria-label="Social media"
             className="flex items-center gap-[16px]"
           >
-            <a
-              aria-label="Facebook"
-              href="https://www.facebook.com/"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <img alt="" src={asset("4aa89.svg")} />
-            </a>
-            <a
-              aria-label="LinkedIn"
-              href="https://www.linkedin.com/"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <img alt="" src={asset("0684a.svg")} />
-            </a>
-            <a
-              aria-label="WhatsApp"
-              href="https://wa.me/8801947760296"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <img alt="" src={asset("a4902.svg")} />
-            </a>
+            {settings.socials.map((social) => (
+              <a
+                aria-label={social.label}
+                href={safeHref(social.url)}
+                key={social.id}
+                rel="noreferrer"
+                target="_blank"
+                title={social.label}
+              >
+                {social.icon ? (
+                  <img alt="" src={mediaUrl(social.icon)} />
+                ) : (
+                  <span aria-hidden="true" className="social-fallback-icon">
+                    {social.label.trim().charAt(0).toUpperCase() || "?"}
+                  </span>
+                )}
+              </a>
+            ))}
           </div>
         </div>
         <div className="site-footer-navigation">
@@ -101,26 +100,26 @@ export default function Footer({ top = 0 }: FooterProps) {
             </h2>
             <ul className="flex flex-col items-start gap-[16px]">
               <li>
-                <a className="footer-link" href="tel:+8801947760296">
-                  +8801947760296
+                <a className="footer-link" href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>
+                  {settings.phone}
                 </a>
               </li>
               <li>
                 <a
                   className="footer-link"
-                  href="mailto:adritamondol065@gmail.com"
+                  href={`mailto:${settings.email}`}
                 >
-                  adritamondol065@gmail.com
+                  {settings.email}
                 </a>
               </li>
               <li>
                 <a
                   className="footer-link"
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(BUSINESS_ADDRESS)}`}
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`}
                   rel="noreferrer"
                   target="_blank"
                 >
-                  {BUSINESS_ADDRESS}
+                  {settings.address}
                 </a>
               </li>
             </ul>

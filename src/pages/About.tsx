@@ -1,8 +1,8 @@
 import Footer from "../components/Footer"
 import Stats from "../components/Stats"
 
-import { assetPathPrefix } from "../paths";
-const imgRectangle7466 = `${assetPathPrefix}/0be7f.png`;
+import { useSiteContent } from "../content/store"
+import { assetPathPrefix, mediaUrl } from "../paths";
 const imgImage1 = `${assetPathPrefix}/1b092.png`;
 const imgImage2 = `${assetPathPrefix}/233a8.png`;
 const imgImage3 = `${assetPathPrefix}/06998.png`;
@@ -15,6 +15,7 @@ const imgTextLogo2 = `${assetPathPrefix}/4a673.svg`;
 const imgArrowDownSimple = `${assetPathPrefix}/05e02.svg`;
 
 export default function AboutMe() {
+  const { images, settings } = useSiteContent()
   return (
     <div className="bg-[#fefefe] relative size-full" data-node-id="1:1403" data-name="About Me">
       <div className="absolute h-[764px] left-0 overflow-clip top-0 w-[1920px]" data-node-id="1:1404" data-name="Frame">
@@ -73,7 +74,7 @@ export default function AboutMe() {
       <Footer top={3564.34} />
       <div className="-translate-x-1/2 absolute content-stretch flex gap-[50px] items-center left-1/2 top-[1005px] w-[1280px]" data-node-id="1:1516" data-name="Frame">
         <div className="h-[698px] relative rounded-[16px] shadow-[0px_2px_8px_0px_rgba(0,0,0,0.1)] shrink-0 w-[600px]" data-node-id="1:1517">
-          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[16px] size-full" src={imgRectangle7466} />
+          <img alt={settings.ownerName} className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[16px] size-full" src={mediaUrl(images.aboutPortrait)} />
         </div>
         <div className="flex flex-row items-center self-stretch" data-node-id="1:1518">
           <div className="bg-white content-stretch drop-shadow-[0px_2px_4px_rgba(0,0,0,0.1)] flex flex-col gap-[24px] h-full items-start justify-center px-[40px] py-[32px] relative rounded-[16px] shrink-0 w-[630px]" data-name="Frame">

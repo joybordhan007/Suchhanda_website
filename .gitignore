@@ -19,3 +19,6 @@ logs/
 # beside it.
 /.plugins/
 /.opencode-skills/
+
+# Database and uploaded images (back these up; never commit them)
+/data/

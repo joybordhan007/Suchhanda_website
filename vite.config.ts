@@ -34,6 +34,12 @@ react(),
       host: process.env.FIGMA_DEV_SERVER_HOST || '0.0.0.0',
       port: parseInt(process.env.PORT || '8443'),
       strictPort: true,
+      // The API server (`pnpm server`) runs separately during development.
+      // Keep the browser's Host header so the API's same-origin check sees the real site.
+      proxy: {
+        '/api': { target: `http://127.0.0.1:${process.env.API_PORT || '8787'}`, changeOrigin: false },
+        '/uploads': { target: `http://127.0.0.1:${process.env.API_PORT || '8787'}`, changeOrigin: false },
+      },
       watch: {
         ignored: [
           '**/.figma/**',

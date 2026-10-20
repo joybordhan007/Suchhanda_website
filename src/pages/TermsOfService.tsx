@@ -1,6 +1,8 @@
 import Footer from "../components/Footer"
+import { useSiteContent } from "../content/store"
 
 export default function TermsOfService() {
+  const { settings } = useSiteContent()
   return (
     <div className="legal-page">
       <header className="legal-hero">
@@ -35,8 +37,8 @@ export default function TermsOfService() {
           The website is provided on an “as available” basis. Content and these
           terms may be updated from time to time. Questions about these terms
           can be sent to{" "}
-          <a href="mailto:adritamondol065@gmail.com">
-            adritamondol065@gmail.com
+          <a href={`mailto:${settings.email}`}>
+            {settings.email}
           </a>
           .
         </p>

@@ -97,6 +97,11 @@
   font-weight: 600;
 }
 
+:root {
+  /* Keep in sync with SIDE_MARGIN in App.tsx. */
+  --site-side-margin: 130px;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -349,29 +354,93 @@ button,
 
 .trusted-logo {
   display: flex;
-  width: 120px;
   height: 40px;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
 }
 
-.trusted-logo:nth-child(1) { width: 102px; }
-.trusted-logo:nth-child(2) { width: 120px; }
-.trusted-logo:nth-child(3) { width: 122px; }
-.trusted-logo:nth-child(4) { width: 90px; }
-.trusted-logo:nth-child(5) { width: 206px; }
-.trusted-logo:nth-child(6) { width: 80px; }
-.trusted-logo:nth-child(7) { width: 176px; }
-.trusted-logo:nth-child(8) { width: 136px; }
-.trusted-logo:nth-child(9) { width: 43px; }
-.trusted-logo:nth-child(10) { width: 80px; }
-
 .trusted-logo img {
   display: block;
-  max-width: 100%;
-  max-height: 100%;
+  width: auto;
+  max-width: 220px;
+  height: 40px;
   object-fit: contain;
+}
+
+/* Review images: three per page, sliding between pages. */
+.reviews-track {
+  display: flex;
+  gap: 24px;
+  transition: transform 500ms ease;
+}
+
+.reviews-item {
+  flex: 0 0 calc((100% - 48px) / 3);
+  aspect-ratio: 519 / 446;
+  overflow: hidden;
+}
+
+.reviews-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.site-footer-flow {
+  position: relative;
+}
+
+.social-fallback-icon {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #091e39;
+  color: #fff;
+  font-family: "Inter:Semi Bold", sans-serif;
+  font-size: 14px;
+}
+
+/* Spam trap on the contact form: off-screen for people, still in the form for bots. */
+.contact-form-trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.service-card-summary,
+.blog-card-title,
+.blog-card-excerpt {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}
+
+.service-card-summary {
+  -webkit-line-clamp: 3;
+}
+
+.blog-card-title,
+.blog-card-excerpt {
+  -webkit-line-clamp: 2;
+}
+
+.blog-card {
+  transition:
+    transform 260ms ease,
+    filter 260ms ease;
+}
+
+.blog-card:hover,
+.blog-card:focus-visible {
+  transform: translateY(-6px);
 }
 
 @keyframes trusted-logo-scroll {
@@ -446,6 +515,9 @@ button,
   width: 1920px;
   height: 495px;
   background: #f3f3f3;
+  /* Extend the background to the screen edges whatever the page's side margin. */
+  box-shadow: 0 0 0 100vmax #f3f3f3;
+  clip-path: inset(0 -100vmax);
   color: #191919;
 }
 
@@ -630,7 +702,7 @@ button,
   color: #c7994b;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1023px) {
 .design-viewport {
   height: auto !important;
   min-height: 100dvh;
@@ -744,6 +816,43 @@ button,
 
 .design-canvas [class~="text-[18px]"] {
   font-size: 16px !important;
+}
+
+.design-canvas [class~="text-[60px]"] {
+  font-size: 34px !important;
+}
+
+.reviews-track {
+  flex-direction: column;
+  transform: none !important;
+}
+
+.reviews-item {
+  flex-basis: auto;
+  width: 100%;
+}
+
+.reviews-dots,
+.service-features-divider {
+  display: none !important;
+}
+
+.design-canvas .blog-hero-image {
+  height: 260px !important;
+}
+
+.design-canvas .service-features {
+  gap: 16px;
+}
+
+/* Keep number badges and icon circles their natural size when cards stack. */
+.design-canvas .service-badge {
+  align-self: flex-start !important;
+}
+
+.design-canvas [data-node-id="1:1128"] [data-name="CTA"] {
+  flex-direction: row !important;
+  align-self: flex-start;
 }
 
 .design-canvas [class~="h-[300px]"] {
@@ -896,6 +1005,13 @@ button,
 .design-canvas [data-node-id="1:2151"] {
   flex-direction: column !important;
   gap: 16px;
+}
+
+/* Keep the clock icon beside the preferred-time dropdown. */
+.design-canvas [data-node-id="1:2158"] {
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 12px;
 }
 
 .design-canvas [data-node-id="1:348"],
@@ -1106,7 +1222,7 @@ button,
 }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1023px) {
 .design-canvas > div {
   gap: 24px;
   padding: 112px 16px 24px;
@@ -1369,6 +1485,19 @@ button,
 
 .achievement-value {
   font-size: 28px;
+}
+}
+
+/* Tablets use the stacked layout, kept inside the same fixed side margin as desktop. */
+@media (min-width: 768px) and (max-width: 1023px) {
+.design-canvas > div {
+  padding-right: var(--site-side-margin);
+  padding-left: var(--site-side-margin);
+}
+
+.site-navbar {
+  left: var(--site-side-margin) !important;
+  width: calc(100% - 2 * var(--site-side-margin));
 }
 }
 

@@ -1,11 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-
-const statistics = [
-  { value: 3, suffix: "+", label: "Years Experience" },
-  { value: 500, suffix: "+", label: "Project Completed" },
-  { value: 2025, suffix: "", label: "Best Marketer Award" },
-  { value: 100, suffix: "+", label: "Dedicated Service" },
-]
+import { useSiteContent } from "../content/store"
 
 function AnimatedValue({ value, suffix }: { value: number; suffix: string }) {
   const [count, setCount] = useState(0)
@@ -56,15 +50,16 @@ function AnimatedValue({ value, suffix }: { value: number; suffix: string }) {
 }
 
 export default function Stats({ className }: { className: string }) {
+  const { stats } = useSiteContent()
   return (
     <div
       className={`achievement-stats ${className}`}
       aria-label="Achievements"
     >
-      {statistics.map(({ value, suffix, label }) => (
+      {stats.map(({ id, value, suffix, label }) => (
         <div
           className="achievement-card"
-          key={label}
+          key={id}
         >
           <div className="achievement-value">
             <AnimatedValue value={value} suffix={suffix} />

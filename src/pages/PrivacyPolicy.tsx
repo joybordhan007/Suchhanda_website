@@ -1,6 +1,8 @@
 import Footer from "../components/Footer"
+import { useSiteContent } from "../content/store"
 
 export default function PrivacyPolicy() {
+  const { settings } = useSiteContent()
   return (
     <div className="legal-page">
       <header className="legal-hero">
@@ -11,7 +13,7 @@ export default function PrivacyPolicy() {
         <p className="legal-updated">Last updated: October 20, 2026</p>
         <h1>Information and privacy</h1>
         <p>
-          This website is a portfolio and contact point for Suchhanda Mondol.
+          This website is a portfolio and contact point for {settings.ownerName}.
           Information you choose to send through the contact form or by email
           is used to respond to your inquiry and discuss requested services.
         </p>
@@ -33,8 +35,8 @@ export default function PrivacyPolicy() {
         <p>
           You may request access to, correction of, or deletion of information
           you have provided, subject to applicable requirements. Contact{" "}
-          <a href="mailto:adritamondol065@gmail.com">
-            adritamondol065@gmail.com
+          <a href={`mailto:${settings.email}`}>
+            {settings.email}
           </a>{" "}
           with privacy questions. This policy may be updated as the website or
           applicable requirements change.

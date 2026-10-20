@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from "react"
-import Footer, { BUSINESS_ADDRESS } from "../components/Footer"
+import Footer from "../components/Footer"
+import { api } from "../content/api"
+import { useSiteContent } from "../content/store"
 import { assetPathPrefix } from "../paths"
 const imgTelephone11 = `${assetPathPrefix}/9aeb0.png`
 const imgEllipse123 = `${assetPathPrefix}/78707.svg`
@@ -13,6 +15,7 @@ const imgTextLogo2 = `${assetPathPrefix}/c9f23.svg`
 const imgArrowDownSimple = `${assetPathPrefix}/05e02.svg`
 
 export default function ContactMe() {
+  const { settings } = useSiteContent()
   const [submitStatus, setSubmitStatus] =
     useState<"idle" | "sending" | "sent" | "error">("idle")
 
@@ -20,31 +23,10 @@ export default function ContactMe() {
     event.preventDefault()
     const form = event.currentTarget
     const formData = Object.fromEntries(new FormData(form).entries())
-    formData._subject = "New website inquiry"
     setSubmitStatus("sending")
 
     try {
-      const response = await fetch(
-        "https://formsubmit.co/ajax/adritamondol065@gmail.com",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        },
-      )
-      const result: unknown = await response.json()
-      if (
-        !response.ok ||
-        typeof result !== "object" ||
-        result === null ||
-        !("success" in result) ||
-        (result.success !== "true" && result.success !== true)
-      ) {
-        throw new Error("The inquiry could not be sent.")
-      }
+      await api("/messages", { method: "POST", body: JSON.stringify(formData) })
       form.reset()
       setSubmitStatus("sent")
     } catch (error) {
@@ -185,7 +167,7 @@ export default function ContactMe() {
                   className="[word-break:break-word] font-['Aileron:Regular'] leading-[1.5] not-italic relative shrink-0 text-[#191919] text-[18px] whitespace-nowrap"
                   data-node-id="1:2124"
                 >
-                  +8801947760296
+                  {settings.phone}
                 </p>
               </div>
               <div
@@ -208,7 +190,7 @@ export default function ContactMe() {
                   className="[word-break:break-word] font-['Aileron:Regular'] leading-[1.5] not-italic relative shrink-0 text-[#191919] text-[18px] whitespace-nowrap"
                   data-node-id="1:2127"
                 >
-                  adritamondol065@gmail.com
+                  {settings.email}
                 </p>
               </div>
               <div
@@ -231,7 +213,7 @@ export default function ContactMe() {
                   className="[word-break:break-word] font-['Aileron:Regular'] leading-[1.5] not-italic relative shrink-0 text-[#191919] text-[18px] w-[392px]"
                   data-node-id="1:2130"
                 >
-                  Mirpur 2, Dhaka, Bangladesh
+                  {settings.address}
                 </p>
               </div>
             </div>
@@ -243,6 +225,14 @@ export default function ContactMe() {
           data-name="Frame"
           onSubmit={handleSubmit}
         >
+          {/* Hidden from people; spam bots fill it in and their message is dropped. */}
+          <input
+            aria-hidden="true"
+            autoComplete="off"
+            className="contact-form-trap"
+            name="website"
+            tabIndex={-1}
+          />
           <div
             className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full"
             data-node-id="1:2132"
@@ -507,7 +497,7 @@ export default function ContactMe() {
             >
               {submitStatus === "sent"
                 ? "Your inquiry has been sent. Thank you!"
-                : "We couldn't send your inquiry. Please try again or email us directly at adritamondol065@gmail.com."}
+                : `We couldn't send your inquiry. Please try again or email us directly at ${settings.email}.`}
             </p>
           )}
         </form>
@@ -529,8 +519,8 @@ export default function ContactMe() {
           className="h-[730px] w-[1280px] rounded-[8px] border-0"
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
-          src={`https://www.google.com/maps?q=${encodeURIComponent(BUSINESS_ADDRESS)}&output=embed`}
-          title={`Map showing ${BUSINESS_ADDRESS}`}
+          src={`https://www.google.com/maps?q=${encodeURIComponent(settings.address)}&output=embed`}
+          title={`Map showing ${settings.address}`}
         />
       </div>
       <div
