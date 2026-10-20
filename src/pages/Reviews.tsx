@@ -1,24 +1,6 @@
-import { useEffect, useRef, useState, type ChangeEvent } from "react"
 import Footer from "../components/Footer"
 
-const initialReviews = ["/assets/bbc34.png", "/assets/bbc34.png", "/assets/bbc34.png"]
-
 export default function Reviews() {
-  const [images, setImages] = useState(initialReviews)
-  const objectUrls = useRef<string[]>([])
-
-  const addImages = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files ?? [])
-    const urls = files.map((file) => URL.createObjectURL(file))
-    objectUrls.current.push(...urls)
-    setImages((current) => [...current, ...urls])
-    event.target.value = ""
-  }
-
-  useEffect(() => {
-    return () => objectUrls.current.forEach((url) => URL.revokeObjectURL(url))
-  }, [])
-
   return (
     <div className="reviews-page" data-name="Reviews">
       <section className="reviews-hero">
@@ -34,23 +16,28 @@ export default function Reviews() {
       <section aria-label="Client reviews" className="reviews-gallery">
         <div className="reviews-toolbar">
           <h2>Client Reviews</h2>
-          <label className="reviews-upload">
-            Add review images
-            <input
-              accept="image/*"
-              multiple
-              onChange={addImages}
-              type="file"
-            />
-          </label>
         </div>
         <div className="reviews-grid">
-          {images.map((src, index) => (
-            <figure className="review-image" key={`${src}-${index}`}>
-              <img alt={`Client review ${index + 1}`} src={src} />
+          {[1, 2, 3].map((review) => (
+            <figure className="review-image" key={review}>
+              <img alt={`Client review ${review}`} src="/assets/bbc34.png" />
             </figure>
           ))}
         </div>
+      </section>
+      <section aria-labelledby="reviews-cta-title" className="reviews-cta">
+        <div>
+          <h2 id="reviews-cta-title">
+            Ready to Elevate <span>Your Brand?</span>
+          </h2>
+          <p>
+            Let&apos;s create something extraordinary together. Schedule a
+            consultation to discuss your vision.
+          </p>
+        </div>
+        <a data-path="/contact" href="/contact">
+          Let&apos;s work Together <span aria-hidden="true">→</span>
+        </a>
       </section>
       <Footer flow />
     </div>

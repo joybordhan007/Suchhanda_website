@@ -12,7 +12,6 @@ const quickLinks = [
   ["About Me", "/about"],
   ["Blog", "/blog"],
   ["Reviews", "/reviews"],
-  ["Contact Me", "/contact"],
 ] as const
 
 const supportLinks = [

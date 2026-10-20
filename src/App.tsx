@@ -20,7 +20,7 @@ const routes = {
   "/blog": { component: Blog, height: 3287 },
   "/blog/article": { component: BlogDetails, height: 4259 },
   "/contact": { component: Contact, height: 3099 },
-  "/reviews": { component: Reviews, height: 2200 },
+  "/reviews": { component: Reviews, height: 1200 },
   "/privacy-policy": { component: PrivacyPolicy, height: 2400 },
   "/terms-of-service": { component: TermsOfService, height: 2400 },
 } as const
