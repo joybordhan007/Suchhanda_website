@@ -387,8 +387,8 @@ button,
   scroll-margin-top: 120px;
 }
 
-.work-case-card > div:first-child {
-  height: 220px !important;
+[data-node-id="1:1300"] > div > div > div:first-child {
+  height: 300px !important;
 }
 
 [data-node-id="1:1300"] > div > div {

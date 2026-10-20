@@ -78,12 +78,12 @@ export default function AboutMe() {
         </div>
       </div>
       <Footer top={3564.34} />
-      <div className="-translate-x-1/2 absolute content-stretch flex gap-[50px] items-center left-1/2 top-[1005px]" data-node-id="1:1516" data-name="Frame">
-        <div className="h-[698px] relative rounded-[16px] shadow-[0px_2px_8px_0px_rgba(0,0,0,0.1)] shrink-0 w-[718px]" data-node-id="1:1517">
+      <div className="-translate-x-1/2 absolute content-stretch flex gap-[50px] items-center left-1/2 top-[1005px] w-[1280px]" data-node-id="1:1516" data-name="Frame">
+        <div className="h-[698px] relative rounded-[16px] shadow-[0px_2px_8px_0px_rgba(0,0,0,0.1)] shrink-0 w-[600px]" data-node-id="1:1517">
           <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[16px] size-full" src={imgRectangle7466} />
         </div>
         <div className="flex flex-row items-center self-stretch" data-node-id="1:1518">
-          <div className="bg-white content-stretch drop-shadow-[0px_2px_4px_rgba(0,0,0,0.1)] flex flex-col gap-[24px] h-full items-start justify-center px-[61px] py-[32px] relative rounded-[16px] shrink-0 w-[792px]" data-name="Frame">
+          <div className="bg-white content-stretch drop-shadow-[0px_2px_4px_rgba(0,0,0,0.1)] flex flex-col gap-[24px] h-full items-start justify-center px-[40px] py-[32px] relative rounded-[16px] shrink-0 w-[630px]" data-name="Frame">
             <div className="[word-break:break-word] flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#3e3e3e] text-[24px] w-[min-content]" data-node-id="1:1519">
               <p className="leading-[1.4]">I’m Suchhanda Mondol, a Digital Marketing Specialist focused on Meta Ads and Google Ads, helping businesses improve their advertising performance through strategic planning, campaign management, and continuous optimization.</p>
             </div>
