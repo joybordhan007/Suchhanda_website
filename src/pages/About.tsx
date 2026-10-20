@@ -1,3 +1,4 @@
+import Footer from "../components/Footer"
 import Stats from "../components/Stats"
 
 const assetPathPrefix = "/assets";
@@ -42,12 +43,12 @@ export default function AboutMe() {
             </div>
           </div>
           <div className="content-stretch flex gap-[16px] items-center relative shrink-0" data-node-id="1:1409" data-name="Frame">
-            <div className="bg-[#091e39] content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-node-id="1:1410" data-name="Frame">
+            <div className="bg-[#091e39] content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-node-id="1:1410" data-name="Frame" data-path="/work">
               <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[16px] text-white whitespace-nowrap" data-node-id="1:1411">
                 View Work
               </p>
             </div>
-            <div className="border border-[#091e39] border-solid content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-node-id="1:1412" data-name="Frame">
+            <div className="border border-[#091e39] border-solid content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-node-id="1:1412" data-name="Frame" data-path="/contact">
               <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[#091e39] text-[16px] whitespace-nowrap" data-node-id="1:1413">
                 Contact Me
               </p>
@@ -76,111 +77,7 @@ export default function AboutMe() {
           </div>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute h-[495px] left-1/2 top-[3564.34px] w-[1920px]" data-node-id="1:1434" data-name="Frame">
-        <div className="absolute bg-[#f3f3f3] h-[495px] left-0 top-0 w-[1920px]" data-node-id="1:1435" />
-        <div className="-translate-x-1/2 absolute content-stretch flex items-start justify-between left-[calc(50%-2.5px)] top-[153px] w-[1551px]" data-node-id="1:1436" data-name="Frame">
-          <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0" data-node-id="1:1437" data-name="Frame">
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[429px]" data-node-id="1:1438" data-name="Frame">
-              <div className="h-[70px] relative shrink-0 w-[344px]" data-node-id="1:1439" data-name="Text Logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTextLogo1} />
-              </div>
-              <div className="[word-break:break-word] flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#191919] text-[16px] w-[min-content]" data-node-id="1:1470">
-                <p className="leading-[1.2]">I’m Suchhanda Mondol — helping brands scale faster with high-converting ads, precise tracking, and performance-driven strategy that delivers real, lasting results.</p>
-              </div>
-            </div>
-            <div className="content-stretch flex gap-[16px] items-center relative shrink-0" data-node-id="1:1471" data-name="Frame">
-              <div className="relative shrink-0 size-[32px]" data-node-id="1:1472" data-name="facebook logo">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFacebookLogo} />
-              </div>
-              <div className="overflow-clip relative shrink-0 size-[32px]" data-node-id="1:1475" data-name="linkedin-icon logo">
-                <div className="absolute inset-[12.5%]" data-node-id="1:1476" data-name="Group">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup} />
-                </div>
-              </div>
-              <div className="overflow-clip relative shrink-0 size-[32px]" data-node-id="1:1478" data-name="WhatsApp logo">
-                <div className="absolute inset-[13.07%_11.81%_11.93%_13.19%]" data-node-id="1:1479">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup1} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="content-stretch flex items-start justify-between relative shrink-0 w-[1024px]" data-node-id="1:1482" data-name="Frame">
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0" data-node-id="1:1483" data-name="Frame">
-              <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="1:1484" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:1485">
-                  <p className="leading-[1.2]">Quick Links</p>
-                </div>
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col font-['Inter:Medium'] font-medium gap-[16px] items-start leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-full whitespace-nowrap" data-node-id="1:1486" data-name="Frame">
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1487">
-                  <p className="leading-[1.2]">Home</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1488">
-                  <p className="leading-[1.2]">Service</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1489">
-                  <p className="leading-[1.2]">Work</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1490">
-                  <p className="leading-[1.2]">About Me</p>
-                </div>
-              </div>
-            </div>
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0" data-node-id="1:1491" data-name="Frame">
-              <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="1:1492" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:1493">
-                  <p className="leading-[1.2]">Support</p>
-                </div>
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col font-['Inter:Medium'] font-medium gap-[16px] items-start leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-full whitespace-nowrap" data-node-id="1:1494" data-name="Frame">
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1495">
-                  <p className="leading-[1.2]">Contact Us</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1496">
-                  <p className="leading-[1.2]">FAQ</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1497">
-                  <p className="leading-[1.2]">Privacy Policy</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1498">
-                  <p className="leading-[1.2]">Terms of Service</p>
-                </div>
-              </div>
-            </div>
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[363px]" data-node-id="1:1499" data-name="Frame">
-              <div className="[word-break:break-word] flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:1500">
-                <p className="leading-[1.2]">Contact Info</p>
-              </div>
-              <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:1501" data-name="Frame">
-                <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-[273px]" data-node-id="1:1502" data-name="Frame">
-                  <div className="relative shrink-0 size-[20px]" data-node-id="1:1503" data-name="Frame">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
-                  </div>
-                  <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-[245px]" data-node-id="1:1505">
-                    <p className="leading-[1.2]">+8801947760296</p>
-                  </div>
-                </div>
-                <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-[273px]" data-node-id="1:1506" data-name="Frame">
-                  <div className="relative shrink-0 size-[20px]" data-node-id="1:1507" data-name="Frame">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame1} />
-                  </div>
-                  <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-[245px]" data-node-id="1:1510">
-                    <p className="leading-[1.2]">adritamondol065@gmail.com</p>
-                  </div>
-                </div>
-                <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-full" data-node-id="1:1511" data-name="Frame">
-                  <div className="relative shrink-0 size-[20px]" data-node-id="1:1512" data-name="Frame">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame2} />
-                  </div>
-                  <div className="[word-break:break-word] flex flex-[1_0_0] flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-px not-italic relative text-[#191919] text-[16px]" data-node-id="1:1515">
-                    <p className="leading-[1.2]">Mirpur 2, Dhaka, Bangladesh</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Footer top={3564.34} />
       <div className="-translate-x-1/2 absolute content-stretch flex gap-[50px] items-center left-1/2 top-[1005px]" data-node-id="1:1516" data-name="Frame">
         <div className="h-[698px] relative rounded-[16px] shadow-[0px_2px_8px_0px_rgba(0,0,0,0.1)] shrink-0 w-[718px]" data-node-id="1:1517">
           <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[16px] size-full" src={imgRectangle7466} />
@@ -220,7 +117,7 @@ export default function AboutMe() {
       </div>
       <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-center left-1/2 top-[2483px] w-[1560px]" data-node-id="1:1535" data-name="Frame">
         <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] whitespace-nowrap" data-node-id="1:1536" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-          <p className="leading-[1.2]">Featured In</p>
+          <p className="leading-[1.2]">Certification &amp; Award</p>
         </div>
         <div className="content-stretch flex gap-[24px] items-center relative shrink-0 w-full" data-node-id="1:1537" data-name="Frame">
           <div className="aspect-[1024/791] flex-[1_0_0] min-w-px relative rounded-[2px] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.1)]" data-node-id="1:1538" data-name="image 4">

@@ -1,4 +1,5 @@
 import Stats from "../components/Stats"
+import Footer from "../components/Footer"
 import TrustedLogos from "../components/TrustedLogos"
 
 const assetPathPrefix = "/assets";
@@ -19,6 +20,10 @@ const imgAdvertisingCampaignTargetingMarketingStrategyPerformance2 = `${assetPat
 const imgHrManagementFlatIllustration1 = `${assetPathPrefix}/48813.png`;
 const imgImage = `${assetPathPrefix}/3c9a6.png`;
 const imgR32 = `${assetPathPrefix}/bbc34.png`;
+const imgWorkCard1 = `${assetPathPrefix}/cd2eb.png`;
+const imgWorkCard2 = `${assetPathPrefix}/4492d.png`;
+const imgWorkCard3 = `${assetPathPrefix}/29777.png`;
+const imgWorkCard4 = `${assetPathPrefix}/30d72.png`;
 const imgMeta = `${assetPathPrefix}/5ba1b.svg`;
 const imgArrowForward = `${assetPathPrefix}/16a89.svg`;
 const imgGroup6 = `${assetPathPrefix}/456b1.svg`;
@@ -193,7 +198,7 @@ export default function Home() {
         </div>
         <div className="content-stretch flex flex-col gap-[56px] items-start relative shrink-0 w-full" data-node-id="1:378" data-name="Frame">
           <div className="content-stretch flex gap-[24px] items-center relative shrink-0 w-full" data-node-id="1:379" data-name="Frame">
-            <div className="service-card bg-white border border-[rgba(0,0,0,0.1)] border-solid content-stretch drop-shadow-[0px_2px_3.5px_rgba(0,0,0,0.1)] flex flex-[1_0_0] flex-col gap-[16px] items-start justify-center min-w-px p-[24px] relative rounded-[16px]" data-name="CTA" data-path="/service">
+            <div className="service-card bg-white border border-[rgba(0,0,0,0.1)] border-solid content-stretch flex flex-[1_0_0] flex-col gap-[16px] items-start justify-center min-w-px p-[24px] relative rounded-[16px]" data-name="CTA" data-path="/service">
               <div className="relative shrink-0 size-[80px]" data-node-id="1:381" data-name="meta">
                 <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMeta} />
               </div>
@@ -355,28 +360,20 @@ export default function Home() {
             </p>
           </div>
           <div className="content-stretch flex gap-[24px] items-start relative shrink-0 w-full" data-node-id="1:450" data-name="Frame">
-            <div className="h-[452px] relative rounded-[16px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.1)] shrink-0 w-[768px]" data-node-id="1:451" data-name="Image">
-              <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-[16px]">
-                <img alt="" className="absolute h-[99.46%] left-[-11.31%] max-w-none top-[0.17%] w-[121.59%]" src={imgImage} />
-              </div>
-            </div>
-            <div className="h-[452px] relative rounded-[16px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.1)] shrink-0 w-[768px]" data-node-id="1:452" data-name="Image">
-              <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-[16px]">
-                <img alt="" className="absolute h-[99.46%] left-[-11.31%] max-w-none top-[0.17%] w-[121.59%]" src={imgImage} />
-              </div>
-            </div>
+            <a aria-label="View Meta Ads campaign" className="home-work-card" data-path="/work#work-card-1" href="/work#work-card-1">
+              <img alt="" src={imgWorkCard1} />
+            </a>
+            <a aria-label="View Google Ads campaign" className="home-work-card" data-path="/work#work-card-2" href="/work#work-card-2">
+              <img alt="" src={imgWorkCard2} />
+            </a>
           </div>
           <div className="content-stretch flex gap-[24px] items-start relative shrink-0 w-full" data-node-id="1:453" data-name="Frame">
-            <div className="h-[452px] relative rounded-[16px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.1)] shrink-0 w-[768px]" data-node-id="1:454" data-name="Image">
-              <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-[16px]">
-                <img alt="" className="absolute h-[99.46%] left-[-11.31%] max-w-none top-[0.17%] w-[121.59%]" src={imgImage} />
-              </div>
-            </div>
-            <div className="h-[452px] relative rounded-[16px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.1)] shrink-0 w-[768px]" data-node-id="1:455" data-name="Image">
-              <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-[16px]">
-                <img alt="" className="absolute h-[99.46%] left-[-11.31%] max-w-none top-[0.17%] w-[121.59%]" src={imgImage} />
-              </div>
-            </div>
+            <a aria-label="View Meta Ads campaign results" className="home-work-card" data-path="/work#work-card-3" href="/work#work-card-3">
+              <img alt="" src={imgWorkCard3} />
+            </a>
+            <a aria-label="View Google Ads campaign results" className="home-work-card" data-path="/work#work-card-4" href="/work#work-card-4">
+              <img alt="" src={imgWorkCard4} />
+            </a>
           </div>
         </div>
         <div className="bg-[#091e39] content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-name="CTA" data-path="/work">
@@ -414,12 +411,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="content-stretch flex gap-[4px] items-center relative shrink-0" data-node-id="1:468" data-name="Frame">
-          <div className="bg-[#facc15] h-[12px] relative rounded-[999px] shrink-0 w-[24px]" data-node-id="1:469" />
-          <div className="bg-[#fff9df] relative rounded-[999px] shrink-0 size-[12px]" data-node-id="1:470" />
-          <div className="bg-[#fff9df] relative rounded-[999px] shrink-0 size-[12px]" data-node-id="1:471" />
-          <div className="bg-[#fff9df] relative rounded-[999px] shrink-0 size-[12px]" data-node-id="1:472" />
-        </div>
         <a className="reviews-view-all" data-path="/reviews" href="/reviews">
           View All Reviews
         </a>
@@ -444,111 +435,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute h-[495px] left-1/2 top-[4897.11px] w-[1920px]" data-node-id="1:480" data-name="Frame">
-        <div className="absolute bg-[#f3f3f3] h-[495px] left-0 top-0 w-[1920px]" data-node-id="1:481" />
-        <div className="-translate-x-1/2 absolute content-stretch flex items-start justify-between left-1/2 top-[153px] w-[1560px]" data-node-id="1:482" data-name="Frame">
-          <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0" data-node-id="1:483" data-name="Frame">
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[429px]" data-node-id="1:484" data-name="Frame">
-              <div className="h-[70px] relative shrink-0 w-[344px]" data-node-id="1:485" data-name="Text Logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTextLogo1} />
-              </div>
-              <div className="[word-break:break-word] flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#191919] text-[16px] w-[min-content]" data-node-id="1:516">
-                <p className="leading-[1.2]">I’m Suchhanda Mondol — helping brands scale faster with high-converting ads, precise tracking, and performance-driven strategy that delivers real, lasting results.</p>
-              </div>
-            </div>
-            <div className="content-stretch flex gap-[16px] items-center relative shrink-0" data-node-id="1:517" data-name="Frame">
-              <div className="relative shrink-0 size-[32px]" data-node-id="1:518" data-name="facebook logo">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFacebookLogo} />
-              </div>
-              <div className="overflow-clip relative shrink-0 size-[32px]" data-node-id="1:521" data-name="linkedin-icon logo">
-                <div className="absolute inset-[12.5%]" data-node-id="1:522" data-name="Group">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup8} />
-                </div>
-              </div>
-              <div className="overflow-clip relative shrink-0 size-[32px]" data-node-id="1:524" data-name="WhatsApp logo">
-                <div className="absolute inset-[13.07%_11.81%_11.93%_13.19%]" data-node-id="1:525">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup9} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="content-stretch flex items-start justify-between relative shrink-0 w-[1024px]" data-node-id="1:528" data-name="Frame">
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0" data-node-id="1:529" data-name="Frame">
-              <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="1:530" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:531">
-                  <p className="leading-[1.2]">Quick Links</p>
-                </div>
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col font-['Inter:Medium'] font-medium gap-[16px] items-start leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-full whitespace-nowrap" data-node-id="1:532" data-name="Frame">
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:533">
-                  <p className="leading-[1.2]">Home</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:534">
-                  <p className="leading-[1.2]">Service</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:535">
-                  <p className="leading-[1.2]">Work</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:536">
-                  <p className="leading-[1.2]">About Me</p>
-                </div>
-              </div>
-            </div>
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0" data-node-id="1:537" data-name="Frame">
-              <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="1:538" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:539">
-                  <p className="leading-[1.2]">Support</p>
-                </div>
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col font-['Inter:Medium'] font-medium gap-[16px] items-start leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-full whitespace-nowrap" data-node-id="1:540" data-name="Frame">
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:541">
-                  <p className="leading-[1.2]">Contact Us</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:542">
-                  <p className="leading-[1.2]">FAQ</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:543">
-                  <p className="leading-[1.2]">Privacy Policy</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:544">
-                  <p className="leading-[1.2]">Terms of Service</p>
-                </div>
-              </div>
-            </div>
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[363px]" data-node-id="1:545" data-name="Frame">
-              <div className="[word-break:break-word] flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:546">
-                <p className="leading-[1.2]">Contact Info</p>
-              </div>
-              <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:547" data-name="Frame">
-                <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-[273px]" data-node-id="1:548" data-name="Frame">
-                  <div className="relative shrink-0 size-[20px]" data-node-id="1:549" data-name="Frame">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
-                  </div>
-                  <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-[245px]" data-node-id="1:551">
-                    <p className="leading-[1.2]">+8801947760296</p>
-                  </div>
-                </div>
-                <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-[273px]" data-node-id="1:552" data-name="Frame">
-                  <div className="relative shrink-0 size-[20px]" data-node-id="1:553" data-name="Frame">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame1} />
-                  </div>
-                  <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-[245px]" data-node-id="1:556">
-                    <p className="leading-[1.2]">adritamondol065@gmail.com</p>
-                  </div>
-                </div>
-                <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-full" data-node-id="1:557" data-name="Frame">
-                  <div className="relative shrink-0 size-[20px]" data-node-id="1:558" data-name="Frame">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame2} />
-                  </div>
-                  <div className="[word-break:break-word] flex flex-[1_0_0] flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-px not-italic relative text-[#191919] text-[16px]" data-node-id="1:561">
-                    <p className="leading-[1.2]">Mirpur 2, Dhaka, Bangladesh</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Footer top={4897.11} />
       <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1560px]" data-node-id="1:562" data-name="Frame">
         <div className="h-[40px] relative shrink-0 w-[197px]" data-node-id="1:563" data-name="Text Logo 1">
           <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTextLogo2} />

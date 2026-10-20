@@ -4,8 +4,10 @@ import Blog from "./pages/Blog"
 import BlogDetails from "./pages/BlogDetails"
 import Contact from "./pages/Contact"
 import Home from "./pages/Home"
+import PrivacyPolicy from "./pages/PrivacyPolicy"
 import Reviews from "./pages/Reviews"
 import ServiceDetails from "./pages/ServiceDetails"
+import TermsOfService from "./pages/TermsOfService"
 import Work from "./pages/Work"
 
 const CANVAS_WIDTH = 1920
@@ -19,6 +21,8 @@ const routes = {
   "/blog/article": { component: BlogDetails, height: 4259 },
   "/contact": { component: Contact, height: 3099 },
   "/reviews": { component: Reviews, height: 2200 },
+  "/privacy-policy": { component: PrivacyPolicy, height: 2400 },
+  "/terms-of-service": { component: TermsOfService, height: 2400 },
 } as const
 
 type RoutePath = keyof typeof routes
@@ -33,8 +37,11 @@ const linkMap: Record<string, RoutePath> = {
   work: "/work",
   "about me": "/about",
   blog: "/blog",
+  reviews: "/reviews",
   "contact me": "/contact",
   "contact us": "/contact",
+  "privacy policy": "/privacy-policy",
+  "terms of service": "/terms-of-service",
   "explore me": "/work",
   "let's work together": "/contact",
   "let’s work together": "/contact",
@@ -52,6 +59,7 @@ export default function App() {
   const [path, setPath] = useState<RoutePath>(getRoute)
   const [viewportWidth, setViewportWidth] = useState(document.documentElement.clientWidth)
   const [serviceOpen, setServiceOpen] = useState(false)
+  const [pendingHash, setPendingHash] = useState("")
   const [contentHeight, setContentHeight] = useState<number>(routes[getRoute()].height)
   const route = routes[path]
 
@@ -111,6 +119,20 @@ export default function App() {
     return () => observer.disconnect()
   }, [path])
 
+  useEffect(() => {
+    if (!pendingHash) return
+    const frame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.getElementById(pendingHash)?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        })
+        setPendingHash("")
+      })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [path, pendingHash])
+
   const scale = Math.min(1, viewportWidth / CANVAS_WIDTH)
   const canvasOffsetX = Math.max(0, (viewportWidth - CANVAS_WIDTH) / 2)
   const Page = route.component
@@ -125,11 +147,12 @@ export default function App() {
     [canvasOffsetX, contentHeight, scale],
   )
 
-  const navigate = (next: RoutePath) => {
-    if (next !== path) {
-      window.history.pushState({}, "", next)
+  const navigate = (next: RoutePath, hash = "") => {
+    if (next !== path || hash) {
+      window.history.pushState({}, "", `${next}${hash}`)
       setPath(next)
-      window.scrollTo(0, 0)
+      setPendingHash(hash.slice(1))
+      if (!hash) window.scrollTo(0, 0)
     }
     setServiceOpen(false)
   }
@@ -145,14 +168,15 @@ export default function App() {
       setServiceOpen((open) => !open)
       return
     }
-    const requestedPath = element.getAttribute("data-path")
-    const direct = requestedPath && requestedPath in routes
-      ? (requestedPath as RoutePath)
+    const requestedPath = element.getAttribute("data-path") || element.getAttribute("href")
+    const [requestedRoute, requestedHash = ""] = requestedPath?.split("#") ?? []
+    const direct = requestedRoute && requestedRoute in routes
+      ? (requestedRoute as RoutePath)
       : linkMap[label]
     const partial = Object.entries(linkMap).find(([text]) => label.includes(text))?.[1]
     if (direct || partial) {
       event.preventDefault()
-      navigate(direct || partial)
+      navigate(direct || partial, direct ? (requestedHash ? `#${requestedHash}` : "") : "")
     }
   }
 

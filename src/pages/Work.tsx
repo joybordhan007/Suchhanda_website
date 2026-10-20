@@ -1,3 +1,4 @@
+import Footer from "../components/Footer"
 import Stats from "../components/Stats"
 import TrustedLogos from "../components/TrustedLogos"
 
@@ -152,12 +153,12 @@ export default function Work() {
             <p className="font-['Noto_Sans:Regular'] font-normal leading-[1.4] relative shrink-0 text-[24px] w-full" data-node-id="1:1177" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>{`Below you'll find a selection of campaigns I've managed for clients across different industries. Each case study shows the challenge, strategy, and measurable outcome.`}</p>
           </div>
           <div className="content-stretch flex gap-[16px] items-center relative shrink-0" data-node-id="1:1178" data-name="Frame">
-            <div className="bg-[#091e39] content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-node-id="1:1179" data-name="Frame">
+            <div className="bg-[#091e39] content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-node-id="1:1179" data-name="Frame" data-path="/about">
               <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[16px] text-white whitespace-nowrap" data-node-id="1:1180">
                 About Me
               </p>
             </div>
-            <div className="border border-[#091e39] border-solid content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-node-id="1:1181" data-name="Frame">
+            <div className="border border-[#091e39] border-solid content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-node-id="1:1181" data-name="Frame" data-path="/contact">
               <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[#091e39] text-[16px] whitespace-nowrap" data-node-id="1:1182">
                 Contact Me
               </p>
@@ -222,114 +223,10 @@ export default function Work() {
           </div>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute h-[495px] left-1/2 top-[5440.11px] w-[1920px]" data-node-id="1:1218" data-name="Frame">
-        <div className="absolute bg-[#f3f3f3] h-[495px] left-0 top-0 w-[1920px]" data-node-id="1:1219" />
-        <div className="-translate-x-1/2 absolute content-stretch flex items-start justify-between left-[calc(50%-2.5px)] top-[153px] w-[1551px]" data-node-id="1:1220" data-name="Frame">
-          <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0" data-node-id="1:1221" data-name="Frame">
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[429px]" data-node-id="1:1222" data-name="Frame">
-              <div className="h-[70px] relative shrink-0 w-[344px]" data-node-id="1:1223" data-name="Text Logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTextLogo1} />
-              </div>
-              <div className="[word-break:break-word] flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#191919] text-[16px] w-[min-content]" data-node-id="1:1254">
-                <p className="leading-[1.2]">I’m Suchhanda Mondol — helping brands scale faster with high-converting ads, precise tracking, and performance-driven strategy that delivers real, lasting results.</p>
-              </div>
-            </div>
-            <div className="content-stretch flex gap-[16px] items-center relative shrink-0" data-node-id="1:1255" data-name="Frame">
-              <div className="relative shrink-0 size-[32px]" data-node-id="1:1256" data-name="facebook logo">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFacebookLogo} />
-              </div>
-              <div className="overflow-clip relative shrink-0 size-[32px]" data-node-id="1:1259" data-name="linkedin-icon logo">
-                <div className="absolute inset-[12.5%]" data-node-id="1:1260" data-name="Group">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup6} />
-                </div>
-              </div>
-              <div className="overflow-clip relative shrink-0 size-[32px]" data-node-id="1:1262" data-name="WhatsApp logo">
-                <div className="absolute inset-[13.07%_11.81%_11.93%_13.19%]" data-node-id="1:1263">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup7} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="content-stretch flex items-start justify-between relative shrink-0 w-[1024px]" data-node-id="1:1266" data-name="Frame">
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0" data-node-id="1:1267" data-name="Frame">
-              <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="1:1268" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:1269">
-                  <p className="leading-[1.2]">Quick Links</p>
-                </div>
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col font-['Inter:Medium'] font-medium gap-[16px] items-start leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-full whitespace-nowrap" data-node-id="1:1270" data-name="Frame">
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1271">
-                  <p className="leading-[1.2]">Home</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1272">
-                  <p className="leading-[1.2]">Service</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1273">
-                  <p className="leading-[1.2]">Work</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1274">
-                  <p className="leading-[1.2]">About Me</p>
-                </div>
-              </div>
-            </div>
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0" data-node-id="1:1275" data-name="Frame">
-              <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="1:1276" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:1277">
-                  <p className="leading-[1.2]">Support</p>
-                </div>
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col font-['Inter:Medium'] font-medium gap-[16px] items-start leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-full whitespace-nowrap" data-node-id="1:1278" data-name="Frame">
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1279">
-                  <p className="leading-[1.2]">Contact Us</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1280">
-                  <p className="leading-[1.2]">FAQ</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1281">
-                  <p className="leading-[1.2]">Privacy Policy</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:1282">
-                  <p className="leading-[1.2]">Terms of Service</p>
-                </div>
-              </div>
-            </div>
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[363px]" data-node-id="1:1283" data-name="Frame">
-              <div className="[word-break:break-word] flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:1284">
-                <p className="leading-[1.2]">Contact Info</p>
-              </div>
-              <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:1285" data-name="Frame">
-                <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-[273px]" data-node-id="1:1286" data-name="Frame">
-                  <div className="relative shrink-0 size-[20px]" data-node-id="1:1287" data-name="Frame">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
-                  </div>
-                  <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-[245px]" data-node-id="1:1289">
-                    <p className="leading-[1.2]">+8801947760296</p>
-                  </div>
-                </div>
-                <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-[273px]" data-node-id="1:1290" data-name="Frame">
-                  <div className="relative shrink-0 size-[20px]" data-node-id="1:1291" data-name="Frame">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame1} />
-                  </div>
-                  <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-[245px]" data-node-id="1:1294">
-                    <p className="leading-[1.2]">adritamondol065@gmail.com</p>
-                  </div>
-                </div>
-                <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-full" data-node-id="1:1295" data-name="Frame">
-                  <div className="relative shrink-0 size-[20px]" data-node-id="1:1296" data-name="Frame">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame2} />
-                  </div>
-                  <div className="[word-break:break-word] flex flex-[1_0_0] flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-px not-italic relative text-[#191919] text-[16px]" data-node-id="1:1299">
-                    <p className="leading-[1.2]">Mirpur 2, Dhaka, Bangladesh</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Footer top={5440.11} />
       <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[80px] items-start left-1/2 top-[1005px] w-[1560px]" data-node-id="1:1300" data-name="Frame">
         <div className="content-stretch flex gap-[24px] items-center relative shrink-0 w-full" data-node-id="1:1301" data-name="Frame">
-          <div className="bg-[#f5f5f5] content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex flex-col gap-[32px] items-start relative rounded-[24px] shrink-0 w-[768px]" data-node-id="1:1302" data-name="Frame">
+          <div className="work-case-card bg-[#f5f5f5] content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex flex-col gap-[32px] items-start relative rounded-[24px] shrink-0 w-[768px]" data-node-id="1:1302" data-name="Frame" id="work-card-1">
             <div className="h-[450px] relative rounded-[24px] shrink-0 w-full" data-node-id="1:1303">
               <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[24px] size-full" src={imgRectangle20} />
             </div>
@@ -338,16 +235,13 @@ export default function Work() {
                 <div className="flex flex-col font-['Inter:Italic'] font-normal italic justify-center relative shrink-0 text-[#2f2f2f] text-[16px] w-full" data-node-id="1:1306">
                   <p className="leading-[1.2]">Meta Ads</p>
                 </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center not-italic relative shrink-0 text-[#2f2f2f] text-[28px] w-full" data-node-id="1:1307">
-                  <p className="leading-[1.2]">Google Ads · Search Campaign</p>
-                </div>
                 <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center not-italic relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1308">
                   <p className="leading-[1.3]">{`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,`}</p>
                 </div>
               </div>
             </div>
           </div>
-          <div className="bg-[#f5f5f5] content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex flex-col gap-[32px] items-start relative rounded-[24px] shrink-0 w-[768px]" data-node-id="1:1309" data-name="Frame">
+          <div className="work-case-card bg-[#f5f5f5] content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex flex-col gap-[32px] items-start relative rounded-[24px] shrink-0 w-[768px]" data-node-id="1:1309" data-name="Frame" id="work-card-2">
             <div className="h-[450px] relative rounded-[24px] shrink-0 w-full" data-node-id="1:1310">
               <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[24px] size-full" src={imgRectangle21} />
             </div>
@@ -355,9 +249,6 @@ export default function Work() {
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-start leading-[0] relative shrink-0 w-full" data-node-id="1:1312" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Italic'] font-normal italic justify-center relative shrink-0 text-[#2f2f2f] text-[16px] w-full" data-node-id="1:1313">
                   <p className="leading-[1.2]">Google Ads</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center not-italic relative shrink-0 text-[#2f2f2f] text-[28px] w-full" data-node-id="1:1314">
-                  <p className="leading-[1.2]">Google Ads · Search Campaign</p>
                 </div>
                 <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center not-italic relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1315">
                   <p className="leading-[1.3]">{`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,`}</p>
@@ -367,7 +258,7 @@ export default function Work() {
           </div>
         </div>
         <div className="content-stretch flex gap-[24px] items-center relative shrink-0 w-full" data-node-id="1:1316" data-name="Frame">
-          <div className="bg-[#f5f5f5] content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex flex-col gap-[32px] items-start relative rounded-[24px] shrink-0 w-[768px]" data-node-id="1:1317" data-name="Frame">
+          <div className="work-case-card bg-[#f5f5f5] content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex flex-col gap-[32px] items-start relative rounded-[24px] shrink-0 w-[768px]" data-node-id="1:1317" data-name="Frame" id="work-card-3">
             <div className="h-[450px] relative rounded-[24px] shrink-0 w-full" data-node-id="1:1318">
               <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[24px] size-full" src={imgRectangle22} />
             </div>
@@ -376,16 +267,13 @@ export default function Work() {
                 <div className="flex flex-col font-['Inter:Italic'] font-normal italic justify-center relative shrink-0 text-[#2f2f2f] text-[16px] w-full" data-node-id="1:1321">
                   <p className="leading-[1.2]">Meta Ads</p>
                 </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center not-italic relative shrink-0 text-[#2f2f2f] text-[28px] w-full" data-node-id="1:1322">
-                  <p className="leading-[1.2]">Google Ads · Search Campaign</p>
-                </div>
                 <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center not-italic relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1323">
                   <p className="leading-[1.3]">{`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,`}</p>
                 </div>
               </div>
             </div>
           </div>
-          <div className="bg-[#f5f5f5] content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex flex-col gap-[32px] items-start relative rounded-[24px] shrink-0 w-[768px]" data-node-id="1:1324" data-name="Frame">
+          <div className="work-case-card bg-[#f5f5f5] content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex flex-col gap-[32px] items-start relative rounded-[24px] shrink-0 w-[768px]" data-node-id="1:1324" data-name="Frame" id="work-card-4">
             <div className="h-[450px] relative rounded-[24px] shrink-0 w-full" data-node-id="1:1325">
               <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[24px] size-full" src={imgRectangle23} />
             </div>
@@ -393,9 +281,6 @@ export default function Work() {
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-start leading-[0] relative shrink-0 w-full" data-node-id="1:1327" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Italic'] font-normal italic justify-center relative shrink-0 text-[#2f2f2f] text-[16px] w-full" data-node-id="1:1328">
                   <p className="leading-[1.2]">Google Ads</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center not-italic relative shrink-0 text-[#2f2f2f] text-[28px] w-full" data-node-id="1:1329">
-                  <p className="leading-[1.2]">Google Ads · Search Campaign</p>
                 </div>
                 <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center not-italic relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1330">
                   <p className="leading-[1.3]">{`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,`}</p>
@@ -414,9 +299,6 @@ export default function Work() {
                 <div className="flex flex-col font-['Inter:Italic'] font-normal italic justify-center relative shrink-0 text-[#2f2f2f] text-[16px] w-full" data-node-id="1:1336">
                   <p className="leading-[1.2]">Google Ads</p>
                 </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center not-italic relative shrink-0 text-[#2f2f2f] text-[28px] w-full" data-node-id="1:1337">
-                  <p className="leading-[1.2]">Google Ads · Search Campaign</p>
-                </div>
                 <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center not-italic relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1338">
                   <p className="leading-[1.3]">{`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,`}</p>
                 </div>
@@ -431,9 +313,6 @@ export default function Work() {
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-start leading-[0] relative shrink-0 w-full" data-node-id="1:1342" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Italic'] font-normal italic justify-center relative shrink-0 text-[#2f2f2f] text-[16px] w-full" data-node-id="1:1343">
                   <p className="leading-[1.2]">Google Ads</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center not-italic relative shrink-0 text-[#2f2f2f] text-[28px] w-full" data-node-id="1:1344">
-                  <p className="leading-[1.2]">Google Ads · Search Campaign</p>
                 </div>
                 <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center not-italic relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1345">
                   <p className="leading-[1.3]">{`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,`}</p>
@@ -452,9 +331,6 @@ export default function Work() {
                 <div className="flex flex-col font-['Inter:Italic'] font-normal italic justify-center relative shrink-0 text-[#2f2f2f] text-[16px] w-full" data-node-id="1:1351">
                   <p className="leading-[1.2]">Meta Ads</p>
                 </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center not-italic relative shrink-0 text-[#2f2f2f] text-[28px] w-full" data-node-id="1:1352">
-                  <p className="leading-[1.2]">Google Ads · Search Campaign</p>
-                </div>
                 <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center not-italic relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1353">
                   <p className="leading-[1.3]">{`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,`}</p>
                 </div>
@@ -469,9 +345,6 @@ export default function Work() {
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-start leading-[0] relative shrink-0 w-full" data-node-id="1:1357" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Italic'] font-normal italic justify-center relative shrink-0 text-[#2f2f2f] text-[16px] w-full" data-node-id="1:1358">
                   <p className="leading-[1.2]">Google Ads</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center not-italic relative shrink-0 text-[#2f2f2f] text-[28px] w-full" data-node-id="1:1359">
-                  <p className="leading-[1.2]">Google Ads · Search Campaign</p>
                 </div>
                 <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center not-italic relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1360">
                   <p className="leading-[1.3]">{`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,`}</p>

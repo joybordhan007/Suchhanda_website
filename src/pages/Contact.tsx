@@ -1,6 +1,6 @@
+import Footer, { BUSINESS_ADDRESS } from "../components/Footer"
 const assetPathPrefix = "/assets";
 const imgTelephone11 = `${assetPathPrefix}/9aeb0.png`;
-const imgRectangle119 = `${assetPathPrefix}/42905.png`;
 const imgTextLogo1 = `${assetPathPrefix}/b0903.svg`;
 const imgFacebookLogo = `${assetPathPrefix}/4aa89.svg`;
 const imgGroup = `${assetPathPrefix}/0684a.svg`;
@@ -15,9 +15,6 @@ const imgPhoneCall01 = `${assetPathPrefix}/bfbad.svg`;
 const imgMail01 = `${assetPathPrefix}/805c3.svg`;
 const imgMarkerPin01 = `${assetPathPrefix}/cb13c.svg`;
 const imgClock = `${assetPathPrefix}/ce72e.svg`;
-const imgGpsOn = `${assetPathPrefix}/6ccb1.svg`;
-const imgPlus = `${assetPathPrefix}/fbfed.svg`;
-const imgMinus = `${assetPathPrefix}/dbccd.svg`;
 const imgTextLogo2 = `${assetPathPrefix}/c9f23.svg`;
 const imgArrowDownSimple = `${assetPathPrefix}/05e02.svg`;
 
@@ -33,111 +30,7 @@ export default function ContactMe() {
           <p className="font-['Anuphan:Regular'] font-normal leading-[1.3] min-w-full relative shrink-0 text-[32px] text-center w-[min-content]" data-node-id="1:2029">{`Ready to start your growth journey? We'd love to hear from you.`}</p>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute h-[495px] left-1/2 top-[2604px] w-[1920px]" data-node-id="1:2030" data-name="Frame">
-        <div className="absolute bg-[#f3f3f3] h-[495px] left-0 top-0 w-[1920px]" data-node-id="1:2031" />
-        <div className="-translate-x-1/2 absolute content-stretch flex items-start justify-between left-[calc(50%-2.5px)] top-[153px] w-[1551px]" data-node-id="1:2032" data-name="Frame">
-          <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0" data-node-id="1:2033" data-name="Frame">
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[429px]" data-node-id="1:2034" data-name="Frame">
-              <div className="h-[70px] relative shrink-0 w-[344px]" data-node-id="1:2035" data-name="Text Logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTextLogo1} />
-              </div>
-              <div className="[word-break:break-word] flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#191919] text-[16px] w-[min-content]" data-node-id="1:2066">
-                <p className="leading-[1.2]">I’m Suchhanda Mondol — helping brands scale faster with high-converting ads, precise tracking, and performance-driven strategy that delivers real, lasting results.</p>
-              </div>
-            </div>
-            <div className="content-stretch flex gap-[16px] items-center relative shrink-0" data-node-id="1:2067" data-name="Frame">
-              <div className="relative shrink-0 size-[32px]" data-node-id="1:2068" data-name="facebook logo">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFacebookLogo} />
-              </div>
-              <div className="overflow-clip relative shrink-0 size-[32px]" data-node-id="1:2071" data-name="linkedin-icon logo">
-                <div className="absolute inset-[12.5%]" data-node-id="1:2072" data-name="Group">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup} />
-                </div>
-              </div>
-              <div className="overflow-clip relative shrink-0 size-[32px]" data-node-id="1:2074" data-name="WhatsApp logo">
-                <div className="absolute inset-[13.07%_11.81%_11.93%_13.19%]" data-node-id="1:2075">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup1} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="content-stretch flex items-start justify-between relative shrink-0 w-[1024px]" data-node-id="1:2078" data-name="Frame">
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0" data-node-id="1:2079" data-name="Frame">
-              <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="1:2080" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:2081">
-                  <p className="leading-[1.2]">Quick Links</p>
-                </div>
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col font-['Inter:Medium'] font-medium gap-[16px] items-start leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-full whitespace-nowrap" data-node-id="1:2082" data-name="Frame">
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:2083">
-                  <p className="leading-[1.2]">Home</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:2084">
-                  <p className="leading-[1.2]">Service</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:2085">
-                  <p className="leading-[1.2]">Work</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:2086">
-                  <p className="leading-[1.2]">About Me</p>
-                </div>
-              </div>
-            </div>
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0" data-node-id="1:2087" data-name="Frame">
-              <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="1:2088" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:2089">
-                  <p className="leading-[1.2]">Support</p>
-                </div>
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col font-['Inter:Medium'] font-medium gap-[16px] items-start leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-full whitespace-nowrap" data-node-id="1:2090" data-name="Frame">
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:2091">
-                  <p className="leading-[1.2]">Contact Us</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:2092">
-                  <p className="leading-[1.2]">FAQ</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:2093">
-                  <p className="leading-[1.2]">Privacy Policy</p>
-                </div>
-                <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:2094">
-                  <p className="leading-[1.2]">Terms of Service</p>
-                </div>
-              </div>
-            </div>
-            <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[363px]" data-node-id="1:2095" data-name="Frame">
-              <div className="[word-break:break-word] flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:2096">
-                <p className="leading-[1.2]">Contact Info</p>
-              </div>
-              <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:2097" data-name="Frame">
-                <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-[273px]" data-node-id="1:2098" data-name="Frame">
-                  <div className="relative shrink-0 size-[20px]" data-node-id="1:2099" data-name="Frame">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
-                  </div>
-                  <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-[245px]" data-node-id="1:2101">
-                    <p className="leading-[1.2]">+8801947760296</p>
-                  </div>
-                </div>
-                <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-[273px]" data-node-id="1:2102" data-name="Frame">
-                  <div className="relative shrink-0 size-[20px]" data-node-id="1:2103" data-name="Frame">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame1} />
-                  </div>
-                  <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] w-[245px]" data-node-id="1:2106">
-                    <p className="leading-[1.2]">adritamondol065@gmail.com</p>
-                  </div>
-                </div>
-                <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-full" data-node-id="1:2107" data-name="Frame">
-                  <div className="relative shrink-0 size-[20px]" data-node-id="1:2108" data-name="Frame">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame2} />
-                  </div>
-                  <div className="[word-break:break-word] flex flex-[1_0_0] flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-px not-italic relative text-[#191919] text-[16px]" data-node-id="1:2111">
-                    <p className="leading-[1.2]">Mirpur 2, Dhaka, Bangladesh</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Footer top={2604} />
       <div className="-translate-x-1/2 absolute content-stretch flex gap-[24px] items-center left-1/2 px-[180px] top-[511px] w-[1920px]" data-node-id="1:2112" data-name="Frame">
         <div className="flex flex-row items-center self-stretch" data-node-id="1:2113">
           <div className="bg-white content-stretch flex flex-col gap-[120px] h-full items-start overflow-clip px-[24px] py-[32px] relative rounded-[8px] shadow-[0px_2px_8px_0px_rgba(0,0,0,0.1)] shrink-0 w-[504px]" data-name="contact">
@@ -303,33 +196,13 @@ export default function ContactMe() {
           <span className="leading-[1.2]">{`VIEW ON `}</span>
           <span className="leading-[1.2] text-[#c7994b]">GOOGLE MAPS</span>
         </p>
-        <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid place-items-start relative shrink-0" data-node-id="1:2169">
-          <div className="col-1 grid-cols-[max-content] grid-rows-[max-content] inline-grid ml-0 mt-0 place-items-start relative row-1" data-node-id="1:2170">
-            <div className="col-1 h-[730px] ml-0 mt-0 relative rounded-[8px] row-1 w-[1560px]" data-node-id="1:2171">
-              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle119} />
-            </div>
-            <div className="bg-[rgba(5,5,5,0.2)] col-1 h-[730px] ml-0 mt-0 relative row-1 w-[1560px]" data-node-id="1:2172" />
-          </div>
-          <div className="col-1 content-stretch flex flex-col gap-[16px] items-start ml-[1462px] mt-[535px] relative row-1 w-[34px]" data-node-id="1:2173" data-name="Frame">
-            <div className="bg-white content-stretch drop-shadow-[0px_2px_2px_rgba(0,0,0,0.1)] flex items-center p-[7px] relative rounded-[4px] shrink-0 w-full" data-node-id="1:2174" data-name="Frame">
-              <div className="relative shrink-0 size-[20px]" data-node-id="1:2175" data-name="gps-on">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGpsOn} />
-              </div>
-            </div>
-            <div className="bg-white content-stretch drop-shadow-[0px_2px_2px_rgba(0,0,0,0.1)] flex flex-col items-start relative rounded-[4px] shrink-0 w-full" data-node-id="1:2176" data-name="Frame">
-              <div className="content-stretch flex items-center px-[7px] py-[8px] relative rounded-[4px] shrink-0" data-node-id="1:2177" data-name="Frame">
-                <div className="relative shrink-0 size-[20px]" data-node-id="1:2178" data-name="plus">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
-                </div>
-              </div>
-              <div className="content-stretch flex items-center px-[7px] py-[8px] relative rounded-[4px] shrink-0" data-node-id="1:2179" data-name="Frame">
-                <div className="relative shrink-0 size-[20px]" data-node-id="1:2180" data-name="minus">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMinus} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <iframe
+          className="h-[730px] w-[1560px] rounded-[8px] border-0"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          src={`https://www.google.com/maps?q=${encodeURIComponent(BUSINESS_ADDRESS)}&output=embed`}
+          title={`Map showing ${BUSINESS_ADDRESS}`}
+        />
       </div>
       <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1560px]" data-node-id="1:2181" data-name="Frame">
         <div className="h-[40px] relative shrink-0 w-[197px]" data-node-id="1:2182" data-name="Text Logo 1">

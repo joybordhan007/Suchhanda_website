@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react"
+import Footer from "../components/Footer"
 
 const initialReviews = ["/assets/bbc34.png", "/assets/bbc34.png", "/assets/bbc34.png"]
 
@@ -51,6 +52,7 @@ export default function Reviews() {
           ))}
         </div>
       </section>
+      <Footer flow />
     </div>
   )
 }
