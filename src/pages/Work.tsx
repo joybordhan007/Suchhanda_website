@@ -20,13 +20,6 @@ const imgRectangle21 = `${assetPathPrefix}/4492d.png`;
 const imgRectangle22 = `${assetPathPrefix}/29777.png`;
 const imgRectangle23 = `${assetPathPrefix}/30d72.png`;
 const imgArrowForward = `${assetPathPrefix}/b3d9b.svg`;
-const imgTextLogo1 = `${assetPathPrefix}/5d363.svg`;
-const imgFacebookLogo = `${assetPathPrefix}/4aa89.svg`;
-const imgGroup6 = `${assetPathPrefix}/0684a.svg`;
-const imgGroup7 = `${assetPathPrefix}/a4902.svg`;
-const imgFrame = `${assetPathPrefix}/c4448.svg`;
-const imgFrame1 = `${assetPathPrefix}/66316.svg`;
-const imgFrame2 = `${assetPathPrefix}/11cd2.svg`;
 const imgTextLogo2 = `${assetPathPrefix}/4a673.svg`;
 const imgArrowDownSimple = `${assetPathPrefix}/05e02.svg`;
 

@@ -45,28 +45,47 @@ function FooterLinks({
 
 export default function Footer({ top = 0 }: FooterProps) {
   return (
-    <footer
-      className="site-footer site-footer-absolute"
-      style={{ top }}
-    >
+    <footer className="site-footer site-footer-absolute" style={{ top }}>
       <div className="site-footer-content">
         <div className="site-footer-brand">
-          <div className="h-[70px] w-[280px]">
-            <img alt="Suchhanda Mondol" className="h-full w-full object-contain object-left" src="/assets/5d363.svg" />
+          <div className="site-footer-logo">
+            <img
+              alt="Suchhanda Mondol"
+              className="h-full w-full object-contain object-left"
+              src="/assets/5d363.svg"
+            />
           </div>
           <p>
             I’m Suchhanda Mondol — helping brands scale faster with
             high-converting ads, precise tracking, and performance-driven
             strategy that delivers real, lasting results.
           </p>
-          <div aria-label="Social media" className="flex items-center gap-[16px]">
-            <a aria-label="Facebook" href="https://www.facebook.com/" rel="noreferrer" target="_blank">
+          <div
+            aria-label="Social media"
+            className="flex items-center gap-[16px]"
+          >
+            <a
+              aria-label="Facebook"
+              href="https://www.facebook.com/"
+              rel="noreferrer"
+              target="_blank"
+            >
               <img alt="" src="/assets/4aa89.svg" />
             </a>
-            <a aria-label="LinkedIn" href="https://www.linkedin.com/" rel="noreferrer" target="_blank">
+            <a
+              aria-label="LinkedIn"
+              href="https://www.linkedin.com/"
+              rel="noreferrer"
+              target="_blank"
+            >
               <img alt="" src="/assets/0684a.svg" />
             </a>
-            <a aria-label="WhatsApp" href="https://wa.me/8801947760296" rel="noreferrer" target="_blank">
+            <a
+              aria-label="WhatsApp"
+              href="https://wa.me/8801947760296"
+              rel="noreferrer"
+              target="_blank"
+            >
               <img alt="" src="/assets/a4902.svg" />
             </a>
           </div>
@@ -74,7 +93,7 @@ export default function Footer({ top = 0 }: FooterProps) {
         <div className="site-footer-navigation">
           <FooterLinks links={quickLinks} title="Quick Links" />
           <FooterLinks links={supportLinks} title="Support" />
-          <section className="flex w-[363px] flex-col items-start gap-[24px]">
+          <section className="site-footer-contact flex flex-col items-start gap-[24px]">
             <h2 className="font-['Inter:Semi_Bold'] text-[20px] font-semibold leading-[1.2] text-[#191919]">
               Contact Info
             </h2>
@@ -85,7 +104,10 @@ export default function Footer({ top = 0 }: FooterProps) {
                 </a>
               </li>
               <li>
-                <a className="footer-link" href="mailto:adritamondol065@gmail.com">
+                <a
+                  className="footer-link"
+                  href="mailto:adritamondol065@gmail.com"
+                >
                   adritamondol065@gmail.com
                 </a>
               </li>

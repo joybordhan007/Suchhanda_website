@@ -3,13 +3,6 @@ const assetPathPrefix = "/assets";
 const imgHeroImage = `${assetPathPrefix}/289f9.png`;
 const imgImage = `${assetPathPrefix}/ef7b7.png`;
 const imgArrowForward = `${assetPathPrefix}/b3d9b.svg`;
-const imgTextLogo1 = `${assetPathPrefix}/5d363.svg`;
-const imgFacebookLogo = `${assetPathPrefix}/4aa89.svg`;
-const imgGroup = `${assetPathPrefix}/0684a.svg`;
-const imgGroup1 = `${assetPathPrefix}/a4902.svg`;
-const imgFrame = `${assetPathPrefix}/c4448.svg`;
-const imgFrame1 = `${assetPathPrefix}/66316.svg`;
-const imgFrame2 = `${assetPathPrefix}/11cd2.svg`;
 const imgTextLogo2 = `${assetPathPrefix}/4a673.svg`;
 const imgArrowDownSimple = `${assetPathPrefix}/05e02.svg`;
 

@@ -12,9 +12,9 @@ import Work from "./pages/Work"
 const CANVAS_WIDTH = 1920
 
 const routes = {
-  "/": { component: Home, height: 5392 },
+  "/": { component: Home, height: 4735 },
   "/service": { component: ServiceDetails, height: 2877 },
-  "/work": { component: Work, height: 5935 },
+  "/work": { component: Work, height: 5201 },
   "/about": { component: About, height: 4059 },
   "/blog": { component: Blog, height: 3287 },
   "/blog/article": { component: BlogDetails, height: 4259 },
@@ -27,7 +27,7 @@ type RoutePath = keyof typeof routes
 
 function getRoute(): RoutePath {
   const path = window.location.pathname.replace(/\/+$/, "") || "/"
-  return path in routes ? (path as RoutePath) : "/"
+  return path in routes ? path as RoutePath : "/"
 }
 
 const linkMap: Record<string, RoutePath> = {
@@ -54,10 +54,15 @@ const linkMap: Record<string, RoutePath> = {
 
 export default function App() {
   const [path, setPath] = useState<RoutePath>(getRoute)
-  const [viewportWidth, setViewportWidth] = useState(document.documentElement.clientWidth)
-  const [serviceOpen, setServiceOpen] = useState(false)
+  const [viewportWidth, setViewportWidth] = useState(
+    document.documentElement.clientWidth,
+  )
   const [pendingHash, setPendingHash] = useState("")
-  const [contentHeight, setContentHeight] = useState<number>(routes[getRoute()].height)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isServiceMenuOpen, setIsServiceMenuOpen] = useState(false)
+  const [contentHeight, setContentHeight] = useState<number>(
+    routes[getRoute()].height,
+  )
   const route = routes[path]
 
   useEffect(() => {
@@ -68,7 +73,6 @@ export default function App() {
         window.history.replaceState({}, "", nextPath)
       }
       setPath(nextPath)
-      setServiceOpen(false)
       window.scrollTo(0, 0)
     }
     const currentPath = window.location.pathname.replace(/\/+$/, "") || "/"
@@ -92,7 +96,33 @@ export default function App() {
   }, [path, route.height])
 
   useEffect(() => {
-    const sections = document.querySelectorAll<HTMLElement>(".design-canvas > div > *")
+    const page = document.querySelector<HTMLElement>(".design-canvas > div")
+    if (!page) return
+
+    const sections = Array.from(page.children)
+      .filter(
+        (element): element is HTMLElement => element instanceof HTMLElement,
+      )
+      .map((element, index) => {
+        const topClass = Array.from(element.classList).find((name) =>
+          name.startsWith("top-["),
+        )
+        const topValue = topClass?.match(/top-\[([\d.]+)px\]/)?.[1]
+        const inlineTop = element.style.top
+        const top = Number.parseFloat(topValue ?? inlineTop) || 0
+        return { element, index, top }
+      })
+      .sort((a, b) => a.top - b.top || a.index - b.index)
+
+    sections.forEach(({ element }, order) => {
+      element.style.setProperty("--mobile-section-order", String(order))
+    })
+  }, [path])
+
+  useEffect(() => {
+    const sections = document.querySelectorAll<HTMLElement>(
+      ".design-canvas > div > *",
+    )
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -146,9 +176,10 @@ export default function App() {
       window.history.pushState({}, "", `${next}${hash}`)
       setPath(next)
       setPendingHash(hash.slice(1))
+      setIsMobileMenuOpen(false)
+      setIsServiceMenuOpen(false)
       if (!hash) window.scrollTo(0, 0)
     }
-    setServiceOpen(false)
   }
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -157,20 +188,22 @@ export default function App() {
     const element = target.closest("a, button, [data-name='CTA'], [data-path]")
     if (!element) return
     const label = (element.textContent || "").trim().toLowerCase()
-    if (label.startsWith("service")) {
-      event.preventDefault()
-      setServiceOpen((open) => !open)
-      return
-    }
-    const requestedPath = element.getAttribute("data-path") || element.getAttribute("href")
+    const requestedPath =
+      element.getAttribute("data-path") || element.getAttribute("href")
     const [requestedRoute, requestedHash = ""] = requestedPath?.split("#") ?? []
-    const direct = requestedRoute && requestedRoute in routes
-      ? (requestedRoute as RoutePath)
-      : linkMap[label]
-    const partial = Object.entries(linkMap).find(([text]) => label.includes(text))?.[1]
+    const direct =
+      requestedRoute && requestedRoute in routes
+        ? requestedRoute as RoutePath
+        : linkMap[label]
+    const partial = Object.entries(linkMap).find(([text]) =>
+      label.includes(text),
+    )?.[1]
     if (direct || partial) {
       event.preventDefault()
-      navigate(direct || partial, direct ? (requestedHash ? `#${requestedHash}` : "") : "")
+      navigate(
+        direct || partial,
+        direct ? (requestedHash ? `#${requestedHash}` : "") : "",
+      )
     }
   }
 
@@ -186,57 +219,110 @@ export default function App() {
       </main>
       <nav
         aria-label="Main navigation"
-        className="site-navbar"
+        className={`site-navbar${isMobileMenuOpen ? " is-menu-open" : ""}`}
         style={{
           left: viewportWidth / 2,
           transform: `scale(${scale})`,
           top: 31 * scale,
         }}
       >
-        <a aria-label="Suchhanda home" className="site-logo" data-path="/" href="/">
+        <a
+          aria-label="Suchhanda home"
+          className="site-logo"
+          data-path="/"
+          href="/"
+        >
           <img alt="Suchhanda" src="/assets/4a673.svg" />
         </a>
-        <div className="site-nav-links">
-          <a aria-current={path === "/" ? "page" : undefined} data-path="/" href="/">
+        <button
+          aria-controls="primary-navigation-links"
+          aria-expanded={isMobileMenuOpen}
+          aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+          className="site-menu-toggle"
+          onClick={() => {
+            setIsMobileMenuOpen((open) => !open)
+            setIsServiceMenuOpen(false)
+          }}
+          type="button"
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+        <div className="site-nav-links" id="primary-navigation-links">
+          <a
+            aria-current={path === "/" ? "page" : undefined}
+            data-path="/"
+            href="/"
+          >
             Home
           </a>
-          <div className="site-service-navigation">
+          <div
+            className={`site-service-navigation${isServiceMenuOpen ? " is-open" : ""}`}
+          >
             <button
-              aria-expanded={serviceOpen}
+              aria-expanded={isServiceMenuOpen}
+              aria-controls="service-navigation-links"
+              aria-haspopup="true"
+              onClick={() => setIsServiceMenuOpen((open) => !open)}
               type="button"
             >
               Service
-              <img alt="" aria-hidden="true" className="service-chevron" src="/assets/05e02.svg" />
+              <img
+                alt=""
+                aria-hidden="true"
+                className="service-chevron"
+                src="/assets/05e02.svg"
+              />
             </button>
-            {serviceOpen && (
-              <div className="service-menu">
-                {[
-                  "Meta Ads Management",
-                  "Google Ads Management",
-                  "Pixel & Tag Manager",
-                  "Conversion Rate Optimization",
-                  "Ads Audit & Optimization",
-                ].map((item) => (
-                  <a data-path="/service" href="/service" key={item}>
-                    {item}
-                  </a>
-                ))}
-              </div>
-            )}
+            <div className="service-menu" id="service-navigation-links">
+              {[
+                "Meta Ads Management",
+                "Google Ads Management",
+                "Pixel & Tag Manager",
+                "Conversion Rate Optimization",
+                "Ads Audit & Optimization",
+              ].map((item) => (
+                <a
+                  data-path="/service"
+                  href="/service"
+                  key={item}
+                  onClick={(event) => event.currentTarget.blur()}
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
           </div>
-          <a aria-current={path === "/work" ? "page" : undefined} data-path="/work" href="/work">
+          <a
+            aria-current={path === "/work" ? "page" : undefined}
+            data-path="/work"
+            href="/work"
+          >
             Work
           </a>
-          <a aria-current={path === "/about" ? "page" : undefined} data-path="/about" href="/about">
+          <a
+            aria-current={path === "/about" ? "page" : undefined}
+            data-path="/about"
+            href="/about"
+          >
             About Me
           </a>
-          <a aria-current={path === "/blog" ? "page" : undefined} data-path="/blog" href="/blog">
+          <a
+            aria-current={path === "/blog" ? "page" : undefined}
+            data-path="/blog"
+            href="/blog"
+          >
             Blog
           </a>
+          <a
+            className="site-contact-link"
+            data-path="/contact"
+            href="/contact"
+          >
+            Contact Me
+          </a>
         </div>
-        <a className="site-contact-link" data-path="/contact" href="/contact">
-          Contact Me
-        </a>
       </nav>
     </div>
   )
