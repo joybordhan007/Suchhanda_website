@@ -1,0 +1,10 @@
+{
+  "description": "Provides a visually engaging and user-friendly website that delivers content seamlessly, enhancing user experience and accessibility across devices.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

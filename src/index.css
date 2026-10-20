@@ -1,0 +1,186 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Anuphan:Medium";
+  src: url("https://static.figma.com/font/Anuphan_wght__2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Anuphan:Regular";
+  src: url("https://static.figma.com/font/Anuphan_wght__2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Inter:Bold";
+  src: url("https://static.figma.com/font/Inter_1") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "Inter:Italic";
+  src: url("https://static.figma.com/font/Inter_1") format("woff2");
+  font-style: italic;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Inter:Medium";
+  src: url("https://static.figma.com/font/Inter_1") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Inter:Regular";
+  src: url("https://static.figma.com/font/Inter_1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Inter:Semi Bold";
+  src: url("https://static.figma.com/font/Inter_1") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Noto Sans:Bold";
+  src: url("https://static.figma.com/font/NotoSans-VF_3") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "Noto Sans:Regular";
+  src: url("https://static.figma.com/font/NotoSans-VF_3") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Noto Sans Math:Regular";
+  src: url("https://static.figma.com/font/NotoSansMath-Regular_1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Noto Sans Symbols2:Regular";
+  src: url("https://static.figma.com/font/NotoSansSymbols2-Regular_5") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Noto Sans Symbols:Regular";
+  src: url("https://static.figma.com/font/NotoSansSymbols-VF_2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Noto Serif:Bold";
+  src: url("https://static.figma.com/font/NotoSerif-VF_2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "Noto Serif:Medium";
+  src: url("https://static.figma.com/font/NotoSerif-VF_2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Noto Serif:SemiBold";
+  src: url("https://static.figma.com/font/NotoSerif-VF_2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Nunito Sans:SemiBold";
+  src: url("https://static.figma.com/font/NunitoSans_YTLC_opsz_wdth_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: #fefefe;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  color: #191919;
+}
+
+button,
+a,
+[data-name="CTA"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+[data-name="CTA"] {
+  cursor: pointer;
+}
+
+.design-viewport {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: #fefefe;
+}
+
+.design-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.service-menu {
+  position: absolute;
+  z-index: 100;
+  top: 98px;
+  left: 1010px;
+  width: 398px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #fefefe;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 18%);
+  font-family: "Inter:Regular", sans-serif;
+}
+
+.service-menu button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  border: 0;
+  border-bottom: 1px solid #ececec;
+  background: transparent;
+  padding: 18px 24px;
+  color: #191919;
+  font-size: 16px;
+  text-align: left;
+}
+
+.service-menu button:hover,
+.service-menu button:focus-visible {
+  background: #f5efe6;
+  outline: none;
+}
+
+[class*="Aileron:SemiBold"] {
+  font-family: "Inter:Semi Bold", sans-serif !important;
+}
+
+[class*="Aileron:Regular"] {
+  font-family: "Inter:Regular", sans-serif !important;
+}
+
+@media (min-width: 1920px) {
+  .design-canvas {
+    left: 50%;
+    margin-left: -960px;
+  }
+}
