@@ -62,7 +62,7 @@ export default function Blog() {
 
   return (
     <div className="flow-page bg-[#fefefe] relative w-full" data-node-id="1:1583" data-name="Blog">
-      <div className="relative h-[585px] overflow-clip w-[1920px]" data-node-id="1:1584" data-name="Hero">
+      <div className="relative h-[480px] overflow-clip w-[1920px]" data-node-id="1:1584" data-name="Hero">
         <div className="[word-break:break-word] absolute content-stretch flex flex-col gap-[32px] items-center left-[410px] text-[#091e39] top-[208px] w-[1100px]" data-node-id="1:1585" data-name="Frame">
           <p className="font-['Noto_Serif:Bold'] font-bold leading-[0] relative shrink-0 text-[64px] whitespace-nowrap" data-node-id="1:1586" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
             <span className="leading-[1.2]">{`Digital `}</span>

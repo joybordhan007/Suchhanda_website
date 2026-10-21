@@ -93,7 +93,7 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
 
   return (
     <div className="flow-page bg-[#fefefe] relative w-full" data-node-id="1:877" data-name="Service Details">
-      <div className="relative h-[585px] overflow-clip w-[1920px]" data-node-id="1:878" data-name="Hero">
+      <div className="relative h-[500px] overflow-clip w-[1920px]" data-node-id="1:878" data-name="Hero">
         <div className="-translate-x-1/2 [word-break:break-word] absolute content-stretch flex flex-col gap-[32px] items-center left-1/2 text-[#091e39] text-center top-[208px] w-[1132px]" data-node-id="1:879" data-name="Frame">
           <div className="content-stretch flex flex-col gap-[16px] items-center relative shrink-0" data-name="Frame">
             {detail.tagline && (
@@ -110,7 +110,7 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
       </div>
 
       {detail.offerings.length > 0 && (
-        <div className="mx-auto mt-[150px] content-stretch flex gap-[24px] items-center relative w-[1280px]" data-node-id="1:1008" data-name="Frame">
+        <div className="mx-auto mt-[120px] content-stretch flex gap-[24px] items-center relative w-[1280px]" data-node-id="1:1008" data-name="Frame">
           <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-[504px]">
             <SectionIntro description={detail.offeringsDescription} eyebrow="Our Services" heading={detail.offeringsHeading || `What's included in *${service.title}*`} />
           </div>
@@ -140,7 +140,7 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
         </div>
       )}
 
-      <div className="mx-auto mt-[150px] content-stretch flex gap-[24px] items-center relative w-[1280px]" data-node-id="1:1093" data-name="Frame">
+      <div className="mx-auto mt-[120px] content-stretch flex gap-[24px] items-center relative w-[1280px]" data-node-id="1:1093" data-name="Frame">
         {detail.processImage && (
           <div className="h-[380px] relative shrink-0 w-[502px] overflow-hidden">
             <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={mediaUrl(detail.processImage)} />
@@ -160,7 +160,7 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
         </div>
       </div>
 
-      <div className="mx-auto mt-[150px] bg-[#191919] content-stretch flex gap-[24px] items-center p-[40px] rounded-[2px] relative w-[1280px]" data-node-id="1:1128" data-name="Frame">
+      <div className="mx-auto mt-[120px] bg-[#191919] content-stretch flex gap-[24px] items-center p-[40px] rounded-[2px] relative w-[1280px]" data-node-id="1:1128" data-name="Frame">
         <div className="content-stretch flex flex-col gap-[57px] items-start relative shrink-0 w-[745px]">
           <SectionIntro description={detail.whyDescription} eyebrow="Why Choose Me" heading={detail.whyHeading || `Results-Driven *${service.title}*`} light />
           <div className="border border-solid border-white content-stretch flex gap-[4px] items-center justify-center p-[16px] relative rounded-[999px] shrink-0" data-name="CTA" data-path="/contact">

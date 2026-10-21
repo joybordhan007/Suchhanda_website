@@ -11,11 +11,11 @@ const CANVAS_WIDTH = 1920
 const DESIGN_CONTENT_WIDTH = 1280
 const DESIGN_GUTTER = (CANVAS_WIDTH - DESIGN_CONTENT_WIDTH) / 2
 // Fixed gap between the content and the screen edge on non-mobile screens:
-// wider on full-HD and larger desktops. The tablet value lives in
+// wider on screens 1700px and up. The tablet value lives in
 // --site-side-margin in index.css; keep them in sync.
 const SIDE_MARGIN = 130
 const WIDE_SIDE_MARGIN = 200
-const WIDE_SCREEN_MIN_WIDTH = 1920
+const WIDE_SCREEN_MIN_WIDTH = 1700
 
 function sideMarginFor(viewportWidth: number) {
   return viewportWidth >= WIDE_SCREEN_MIN_WIDTH ? WIDE_SIDE_MARGIN : SIDE_MARGIN
