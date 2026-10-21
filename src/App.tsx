@@ -393,15 +393,17 @@ function Site() {
     if (element instanceof HTMLButtonElement && element.type === "submit") {
       return
     }
+    // Menu toggles and other open/close buttons are not links.
+    if (element.hasAttribute("aria-expanded")) return
     const label = (element.textContent || "").trim().toLowerCase()
     // data-path holds the route itself; href already includes the base path.
     const dataPath = element.getAttribute("data-path")
     const href = element.getAttribute("href")
-    const [requestedPath = "", requestedHash = ""] = (
-      dataPath ?? (href?.startsWith("/") ? href : "")
-    ).split("#")
-    const requestedRoute = dataPath ? requestedPath : stripBase(requestedPath)
-    const direct = matchPath(requestedRoute) ? requestedRoute : linkMap[label]
+    const linkPath = dataPath ?? (href?.startsWith("/") ? href : null)
+    const [requestedPath = "", requestedHash = ""] = linkPath?.split("#") ?? []
+    // Without a link, the label decides (Figma buttons such as "Explore Me" have no href).
+    const requestedRoute = linkPath === null ? null : dataPath ? requestedPath : stripBase(requestedPath)
+    const direct = requestedRoute && matchPath(requestedRoute) ? requestedRoute : linkMap[label]
     // Prefer the longest matching label so "let's work together" wins over "work".
     const partial = Object.entries(linkMap)
       .filter(([text]) => label.includes(text))
