@@ -335,6 +335,9 @@ button,
 
 .trusted-logo-window {
   overflow: hidden;
+  /* Logos fade in and out at the edges instead of being cut off. */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
 }
 
 .trusted-logo-track {
@@ -513,7 +516,6 @@ button,
 .site-footer {
   z-index: 1;
   width: 1920px;
-  height: 495px;
   background: #f3f3f3;
   /* Extend the background to the screen edges whatever the page's side margin. */
   box-shadow: 0 0 0 100vmax #f3f3f3;
@@ -538,7 +540,7 @@ button,
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin: auto auto 0;
+  margin: 64px auto 0;
   padding: 20px 0 28px;
   border-top: 1px solid rgb(25 25 25 / 12%);
   color: #5a5a5a;
@@ -572,7 +574,7 @@ button,
   gap: 24px;
   justify-content: flex-start;
   margin: 0 auto;
-  padding-top: 153px;
+  padding-top: 96px;
 }
 
 .site-footer-brand {
@@ -679,9 +681,13 @@ button,
 
 .legal-page {
   position: relative;
-  min-height: 100%;
   padding: 200px 320px 0;
   background: #fefefe;
+}
+
+/* The footer follows the text, full width across the page's side padding. */
+.legal-page > .site-footer-flow {
+  margin: 120px -320px 0;
 }
 
 .legal-hero {

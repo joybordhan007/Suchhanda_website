@@ -194,7 +194,7 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
         )}
       </div>
 
-      <div className="mt-[126px]">
+      <div className="mt-[120px]">
         <Footer />
       </div>
     </div>

@@ -42,7 +42,7 @@ export default function PrivacyPolicy() {
           applicable requirements change.
         </p>
       </main>
-      <Footer top={1905} />
+      <Footer />
     </div>
   )
 }

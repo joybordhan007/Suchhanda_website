@@ -39,7 +39,7 @@ export default function Home() {
 
   return (
     <div className="bg-[#fefefe] relative size-full" data-node-id="1:347" data-name="Home">
-      <div className="absolute h-[920px] left-0 overflow-clip top-0 w-[1920px]" data-node-id="1:348" data-name="Frame">
+      <div className="absolute h-[860px] left-0 overflow-clip top-0 w-[1920px]" data-node-id="1:348" data-name="Frame">
         <div className="absolute content-stretch flex flex-col gap-[64px] items-start left-[320px] top-[288px] w-[700px]" data-node-id="1:349" data-name="Frame">
           <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-start leading-[0] relative shrink-0 w-full" data-node-id="1:350" data-name="Frame">
             <ul className="block font-['Inter:Regular'] font-normal not-italic relative shrink-0 text-[18px] text-black uppercase w-full" data-node-id="1:351">
@@ -80,8 +80,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <Stats className="absolute left-[320px] top-[980px]" />
-      <div className="absolute content-stretch flex flex-col gap-[56px] items-start left-[320px] top-[1297px] w-[1280px]" data-node-id="1:376" data-name="Frame">
+      <Stats className="absolute left-[320px] top-[880px]" />
+      <div className="absolute content-stretch flex flex-col gap-[56px] items-start left-[320px] top-[1107px] w-[1280px]" data-node-id="1:376" data-name="Frame">
         <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-full" data-node-id="1:377" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
           <p>
             <span className="leading-[1.2]">{`End-to-End Digital `}</span>
@@ -96,7 +96,7 @@ export default function Home() {
           ))}
         </div>
       </div>
-      <div className="absolute content-stretch flex flex-col gap-[56px] items-center left-[320px] top-[2184px] w-[1280px]" data-node-id="1:447" data-name="Frame">
+      <div className="absolute content-stretch flex flex-col gap-[56px] items-center left-[320px] top-[2017px] w-[1280px]" data-node-id="1:447" data-name="Frame">
         <div className="content-stretch flex flex-col gap-[56px] items-start relative shrink-0 w-full" data-node-id="1:448" data-name="Frame">
           <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-full" data-node-id="1:449" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
             <p>
@@ -124,7 +124,7 @@ export default function Home() {
           </p>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-start left-1/2 top-[2808px] w-[1280px]" data-node-id="1:458" data-name="Frame">
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-start left-1/2 top-[2640px] w-[1280px]" data-node-id="1:458" data-name="Frame">
         <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-[1280px]" data-node-id="1:459" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
           <p>
             <span className="leading-[1.2]">{`Trusted by `}</span>
@@ -133,7 +133,7 @@ export default function Home() {
         </div>
         <TrustedLogos className="h-[40px] shrink-0 w-[1280px]" />
       </div>
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[40px] items-center justify-center left-1/2 top-[3062px] w-[1280px]" data-node-id="1:461" data-name="Frame">
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[40px] items-center justify-center left-1/2 top-[2894px] w-[1280px]" data-node-id="1:461" data-name="Frame">
         <div className="content-stretch flex flex-col gap-[56px] items-start relative shrink-0 w-full" data-node-id="1:462" data-name="Frame">
           <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-[1280px]" data-node-id="1:463" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
             <p>
@@ -144,7 +144,7 @@ export default function Home() {
           <Reviews />
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[3761.11px] w-[1280px]" data-node-id="1:473" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[3461px] w-[1280px]" data-node-id="1:473" data-name="Frame">
         <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-center leading-[0] not-italic relative shrink-0 text-center w-full" data-node-id="1:474" data-name="Frame">
           <div className="flex flex-col font-['Inter:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[40px] text-white w-[min-content]" data-node-id="1:475">
             <p>
@@ -164,7 +164,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <Footer top={4239.11} />
+      <Footer top={3941} />
     </div>
   )
 }

@@ -70,7 +70,7 @@ export default function ContactMe() {
           >{`Ready to start your growth journey? We'd love to hear from you.`}</p>
         </div>
       </div>
-      <Footer top={2604} />
+      <Footer top={2449} />
       <div
         className="-translate-x-1/2 absolute content-stretch flex gap-[24px] items-center left-1/2 px-[320px] top-[511px] w-[1920px]"
         data-node-id="1:2112"
@@ -508,7 +508,7 @@ export default function ContactMe() {
         </form>
       </div>
       <div
-        className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-center justify-center leading-[0] left-1/2 top-[1541px] w-[1280px]"
+        className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-center justify-center leading-[0] left-1/2 top-[1466px] w-[1280px]"
         data-node-id="1:2167"
         data-name="Frame"
       >

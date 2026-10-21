@@ -96,7 +96,7 @@ export default function Work() {
         </div>
         <Reviews />
       </div>
-      <CtaBanner className="mx-auto mt-[200px]" nodeId="1:1211" />
+      <CtaBanner className="mx-auto mt-[120px]" nodeId="1:1211" />
       <div className="mt-[120px]">
         <Footer />
       </div>

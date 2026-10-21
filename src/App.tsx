@@ -14,7 +14,7 @@ const DESIGN_GUTTER = (CANVAS_WIDTH - DESIGN_CONTENT_WIDTH) / 2
 // wider on full-HD and larger desktops. The tablet value lives in
 // --site-side-margin in index.css; keep them in sync.
 const SIDE_MARGIN = 130
-const WIDE_SIDE_MARGIN = 180
+const WIDE_SIDE_MARGIN = 200
 const WIDE_SCREEN_MIN_WIDTH = 1920
 
 function sideMarginFor(viewportWidth: number) {
@@ -41,15 +41,15 @@ function preloadPages() {
 // Pages with a fixed height are absolutely positioned design canvases; "auto" pages
 // flow normally and are measured, so their height follows their content.
 const pages = {
-  home: { component: Home, height: 4735 },
+  home: { component: Home, height: 4380 },
   service: { component: lazy(pageLoaders.service), height: "auto" },
   work: { component: lazy(pageLoaders.work), height: "auto" },
-  about: { component: lazy(pageLoaders.about), height: 4059 },
+  about: { component: lazy(pageLoaders.about), height: 3850 },
   blog: { component: lazy(pageLoaders.blog), height: "auto" },
   post: { component: lazy(pageLoaders.post), height: "auto" },
-  contact: { component: lazy(pageLoaders.contact), height: 3099 },
-  privacy: { component: lazy(pageLoaders.privacy), height: 2400 },
-  terms: { component: lazy(pageLoaders.terms), height: 2400 },
+  contact: { component: lazy(pageLoaders.contact), height: 2890 },
+  privacy: { component: lazy(pageLoaders.privacy), height: "auto" },
+  terms: { component: lazy(pageLoaders.terms), height: "auto" },
 } as const satisfies Record<string, { component: ComponentType<{ slug?: string }>; height: number | "auto" }>
 
 type PageKey = keyof typeof pages
@@ -173,12 +173,8 @@ function Site() {
   const content = useSiteContent()
   const match = matchPath(path) ?? { page: "home" }
   const page = pages[match.page]
-  const contentHeight =
-    page.height === "auto"
-      ? measured?.path === path
-        ? measured.height
-        : 3000
-      : page.height
+  // Until a page is measured, its design height (or a rough guess) avoids a jump.
+  const contentHeight = measured?.path === path ? measured.height : page.height === "auto" ? 3000 : page.height
 
   useEffect(() => {
     void loadContent()
@@ -192,15 +188,21 @@ function Site() {
     idle(() => preloadPages())
   }, [firstPageShown])
 
-  // Measure flowing pages so the scaled canvas is exactly as tall as the page.
+  // Measure every page so the scaled canvas is exactly as tall as its content: the
+  // lowest bottom edge among its sections (absolute or flowing), so a taller section
+  // or footer never gets cut off.
   useEffect(() => {
-    if (renderedPath === null || page.height !== "auto") return
-    const element = document.querySelector<HTMLElement>(".design-canvas > div")
-    if (!element) return
-    const observer = new ResizeObserver(() =>
-      setMeasured({ path, height: Math.ceil(element.offsetHeight) }),
-    )
-    observer.observe(element)
+    if (renderedPath === null) return
+    const root = document.querySelector<HTMLElement>(".design-canvas > div")
+    if (!root) return
+    const measure = () => {
+      const sections = Array.from(root.children) as HTMLElement[]
+      const bottom = Math.max(0, ...sections.map((section) => section.offsetTop + section.offsetHeight))
+      setMeasured({ path, height: Math.ceil(page.height === "auto" ? Math.max(bottom, root.offsetHeight) : bottom) })
+    }
+    const observer = new ResizeObserver(measure)
+    observer.observe(root)
+    Array.from(root.children).forEach((section) => observer.observe(section))
     return () => observer.disconnect()
   }, [path, page.height, renderedPath])
 

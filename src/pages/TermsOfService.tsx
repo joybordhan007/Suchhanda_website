@@ -43,7 +43,7 @@ export default function TermsOfService() {
           .
         </p>
       </main>
-      <Footer top={1905} />
+      <Footer />
     </div>
   )
 }
