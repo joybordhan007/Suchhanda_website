@@ -502,7 +502,7 @@ button,
 }
 
 [data-node-id="1:376"] .service-card {
-  height: 320px;
+  height: 292px;
 }
 
 .service-card:hover,
@@ -1619,6 +1619,89 @@ button,
   [data-reveal="true"][data-revealed] {
     animation: none;
   }
+}
+
+/* Desktop and tablet-landscape type scale: one step smaller than the Figma design so
+   text sits lighter inside the fixed side margins. Mobile has its own sizes above. */
+@media (min-width: 1024px) {
+.design-canvas [class~="text-[64px]"] {
+  font-size: 54px !important;
+}
+
+.design-canvas [class~="text-[60px]"] {
+  font-size: 50px !important;
+}
+
+.design-canvas [class~="text-[48px]"] {
+  font-size: 42px !important;
+}
+
+.design-canvas [class~="text-[40px]"] {
+  font-size: 34px !important;
+}
+
+.design-canvas [class~="text-[32px]"] {
+  font-size: 28px !important;
+}
+
+.design-canvas [class~="text-[24px]"] {
+  font-size: 21px !important;
+}
+
+.design-canvas [class~="text-[20px]"] {
+  font-size: 18px !important;
+}
+
+.design-canvas [class~="text-[18px]"] {
+  font-size: 16px !important;
+}
+
+.design-canvas [class~="text-[16px]"] {
+  font-size: 15px !important;
+}
+
+.design-canvas [class~="text-[14px]"] {
+  font-size: 13px !important;
+}
+
+.achievement-value {
+  font-size: 38px;
+}
+
+.achievement-label {
+  font-size: 17px;
+}
+
+.site-navbar a,
+.site-navbar button {
+  font-size: 18px;
+}
+
+.site-logo {
+  width: 177px;
+  height: 36px;
+}
+
+.footer-link,
+.site-footer-brand > p {
+  font-size: 15px;
+}
+
+.legal-hero p {
+  font-size: 54px;
+}
+
+.legal-content {
+  font-size: 18px;
+}
+
+.legal-content h1 {
+  font-size: 28px;
+}
+
+.legal-content h2 {
+  font-size: 21px;
+}
 }
 
 /* ---------------------------------------------------------------------------

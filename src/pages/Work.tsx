@@ -47,7 +47,7 @@ export default function Work() {
         </div>
       </div>
       <Stats className="mx-auto mt-[4px]" />
-      <div className="mx-auto mt-[136px] flex flex-col gap-[80px] items-start w-[1280px]" data-node-id="1:1300" data-name="Frame">
+      <div className="mx-auto mt-[120px] flex flex-col gap-[80px] items-start w-[1280px]" data-node-id="1:1300" data-name="Frame">
         {rows.length === 0 && <p className="w-full text-center text-[18px] text-[#3e3e3e]">Case studies are coming soon.</p>}
         {rows.map((row, index) => (
           <div className="content-stretch flex gap-[24px] items-stretch relative shrink-0 w-full" data-name="Frame" key={index}>

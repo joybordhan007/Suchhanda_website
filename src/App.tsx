@@ -41,13 +41,13 @@ function preloadPages() {
 // Pages with a fixed height are absolutely positioned design canvases; "auto" pages
 // flow normally and are measured, so their height follows their content.
 const pages = {
-  home: { component: Home, height: 4380 },
+  home: { component: Home, height: 4282 },
   service: { component: lazy(pageLoaders.service), height: "auto" },
   work: { component: lazy(pageLoaders.work), height: "auto" },
-  about: { component: lazy(pageLoaders.about), height: 3850 },
+  about: { component: lazy(pageLoaders.about), height: 3830 },
   blog: { component: lazy(pageLoaders.blog), height: "auto" },
   post: { component: lazy(pageLoaders.post), height: "auto" },
-  contact: { component: lazy(pageLoaders.contact), height: 2890 },
+  contact: { component: lazy(pageLoaders.contact), height: 2895 },
   privacy: { component: lazy(pageLoaders.privacy), height: "auto" },
   terms: { component: lazy(pageLoaders.terms), height: "auto" },
 } as const satisfies Record<string, { component: ComponentType<{ slug?: string }>; height: number | "auto" }>
