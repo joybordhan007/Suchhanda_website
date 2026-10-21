@@ -2,7 +2,7 @@
   "title": "Professional Digital Marketing Services | Suchhanda Mondol",
   "description": "Boost your online presence with Suchhanda Mondol. Expert digital marketing solutions designed to drive targeted traffic, leads, and sales for your business.",
   "robots": {
-    "index": false
+    "index": true
   },
   "accessibility": {
     "addBypassLinks": false,

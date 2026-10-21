@@ -33,6 +33,14 @@ export function withBase(route: string) {
   return `${basePath}${route}`
 }
 
+// Link to a website page from the admin dashboard. When the dashboard runs on its own
+// "admin." subdomain, the website is on the main domain.
+export function siteHref(route: string) {
+  const { protocol, hostname, port } = window.location
+  if (!hostname.startsWith("admin.")) return withBase(route)
+  return `${protocol}//${hostname.slice("admin.".length)}${port ? `:${port}` : ""}${withBase(route)}`
+}
+
 // "/sub/work/" -> "/work"; returns null when the path is outside the site.
 export function stripBase(pathname: string) {
   if (basePath && pathname !== basePath && !pathname.startsWith(`${basePath}/`)) {

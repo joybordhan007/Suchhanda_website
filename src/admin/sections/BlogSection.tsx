@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react"
 import { slugify } from "../../content/selectors"
 import type { BlogPost } from "../../content/types"
-import { mediaUrl, withBase } from "../../paths"
+import { mediaUrl, siteHref } from "../../paths"
 import BlockEditor from "../components/BlockEditor"
 import EditorBar from "../components/EditorBar"
 import ImageField from "../components/ImageField"
@@ -132,7 +132,7 @@ function PostEditor({
       {post.status === "published" && (
         <a
           className="self-start text-[14px] font-medium text-[#8a6a2f] underline underline-offset-4"
-          href={withBase(`/blog/${post.slug}`)}
+          href={siteHref(`/blog/${post.slug}`)}
           rel="noreferrer"
           target="_blank"
         >

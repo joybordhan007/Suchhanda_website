@@ -129,6 +129,25 @@ const cookieValue = (header: string | undefined, name: string) =>
     .map((part) => part.trim().split("="))
     .find(([key]) => key === name)?.[1]
 
+// Host the request was sent to ("admin.example.com"), without the port.
+function requestHost(c: Context) {
+  const forwarded = process.env.TRUST_PROXY === "1" ? c.req.header("x-forwarded-host")?.split(",")[0]?.trim() : ""
+  return (forwarded || c.req.header("host") || new URL(c.req.url).host).replace(/:\d+$/, "").toLowerCase()
+}
+
+// Whether this request is for the admin domain, decided by the request host alone: on cPanel
+// the admin subdomain's folder sits inside the main site's folder, so requests for either
+// domain can reach either app.
+function isAdminHost(c: Context) {
+  const host = requestHost(c)
+  return config.adminUrl ? host === new URL(config.adminUrl).hostname : host.startsWith("admin.")
+}
+
+// Website address for links from the admin domain: SITE_URL, else the admin host without "admin.".
+function siteUrlFor(c: Context) {
+  return config.siteUrl || `https://${requestHost(c).replace(/^admin\./, "")}`
+}
+
 export function createApp() {
   const app = new Hono<Env>()
 
@@ -137,6 +156,8 @@ export function createApp() {
     c.header("X-Content-Type-Options", "nosniff")
     c.header("Referrer-Policy", "strict-origin-when-cross-origin")
     c.header("X-Frame-Options", "SAMEORIGIN")
+    // The admin domain should never show up in search results.
+    if (isAdminHost(c)) c.header("X-Robots-Tag", "noindex, nofollow")
   })
   app.use("/api/*", sameOrigin)
   app.use("/api/*", async (c, next) => {
@@ -153,6 +174,9 @@ export function createApp() {
   })
 
   // ---- Content ----------------------------------------------------------
+  // For checking a deployment: which host this app saw and how it treats it.
+  app.get("/api/health", (c) => c.json({ ok: true, host: requestHost(c), admin: isAdminHost(c), node: process.version }))
+
   app.get("/api/content", (c) => {
     const row = db.prepare("SELECT json FROM content WHERE id = 1").get() as { json: string } | undefined
     return c.json({ content: row ? JSON.parse(row.json) : null })
@@ -392,7 +416,14 @@ export function createApp() {
   app.get("*", (c) => {
     const indexFile = join(config.distDir, "index.html")
     if (!existsSync(indexFile)) return c.text("Website build not found. Run `pnpm build`.", 404)
-    const file = c.req.path === "/" ? null : fileIn(config.distDir, c.req.path)
+    const path = c.req.path
+    const file = path === "/" ? null : fileIn(config.distDir, path)
+    const isAdminPage = path === "/admin" || path.startsWith("/admin/")
+    const adminHost = isAdminHost(c)
+    if (config.adminUrl && isAdminPage && !adminHost) return c.redirect(`${config.adminUrl}${path}`, 302)
+    if (adminHost && !isAdminPage && !file) {
+      return c.redirect(path === "/" ? "/admin" : `${siteUrlFor(c)}${path}`, 302)
+    }
     if (file) {
       const hashed = c.req.path.startsWith("/assets/index-") || /-[A-Za-z0-9_-]{8}\.(js|css)$/.test(file)
       return sendFile(c, file, { "Cache-Control": hashed ? "public, max-age=31536000, immutable" : "public, max-age=3600" })

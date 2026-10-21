@@ -14,6 +14,11 @@ export const config = {
   uploadsDir: resolve(dataDir, "uploads"),
   // Built website served by this server in production (`pnpm build` output).
   distDir: resolve(root, process.env.DIST_DIR ?? "dist"),
+  // Split hosting (e.g. cPanel): the public site and the admin dashboard run as two apps on
+  // two domains, sharing DATA_DIR. On the website app set ADMIN_URL, so /admin moves to the
+  // admin domain; on the admin app set SITE_URL, so website pages move to the main domain.
+  adminUrl: (process.env.ADMIN_URL ?? "").replace(/\/+$/, ""),
+  siteUrl: (process.env.SITE_URL ?? "").replace(/\/+$/, ""),
   sessionDays: 7,
   maxUploadBytes: 5 * 1024 * 1024,
   maxContentBytes: 2 * 1024 * 1024,

@@ -14,6 +14,9 @@ importers:
       hono:
         specifier: 4.13.13
         version: 4.13.13
+      node-sqlite3-wasm:
+        specifier: 0.8.61
+        version: 0.8.61
       react:
         specifier: ^19.0.0
         version: 19.2.4
@@ -454,6 +457,9 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  node-sqlite3-wasm@0.8.61:
+    resolution: {integrity: sha512-Yqp6mz/CqmoUU4dCQOda9KtxC0+ToDX2w7p9/bv0hwaIXNbcGiGnfrkzE22reefoBvB1gYAUpJImsf0L7NQ9wg==}
+
   oxfmt@0.2.0:
     resolution: {integrity: sha512-99bPAiYDiYikUej8U0Slv8pcFVbMe38Ulm+T6bJ4KQgm+UsbgTKCBpWxbD/LRz1CuYw3PRpqfPv6AkQsIAo3Ag==}
     engines: {node: '>=8.*'}
@@ -847,6 +853,8 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.5
 
   nanoid@3.3.19: {}
+
+  node-sqlite3-wasm@0.8.61: {}
 
   oxfmt@0.2.0:
     optionalDependencies:

@@ -17,6 +17,7 @@
   "dependencies": {
     "@hono/node-server": "^2.1.5",
     "hono": "4.13.13",
+    "node-sqlite3-wasm": "0.8.61",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

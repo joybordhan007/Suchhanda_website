@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState, type ComponentType } from "re
 import { api, ApiError } from "../content/api"
 import { getContent, loadContent, resetContent, saveContent, useContentReady, useSiteContent } from "../content/store"
 import type { SiteContent } from "../content/types"
-import { asset, mediaUrl, stripBase, withBase } from "../paths"
+import { asset, mediaUrl, siteHref, stripBase, withBase } from "../paths"
 import Icon, { type IconName } from "./components/Icon"
 import LoginPage, { type AdminUser } from "./LoginPage"
 import BlogSection from "./sections/BlogSection"
@@ -310,7 +310,7 @@ function Dashboard({
             )}
           </nav>
           <div className="flex items-center gap-[8px]">
-            <a className="admin-btn admin-btn-secondary h-[36px] px-[12px]" href={withBase("/")} rel="noreferrer" target="_blank">
+            <a className="admin-btn admin-btn-secondary h-[36px] px-[12px]" href={siteHref("/")} rel="noreferrer" target="_blank">
               <Icon name="external" size={16} />
               <span className="hidden sm:inline">View website</span>
             </a>

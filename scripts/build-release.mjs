@@ -35,13 +35,15 @@ writeFileSync(
         start: "node app.cjs",
         "admin:create": "node server/create-admin.js",
         "admin:email": "node server/change-email.js",
+        // For cPanel's "Run JS script" button, which shows the output.
+        "check:sqlite": "node check-sqlite.cjs",
       },
       dependencies: {
         hono: project.dependencies.hono,
         "@hono/node-server": project.dependencies["@hono/node-server"],
+        // SQLite for Node.js versions without built-in node:sqlite (cPanel offers Node 20).
+        "node-sqlite3-wasm": project.dependencies["node-sqlite3-wasm"],
       },
-      // SQLite driver for Node.js versions without built-in node:sqlite (Node 20, 22.0–22.12).
-      optionalDependencies: { "better-sqlite3": "^12.11.1" },
     },
     null,
     2,
@@ -67,6 +69,27 @@ import("./server/index.js").catch((error) => {
   console.error(text)
   process.exit(1)
 })
+`,
+)
+
+writeFileSync(
+  `${release}/check-sqlite.cjs`,
+  `// Reports which SQLite driver this Node.js can use (npm run check:sqlite).
+console.log("Node.js " + process.version + " on " + process.platform + "-" + process.arch)
+try {
+  require("node:sqlite")
+  console.log("OK: built-in node:sqlite is available.")
+} catch (error) {
+  console.log("Built-in node:sqlite: not available (" + error.message + ")")
+}
+try {
+  const sqliteWasm = require("node-sqlite3-wasm")
+  new sqliteWasm.Database(":memory:").get("SELECT 1")
+  console.log("OK: node-sqlite3-wasm works.")
+} catch (error) {
+  console.log("node-sqlite3-wasm FAILED:")
+  console.log(error && error.stack ? error.stack : error)
+}
 `,
 )
 

@@ -2,7 +2,7 @@ import { useState, type ReactNode } from "react"
 import { basicDetail } from "../../content/defaults"
 import { slugify } from "../../content/selectors"
 import type { Service, ServiceDetail } from "../../content/types"
-import { withBase } from "../../paths"
+import { siteHref } from "../../paths"
 import EditorBar from "../components/EditorBar"
 import ImageField from "../components/ImageField"
 import ListEditor from "../components/ListEditor"
@@ -188,7 +188,7 @@ function ServiceEditor({ service, onSave, onBack }: { service: Service; onSave: 
       {service.active && (
         <a
           className="self-start text-[14px] font-medium text-[#8a6a2f] underline underline-offset-4"
-          href={withBase(`/service/${service.slug}`)}
+          href={siteHref(`/service/${service.slug}`)}
           rel="noreferrer"
           target="_blank"
         >

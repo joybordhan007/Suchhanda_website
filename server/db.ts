@@ -1,8 +1,8 @@
-import { mkdirSync } from "node:fs"
+import { mkdirSync, rmSync, statSync } from "node:fs"
 import { join } from "node:path"
 import { config } from "./config.ts"
 
-// The few SQLite calls the server uses; node:sqlite and better-sqlite3 both provide them.
+// The few SQLite calls the server uses.
 type Statement = {
   get(...params: unknown[]): unknown
   all(...params: unknown[]): unknown[]
@@ -13,25 +13,62 @@ export type Database = {
   prepare(sql: string): Statement
 }
 
-// Node 22.13+ has SQLite built in. Older Node versions (e.g. the Node 20 offered by many
-// cPanel hosts) use the better-sqlite3 package instead; the database file is the same.
+type WasmDatabase = {
+  exec(sql: string): void
+  get(sql: string, values: unknown[]): unknown
+  all(sql: string, values: unknown[]): unknown[]
+  run(sql: string, values: unknown[]): unknown
+}
+
+// Node 22.13+ has SQLite built in. Older Node versions (cPanel hosts offer Node 20 at most)
+// use node-sqlite3-wasm: SQLite compiled to WebAssembly, so nothing has to be built on the
+// host. The database file is the same either way.
 async function openDatabase(file: string): Promise<Database> {
   try {
     const { DatabaseSync } = await import("node:sqlite")
-    return new DatabaseSync(file) as unknown as Database
-  } catch (builtInError) {
-    // A variable keeps TypeScript from requiring the optional package's types.
-    const fallback = "better-sqlite3"
-    try {
-      const { default: BetterSqlite } = await import(fallback)
-      return new BetterSqlite(file) as Database
-    } catch {
-      throw new Error(
-        `No SQLite driver: this Node.js (${process.version}) has no built-in node:sqlite and the better-sqlite3 package is not installed. ` +
-          "Run `npm install` in the app folder, or choose Node.js 22.13 or newer. " +
-          `(node:sqlite: ${builtInError instanceof Error ? builtInError.message : String(builtInError)})`,
-      )
+    const db = new DatabaseSync(file) as unknown as Database
+    db.exec("PRAGMA journal_mode = WAL;")
+    return db
+  } catch {
+    const { default: sqliteWasm } = await import("node-sqlite3-wasm")
+    removeStaleLock(file)
+    const raw = new sqliteWasm.Database(file) as WasmDatabase
+    // The WebAssembly build cannot share WAL memory between processes, so it uses a
+    // rollback journal. A database last used in WAL mode is converted once here.
+    raw.exec("PRAGMA busy_timeout = 5000;")
+    raw.exec("PRAGMA locking_mode = EXCLUSIVE;")
+    raw.get("PRAGMA journal_mode = DELETE;", [])
+    raw.exec("PRAGMA locking_mode = NORMAL;")
+    const retry = <T>(query: () => T): T => {
+      try {
+        return query()
+      } catch (error) {
+        if (!(error instanceof Error && /locked|busy/i.test(error.message)) || !removeStaleLock(file)) throw error
+        return query()
+      }
     }
+    const db: Database = {
+      exec: (sql) => retry(() => raw.exec(sql)),
+      prepare: (sql) => ({
+        get: (...values) => retry(() => raw.get(sql, values)) ?? undefined,
+        all: (...values) => retry(() => raw.all(sql, values)),
+        run: (...values) => retry(() => raw.run(sql, values)),
+      }),
+    }
+    return db
+  }
+}
+
+// node-sqlite3-wasm locks the database with a "<file>.lock" folder. A process killed while
+// holding it leaves the folder behind; any lock older than a few seconds is such a leftover.
+function removeStaleLock(file: string) {
+  const lock = `${file}.lock`
+  try {
+    if (Date.now() - statSync(lock).mtimeMs < 15_000) return false
+    rmSync(lock, { recursive: true, force: true })
+    return true
+  } catch {
+    return false
   }
 }
 
@@ -41,7 +78,6 @@ mkdirSync(config.uploadsDir, { recursive: true })
 export const db = await openDatabase(join(config.dataDir, "site.db"))
 
 db.exec(`
-  PRAGMA journal_mode = WAL;
   PRAGMA foreign_keys = ON;
 
   CREATE TABLE IF NOT EXISTS content (
