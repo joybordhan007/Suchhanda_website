@@ -205,7 +205,8 @@ function Site() {
   }, [path, page.height, renderedPath])
 
   useEffect(() => {
-    const siteTitle = "Suchhanda Mondol | Performance Marketing"
+    // Keep in sync with "title" in .figma/make/site.json (used for the first page load).
+    const siteTitle = "Professional Digital Marketing Services | Suchhanda Mondol"
     const service = match.page === "service" ? content.services.find((item) => item.slug === match.slug) : null
     const post = match.page === "post" ? content.blog.find((item) => item.slug === match.slug) : null
     const name = service?.title ?? post?.title
@@ -308,7 +309,10 @@ function Site() {
             itemObserver.unobserve(item)
           })
       },
-      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
+      // No negative bottom margin: items at the very end of the page (the footer's
+      // copyright line) can never scroll above the screen's bottom edge, so a margin
+      // there would keep them hidden for good.
+      { threshold: 0.12 },
     )
 
     sections.forEach((section) => {

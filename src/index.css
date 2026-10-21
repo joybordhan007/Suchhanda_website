@@ -526,6 +526,45 @@ button,
   left: 0;
 }
 
+.site-footer {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Copyright and credit line, pinned to the bottom of the footer. */
+.site-footer-bottom {
+  display: flex;
+  width: 1280px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: auto auto 0;
+  padding: 20px 0 28px;
+  border-top: 1px solid rgb(25 25 25 / 12%);
+  color: #5a5a5a;
+  font-family: "Inter:Regular", sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.site-footer-bottom p {
+  margin: 0;
+}
+
+.site-footer-bottom a {
+  color: #191919;
+  font-family: "Inter:Semi Bold", sans-serif;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.site-footer-bottom a:hover,
+.site-footer-bottom a:focus-visible {
+  color: #c7994b;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .site-footer-content {
   display: flex;
   width: 1280px;
@@ -1140,6 +1179,16 @@ button,
   flex-direction: column;
   gap: 24px;
   padding: 48px 0 24px;
+}
+
+.site-footer-bottom {
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 16px 0 24px;
+  font-size: 13px;
 }
 
 .site-footer-brand {

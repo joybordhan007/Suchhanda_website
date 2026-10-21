@@ -126,6 +126,15 @@ export default function Footer({ top }: FooterProps) {
           </section>
         </div>
       </div>
+      <div className="site-footer-bottom">
+        <p>Copyright © {new Date().getFullYear()} SUCHHANDA MONDOL</p>
+        <p>
+          Website Designed and Developed by{" "}
+          <a href="https://designops.agency" rel="noopener" target="_blank">
+            DesignOps
+          </a>
+        </p>
+      </div>
     </footer>
   )
 }
