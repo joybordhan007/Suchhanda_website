@@ -244,7 +244,7 @@ export function createApp() {
   app.post("/api/uploads", requireAdmin, async (c) => {
     const body = await c.req.parseBody()
     const file = body.file
-    if (!(file instanceof File)) return c.json({ error: "No file was sent." }, 400)
+    if (typeof file !== "object" || !("arrayBuffer" in file)) return c.json({ error: "No file was sent." }, 400)
     if (file.size > config.maxUploadBytes) return c.json({ error: "Images must be 5 MB or smaller." }, 413)
     const bytes = Buffer.from(await file.arrayBuffer())
     const kind = imageTypes.find((type) => type.test(bytes))

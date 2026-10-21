@@ -1,0 +1,17 @@
+{
+  // Compiles the API server to plain JavaScript for hosts that cannot run TypeScript
+  // directly (used by `pnpm build:release`).
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rewriteRelativeImportExtensions": true,
+    "rootDir": "server",
+    "outDir": "release/server",
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "removeComments": false
+  },
+  "include": ["server/**/*.ts"]
+}

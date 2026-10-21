@@ -22,3 +22,6 @@ logs/
 
 # Database and uploaded images (back these up; never commit them)
 /data/
+
+# Built by pnpm build:release; upload its contents to the host
+/release/

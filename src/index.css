@@ -1543,6 +1543,55 @@ button,
 }
 }
 
+/* Stacked (phone and tablet) layout polish, checked at a 440px phone. */
+@media (max-width: 1023px) {
+/* More air between sections; the footer runs to the bottom of the page. */
+.design-canvas > div {
+  gap: 48px;
+  padding-bottom: 0;
+}
+
+/* Hero tagline centred like the rest of the hero, without the list bullet. */
+.design-canvas [data-node-id="1:351"] {
+  text-align: center;
+}
+
+.design-canvas [data-node-id="1:351"] li {
+  margin-inline-start: 0 !important;
+  list-style: none;
+}
+
+/* "Ready to Elevate Your Brand?" band: keep its text off the band's edges. */
+.design-canvas > div > [data-node-id="1:473"],
+.design-canvas > div > [data-node-id="1:1211"],
+.design-canvas > div > [data-node-id="1:1427"],
+.design-canvas > div > [data-node-id="1:1736"] {
+  padding: 48px 24px !important;
+}
+
+/* Service page "Why Choose Me" dark box. */
+.design-canvas > div > [data-node-id="1:1128"] {
+  padding: 32px 24px !important;
+}
+
+/* Footer columns read left to right instead of hugging the right edge. */
+.site-footer-navigation {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-content: stretch;
+  row-gap: 32px;
+}
+
+.site-footer-navigation section,
+.site-footer-contact {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.site-footer-navigation ul {
+  align-items: flex-start;
+}
+}
+
 /* Tablets use the stacked layout, kept inside the same fixed side margin as desktop. */
 @media (min-width: 768px) and (max-width: 1023px) {
 .design-canvas > div {

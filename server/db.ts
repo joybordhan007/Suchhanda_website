@@ -1,12 +1,44 @@
 import { mkdirSync } from "node:fs"
 import { join } from "node:path"
-import { DatabaseSync } from "node:sqlite"
 import { config } from "./config.ts"
+
+// The few SQLite calls the server uses; node:sqlite and better-sqlite3 both provide them.
+type Statement = {
+  get(...params: unknown[]): unknown
+  all(...params: unknown[]): unknown[]
+  run(...params: unknown[]): unknown
+}
+export type Database = {
+  exec(sql: string): void
+  prepare(sql: string): Statement
+}
+
+// Node 22.13+ has SQLite built in. Older Node versions (e.g. the Node 20 offered by many
+// cPanel hosts) use the better-sqlite3 package instead; the database file is the same.
+async function openDatabase(file: string): Promise<Database> {
+  try {
+    const { DatabaseSync } = await import("node:sqlite")
+    return new DatabaseSync(file) as unknown as Database
+  } catch (builtInError) {
+    // A variable keeps TypeScript from requiring the optional package's types.
+    const fallback = "better-sqlite3"
+    try {
+      const { default: BetterSqlite } = await import(fallback)
+      return new BetterSqlite(file) as Database
+    } catch {
+      throw new Error(
+        `No SQLite driver: this Node.js (${process.version}) has no built-in node:sqlite and the better-sqlite3 package is not installed. ` +
+          "Run `npm install` in the app folder, or choose Node.js 22.13 or newer. " +
+          `(node:sqlite: ${builtInError instanceof Error ? builtInError.message : String(builtInError)})`,
+      )
+    }
+  }
+}
 
 mkdirSync(config.dataDir, { recursive: true })
 mkdirSync(config.uploadsDir, { recursive: true })
 
-export const db = new DatabaseSync(join(config.dataDir, "site.db"))
+export const db = await openDatabase(join(config.dataDir, "site.db"))
 
 db.exec(`
   PRAGMA journal_mode = WAL;

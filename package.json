@@ -11,7 +11,8 @@
     "server": "node --watch-path=server server/index.ts",
     "start": "node server/index.ts --production",
     "admin:create": "node server/create-admin.ts",
-    "admin:email": "node server/change-email.ts"
+    "admin:email": "node server/change-email.ts",
+    "build:release": "node scripts/build-release.mjs"
   },
   "dependencies": {
     "@hono/node-server": "^2.1.5",

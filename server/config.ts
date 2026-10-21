@@ -1,6 +1,8 @@
 import { resolve } from "node:path"
+import { fileURLToPath } from "node:url"
 
-const root = resolve(import.meta.dirname, "..")
+// Project folder (or the release folder on the host); works on every supported Node.js.
+const root = fileURLToPath(new URL("..", import.meta.url))
 const dataDir = resolve(root, process.env.DATA_DIR ?? "data")
 
 export const config = {
