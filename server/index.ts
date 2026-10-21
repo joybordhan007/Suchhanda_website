@@ -3,11 +3,14 @@ import { createApp } from "./app.ts"
 import { deleteExpiredSessions } from "./auth.ts"
 import { config } from "./config.ts"
 import { db } from "./db.ts"
+import { pruneOldPageViews } from "./stats.ts"
 
 const app = createApp()
 
 deleteExpiredSessions()
 setInterval(deleteExpiredSessions, 60 * 60 * 1000).unref()
+pruneOldPageViews()
+setInterval(pruneOldPageViews, 24 * 60 * 60 * 1000).unref()
 
 const adminCount = (db.prepare("SELECT COUNT(*) AS count FROM admins").get() as { count: number }).count
 if (adminCount === 0) {

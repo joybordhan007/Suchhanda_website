@@ -9,6 +9,7 @@ type TextFieldProps = {
   type?: "text" | "email" | "tel" | "url" | "number" | "date" | "password"
   placeholder?: string
   hint?: string
+  autoFocus?: boolean
 }
 
 export default function TextField({
@@ -20,19 +21,20 @@ export default function TextField({
   type = "text",
   placeholder,
   hint,
+  autoFocus,
 }: TextFieldProps) {
   const id = useId()
-  const inputClass =
-    "w-full rounded-[8px] border border-[rgba(25,25,25,0.2)] bg-white px-[12px] py-[10px] text-[15px] text-[#191919] outline-none focus:border-[#c7994b] focus:ring-2 focus:ring-[#c7994b]/25"
+  const inputClass = "admin-input"
 
   return (
     <div className="flex flex-col gap-[6px]">
-      <label className="text-[13px] font-medium uppercase tracking-wide text-[#555]" htmlFor={id}>
+      <label className="admin-label" htmlFor={id}>
         {label}
       </label>
       {multiline ? (
         <textarea
           className={`${inputClass} resize-y`}
+          autoFocus={autoFocus}
           id={id}
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
@@ -42,6 +44,7 @@ export default function TextField({
       ) : (
         <input
           className={inputClass}
+          autoFocus={autoFocus}
           id={id}
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
@@ -49,7 +52,7 @@ export default function TextField({
           value={value}
         />
       )}
-      {hint && <p className="text-[13px] text-[#777]">{hint}</p>}
+      {hint && <p className="text-[13px] leading-[1.45] text-[var(--admin-muted)]">{hint}</p>}
     </div>
   )
 }

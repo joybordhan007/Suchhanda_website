@@ -21,7 +21,7 @@ function AnimatedValue({ value, suffix }: { value: number; suffix: string }) {
         if (!entry.isIntersecting) return
         observer.disconnect()
         const startedAt = performance.now()
-        const duration = 1400
+        const duration = 2600
 
         const animate = (now: number) => {
           const progress = Math.min((now - startedAt) / duration, 1)

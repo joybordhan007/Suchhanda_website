@@ -1,43 +1,56 @@
-import { useCallback, useEffect, useState, type ComponentType } from "react"
+import { useCallback, useEffect, useRef, useState, type ComponentType } from "react"
 import { api, ApiError } from "../content/api"
-import { loadContent, resetContent, saveContent, useContentReady, useSiteContent } from "../content/store"
-import type { ContactMessage, SiteContent } from "../content/types"
-import { asset, stripBase, withBase } from "../paths"
+import { getContent, loadContent, resetContent, saveContent, useContentReady, useSiteContent } from "../content/store"
+import type { SiteContent } from "../content/types"
+import { asset, mediaUrl, stripBase, withBase } from "../paths"
+import Icon, { type IconName } from "./components/Icon"
 import LoginPage, { type AdminUser } from "./LoginPage"
-import AccountSection from "./sections/AccountSection"
 import BlogSection from "./sections/BlogSection"
 import DashboardSection from "./sections/DashboardSection"
 import ImagesSection from "./sections/ImagesSection"
 import LogosSection from "./sections/LogosSection"
 import MessagesSection from "./sections/MessagesSection"
+import ProfileSection from "./sections/ProfileSection"
 import ReviewsSection from "./sections/ReviewsSection"
 import ServicesSection from "./sections/ServicesSection"
 import SettingsSection from "./sections/SettingsSection"
 import StatsSection from "./sections/StatsSection"
 import WorkSection from "./sections/WorkSection"
-import type { SectionProps } from "./types"
+import type { ManagedSectionProps, SectionProps } from "./types"
 
-const sections = [
-  { id: "", label: "Dashboard", icon: "◧" },
-  { id: "services", label: "Services", icon: "◆" },
-  { id: "work", label: "Work", icon: "▣" },
-  { id: "blog", label: "Blog", icon: "✎" },
-  { id: "messages", label: "Messages", icon: "✉" },
-  { id: "stats", label: "Achievements", icon: "▲" },
-  { id: "logos", label: "Client Logos", icon: "◎" },
-  { id: "reviews", label: "Reviews", icon: "★" },
-  { id: "images", label: "Page Images", icon: "▧" },
-  { id: "settings", label: "Site Settings", icon: "⚙" },
-  { id: "account", label: "Account", icon: "◉" },
-] as const
+const navGroups = [
+  { label: "Overview", items: [{ id: "", label: "Dashboard", icon: "dashboard" }] },
+  {
+    label: "Content",
+    items: [
+      { id: "services", label: "Services", icon: "services" },
+      { id: "work", label: "Work", icon: "work" },
+      { id: "blog", label: "Blog", icon: "blog" },
+    ],
+  },
+  { label: "Inbox", items: [{ id: "messages", label: "Messages", icon: "messages" }] },
+  {
+    label: "Website",
+    items: [
+      { id: "stats", label: "Achievements", icon: "award" },
+      { id: "logos", label: "Client Logos", icon: "logos" },
+      { id: "reviews", label: "Reviews", icon: "star" },
+      { id: "images", label: "Page Images", icon: "image" },
+      { id: "settings", label: "Site Settings", icon: "settings" },
+    ],
+  },
+] as const satisfies { label: string; items: { id: string; label: string; icon: IconName }[] }[]
 
-type SectionId = (typeof sections)[number]["id"]
+type SectionId = (typeof navGroups)[number]["items"][number]["id"] | "profile"
+type Route = { section: SectionId; itemId?: string }
 
-// Sections that edit the website content (and share the Save bar).
-const contentSections: Partial<Record<SectionId, ComponentType<SectionProps>>> = {
-  services: ServicesSection,
-  work: WorkSection,
-  blog: BlogSection,
+const sectionLabels: Record<string, string> = {
+  ...Object.fromEntries(navGroups.flatMap((group) => group.items.map((item) => [item.id, item.label]))),
+  profile: "Profile",
+}
+
+// Edited as a whole and saved with the shared "Save changes" bar.
+const draftSections: Partial<Record<SectionId, ComponentType<SectionProps>>> = {
   stats: StatsSection,
   logos: LogosSection,
   reviews: ReviewsSection,
@@ -45,9 +58,18 @@ const contentSections: Partial<Record<SectionId, ComponentType<SectionProps>>> =
   settings: SettingsSection,
 }
 
-function getSection(): SectionId {
-  const id = (stripBase(window.location.pathname) ?? "").replace(/^\/admin\/?/, "")
-  return sections.some((section) => section.id === id) ? (id as SectionId) : ""
+// Lists whose changes are saved one item at a time.
+const managedSections: Partial<Record<SectionId, ComponentType<ManagedSectionProps>>> = {
+  services: ServicesSection,
+  work: WorkSection,
+  blog: BlogSection,
+}
+
+const sectionIds = new Set<string>(Object.keys(sectionLabels))
+
+function getRoute(): Route {
+  const [section = "", itemId] = (stripBase(window.location.pathname) ?? "").replace(/^\/admin\/?/, "").split("/")
+  return sectionIds.has(section) ? { section: section as SectionId, itemId: itemId || undefined } : { section: "" }
 }
 
 export default function AdminApp() {
@@ -62,29 +84,55 @@ export default function AdminApp() {
   }, [])
 
   if (admin === undefined) {
-    return <div className="flex min-h-dvh items-center justify-center bg-[#091e39] text-white/70">Loading…</div>
+    return <div className="admin-ui flex min-h-dvh items-center justify-center text-[var(--admin-muted)]">Loading…</div>
   }
   if (admin === null) return <LoginPage onSignedIn={setAdmin} />
-  return <Dashboard admin={admin} onSignedOut={() => setAdmin(null)} />
+  return <Dashboard admin={admin} onAdminChange={setAdmin} onSignedOut={() => setAdmin(null)} />
 }
 
-function Dashboard({ admin, onSignedOut }: { admin: AdminUser; onSignedOut: () => void }) {
+function Avatar({ admin, size = 36 }: { admin: AdminUser; size?: number }) {
+  const initial = (admin.name || admin.email).trim().charAt(0).toUpperCase()
+  return admin.avatar ? (
+    <img alt="" className="shrink-0 rounded-full object-cover ring-2 ring-white/15" src={mediaUrl(admin.avatar)} style={{ width: size, height: size }} />
+  ) : (
+    <span
+      className="flex shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#d9b46e] to-[#b8873a] font-semibold text-[#091e39]"
+      style={{ width: size, height: size, fontSize: size * 0.42 }}
+    >
+      {initial}
+    </span>
+  )
+}
+
+function Dashboard({
+  admin,
+  onAdminChange,
+  onSignedOut,
+}: {
+  admin: AdminUser
+  onAdminChange: (admin: AdminUser) => void
+  onSignedOut: () => void
+}) {
   const ready = useContentReady()
   const saved = useSiteContent()
   const [draft, setDraft] = useState<SiteContent | null>(null)
   // Bumped when the draft is replaced, so editors drop any local typing state.
   const [revision, setRevision] = useState(0)
-  const [section, setSection] = useState<SectionId>(getSection)
+  const [route, setRoute] = useState<Route>(getRoute)
   const [status, setStatus] = useState<{ kind: "idle" | "saving" | "saved" | "error"; text?: string }>({ kind: "idle" })
+  const [toast, setToast] = useState<{ kind: "saved" | "error"; text: string } | null>(null)
+  const toastTimer = useRef<number | undefined>(undefined)
   const [unread, setUnread] = useState<number | null>(null)
-  const isDirty = draft !== null && JSON.stringify(draft) !== JSON.stringify(saved)
+  // The save time is not an edit, so it is left out of the comparison.
+  const isDirty = draft !== null && JSON.stringify({ ...draft, updatedAt: null }) !== JSON.stringify({ ...saved, updatedAt: null })
 
   useEffect(() => {
     void loadContent()
-    api<{ messages: ContactMessage[] }>("/messages")
-      .then(({ messages }) => setUnread(messages.filter((message) => !message.isRead).length))
+    // Only the unread count is needed here.
+    api<{ unread: number }>("/messages?limit=0")
+      .then(({ unread: count }) => setUnread(count))
       .catch(() => setUnread(null))
-    const popstate = () => setSection(getSection())
+    const popstate = () => setRoute(getRoute())
     window.addEventListener("popstate", popstate)
     return () => window.removeEventListener("popstate", popstate)
   }, [])
@@ -100,26 +148,46 @@ function Dashboard({ admin, onSignedOut }: { admin: AdminUser; onSignedOut: () =
     return () => window.removeEventListener("beforeunload", warn)
   }, [isDirty])
 
+  const showToast = (next: { kind: "saved" | "error"; text: string }) => {
+    window.clearTimeout(toastTimer.current)
+    setToast(next)
+    toastTimer.current = window.setTimeout(() => setToast(null), 3000)
+  }
+
   const handleUnread = useCallback((count: number) => setUnread(count), [])
 
-  const open = (next: string) => {
-    const id = sections.some((item) => item.id === next) ? (next as SectionId) : ""
-    window.history.pushState({}, "", withBase(id ? `/admin/${id}` : "/admin"))
-    setSection(id)
+  const open = useCallback((section: string, itemId?: string) => {
+    const id = sectionIds.has(section) ? (section as SectionId) : ""
+    const path = id ? `/admin/${id}${itemId ? `/${itemId}` : ""}` : "/admin"
+    window.history.pushState({}, "", withBase(path))
+    setRoute({ section: id, itemId })
     window.scrollTo(0, 0)
-  }
+  }, [])
 
   const replaceDraft = (next: SiteContent) => {
     setDraft(next)
     setRevision((value) => value + 1)
   }
 
-  const handleError = (error: unknown) => {
+  const isSignedOutError = (error: unknown) => {
     if (error instanceof ApiError && error.status === 401) {
       onSignedOut()
-      return
+      return true
     }
-    setStatus({ kind: "error", text: error instanceof Error ? error.message : "Could not save." })
+    return false
+  }
+
+  // Saves one change straight away: applied to the saved content (so other unsaved
+  // edits are not published with it) and to the draft.
+  const commit = async (apply: (content: SiteContent) => SiteContent) => {
+    try {
+      const result = await saveContent(apply(getContent()))
+      setDraft((current) => (current ? { ...apply(current), updatedAt: result.updatedAt } : current))
+      showToast({ kind: "saved", text: "Saved — live on the website." })
+    } catch (error) {
+      if (!isSignedOutError(error)) showToast({ kind: "error", text: error instanceof Error ? error.message : "Could not save." })
+      throw error
+    }
   }
 
   const save = async () => {
@@ -129,7 +197,7 @@ function Dashboard({ admin, onSignedOut }: { admin: AdminUser; onSignedOut: () =
       setDraft(await saveContent(draft))
       setStatus({ kind: "saved" })
     } catch (error) {
-      handleError(error)
+      if (!isSignedOutError(error)) setStatus({ kind: "error", text: error instanceof Error ? error.message : "Could not save." })
     }
   }
 
@@ -140,69 +208,135 @@ function Dashboard({ admin, onSignedOut }: { admin: AdminUser; onSignedOut: () =
       replaceDraft(await resetContent())
       setStatus({ kind: "saved" })
     } catch (error) {
-      handleError(error)
+      if (!isSignedOutError(error)) setStatus({ kind: "error", text: error instanceof Error ? error.message : "Could not save." })
     }
   }
 
   const signOut = async () => {
-    if (isDirty && !window.confirm("You have unsaved changes. Sign out anyway?")) return
+    if (isDirty && !window.confirm("You have unsaved changes. Log out anyway?")) return
     await api("/auth/logout", { method: "POST" }).catch(() => undefined)
     onSignedOut()
   }
 
-  const ContentSection = contentSections[section]
-  const showSaveBar = Boolean(ContentSection)
-  const navButton = (active: boolean) =>
-    `flex shrink-0 items-center gap-[10px] rounded-[8px] px-[14px] py-[10px] text-left text-[15px] transition ${
-      active ? "bg-white/12 text-white" : "text-white/70 hover:bg-white/6 hover:text-white"
-    }`
+  const DraftSection = draftSections[route.section]
+  const ManagedSection = managedSections[route.section]
+  const sectionLabel = sectionLabels[route.section] ?? "Dashboard"
 
   return (
-    <div className="min-h-dvh bg-[#f4f5f7] font-['Inter:Regular'] text-[#191919] lg:flex">
-      <aside className="bg-[#091e39] lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-[260px] lg:shrink-0 lg:flex-col">
-        <div className="flex items-center justify-between gap-[12px] px-[20px] py-[18px] lg:block">
-          <img alt="Suchhanda" className="h-[32px] brightness-0 invert" src={asset("4a673.svg")} />
-          <p className="mt-[6px] hidden text-[12px] uppercase tracking-[0.2em] text-[#c7994b] lg:block">Admin</p>
+    <div className="admin-ui min-h-dvh lg:flex">
+      <aside className="relative z-20 bg-[#091e39] text-white lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-[264px] lg:shrink-0 lg:flex-col">
+        <div className="flex items-center justify-between gap-[12px] px-[20px] pt-[18px] pb-[10px] lg:block lg:px-[22px] lg:pt-[24px] lg:pb-[18px]">
+          <div className="flex items-center gap-[10px]">
+            <img alt="Suchhanda" className="h-[30px] brightness-0 invert" src={asset("4a673.svg")} />
+          </div>
+          <span className="mt-[10px] hidden w-fit rounded-full bg-white/8 px-[10px] py-[3px] text-[11px] font-semibold uppercase tracking-[0.14em] text-[#d9b46e] lg:inline-block">
+            Admin panel
+          </span>
         </div>
-        <nav aria-label="Admin sections" className="flex gap-[4px] overflow-x-auto px-[12px] pb-[12px] lg:flex-1 lg:flex-col lg:overflow-y-auto">
-          {sections.map((item) => (
-            <button
-              aria-current={section === item.id ? "page" : undefined}
-              className={navButton(section === item.id)}
-              key={item.id || "dashboard"}
-              onClick={() => open(item.id)}
-              type="button"
-            >
-              <span aria-hidden="true" className="w-[18px] text-center text-[#c7994b]">
-                {item.icon}
-              </span>
-              {item.label}
-              {item.id === "messages" && (unread ?? 0) > 0 && (
-                <span className="ml-auto rounded-full bg-[#c7994b] px-[7px] text-[12px] font-semibold text-[#091e39]">{unread}</span>
-              )}
-            </button>
+
+        <nav aria-label="Admin sections" className="flex gap-[4px] overflow-x-auto px-[12px] pb-[12px] lg:flex-1 lg:flex-col lg:gap-[18px] lg:overflow-y-auto lg:px-[14px]">
+          {navGroups.map((group) => (
+            <div className="flex shrink-0 gap-[4px] lg:flex-col lg:gap-[2px]" key={group.label}>
+              <p className="hidden px-[12px] pb-[6px] text-[11px] font-semibold uppercase tracking-[0.12em] text-white/38 lg:block">{group.label}</p>
+              {group.items.map((item) => {
+                const active = route.section === item.id
+                return (
+                  <button
+                    aria-current={active ? "page" : undefined}
+                    className={`relative flex shrink-0 items-center gap-[12px] rounded-[10px] px-[12px] py-[9px] text-left text-[14px] font-medium transition ${
+                      active ? "bg-white/10 text-white" : "text-white/65 hover:bg-white/5 hover:text-white"
+                    }`}
+                    key={item.id || "dashboard"}
+                    onClick={() => open(item.id)}
+                    type="button"
+                  >
+                    {active && <span aria-hidden="true" className="absolute top-[8px] bottom-[8px] left-0 hidden w-[3px] rounded-full bg-[#d9b46e] lg:block" />}
+                    <Icon className={active ? "text-[#d9b46e]" : "text-white/55"} name={item.icon} />
+                    {item.label}
+                    {item.id === "messages" && (unread ?? 0) > 0 && (
+                      <span className="ml-auto rounded-full bg-[#d9b46e] px-[7px] py-[1px] text-[11px] font-bold text-[#091e39]">{unread}</span>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
           ))}
         </nav>
-        <a className="hidden px-[26px] py-[18px] text-[14px] text-white/60 hover:text-white lg:block" href={withBase("/")} rel="noreferrer" target="_blank">
-          View website ↗
-        </a>
+
+        <div className="hidden border-t border-white/10 p-[14px] lg:block">
+          <button
+            aria-current={route.section === "profile" ? "page" : undefined}
+            className={`flex w-full min-w-0 items-center gap-[10px] rounded-[12px] p-[8px] text-left transition ${
+              route.section === "profile" ? "bg-white/10" : "hover:bg-white/5"
+            }`}
+            onClick={() => open("profile")}
+            type="button"
+          >
+            <Avatar admin={admin} />
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-[14px] font-semibold text-white">{admin.name || "Your profile"}</span>
+              <span className="block truncate text-[12px] text-white/50">{admin.email}</span>
+            </span>
+            <Icon className="text-white/40" name="user" size={16} />
+          </button>
+          <button
+            className="mt-[6px] flex w-full items-center gap-[12px] rounded-[10px] px-[12px] py-[9px] text-[14px] font-medium text-white/65 transition hover:bg-white/5 hover:text-[#fda29b]"
+            onClick={() => void signOut()}
+            type="button"
+          >
+            <Icon name="logout" />
+            Logout
+          </button>
+        </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        {showSaveBar && (
-          <div className="sticky top-0 z-10 flex flex-wrap items-center justify-end gap-[10px] border-b border-[rgba(0,0,0,0.08)] bg-white/90 px-[16px] py-[12px] backdrop-blur sm:px-[32px]">
-            <span aria-live="polite" className="mr-auto text-[14px] text-[#777]">
-              {status.kind === "saving" && "Saving…"}
-              {status.kind === "saved" && !isDirty && "All changes saved and live on the website."}
-              {status.kind === "error" && <span className="text-red-700">{status.text}</span>}
-              {(status.kind === "idle" || (status.kind === "saved" && isDirty)) &&
-                (isDirty ? "You have unsaved changes." : "No changes.")}
+        <header className="sticky top-0 z-20 flex h-[64px] items-center justify-between gap-[12px] border-b border-[var(--admin-border)] bg-white/85 px-[16px] backdrop-blur-md sm:px-[32px]">
+          <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-[8px] text-[14px]">
+            <button className="text-[var(--admin-muted)] hover:text-[var(--admin-text)]" onClick={() => open("")} type="button">
+              Admin
+            </button>
+            <span aria-hidden="true" className="text-[#d0d5dd]">
+              /
             </span>
-            <button className="rounded-[8px] px-[14px] py-[9px] text-[14px] text-[#555] hover:text-red-700" onClick={reset} type="button">
+            <span className={`truncate font-semibold ${route.itemId ? "text-[var(--admin-muted)]" : "text-[var(--admin-text)]"}`}>{sectionLabel}</span>
+            {route.itemId && (
+              <>
+                <span aria-hidden="true" className="text-[#d0d5dd]">
+                  /
+                </span>
+                <span className="truncate font-semibold text-[var(--admin-text)]">Details</span>
+              </>
+            )}
+          </nav>
+          <div className="flex items-center gap-[8px]">
+            <a className="admin-btn admin-btn-secondary h-[36px] px-[12px]" href={withBase("/")} rel="noreferrer" target="_blank">
+              <Icon name="external" size={16} />
+              <span className="hidden sm:inline">View website</span>
+            </a>
+            <button aria-label="Profile" className="rounded-full lg:hidden" onClick={() => open("profile")} type="button">
+              <Avatar admin={admin} size={34} />
+            </button>
+            <button aria-label="Logout" className="admin-icon-btn lg:hidden" onClick={() => void signOut()} type="button">
+              <Icon name="logout" size={16} />
+            </button>
+          </div>
+        </header>
+
+        {DraftSection && (
+          <div className="sticky top-[64px] z-10 flex flex-wrap items-center justify-end gap-[10px] border-b border-[var(--admin-border)] bg-[var(--admin-bg)]/90 px-[16px] py-[10px] backdrop-blur-md sm:px-[32px]">
+            <span aria-live="polite" className="mr-auto text-[13px] font-medium text-[var(--admin-muted)]">
+              {status.kind === "saving" && "Saving…"}
+              {status.kind === "saved" && !isDirty && <span className="text-[#067647]">All changes saved and live on the website.</span>}
+              {status.kind === "error" && <span className="text-[#b42318]">{status.text}</span>}
+              {(status.kind === "idle" || (status.kind === "saved" && isDirty)) &&
+                (isDirty ? <span className="admin-badge bg-[#fdf6e9] text-[var(--admin-gold-ink)]">Unsaved changes</span> : "No changes yet.")}
+            </span>
+            <button className="admin-btn admin-btn-ghost h-[36px] hover:text-[#b42318]" onClick={reset} type="button">
               Reset to original
             </button>
             <button
-              className="rounded-[8px] border border-[rgba(25,25,25,0.2)] bg-white px-[16px] py-[9px] text-[14px] disabled:opacity-40"
+              className="admin-btn admin-btn-secondary h-[36px]"
               disabled={!isDirty}
               onClick={() => {
                 replaceDraft(saved)
@@ -212,37 +346,48 @@ function Dashboard({ admin, onSignedOut }: { admin: AdminUser; onSignedOut: () =
             >
               Discard
             </button>
-            <button
-              className="rounded-[8px] bg-[#091e39] px-[20px] py-[9px] text-[14px] font-medium text-white disabled:opacity-40"
-              disabled={!isDirty || status.kind === "saving"}
-              onClick={save}
-              type="button"
-            >
+            <button className="admin-btn admin-btn-primary h-[36px]" disabled={!isDirty || status.kind === "saving"} onClick={save} type="button">
               Save changes
             </button>
           </div>
         )}
-        <main className="mx-auto w-full max-w-[1100px] px-[16px] py-[32px] sm:px-[32px]">
+
+        <main className="mx-auto w-full max-w-[1200px] px-[16px] pt-[28px] pb-[48px] sm:px-[32px]">
           {!draft ? (
-            <p className="text-[15px] text-[#777]">Loading content…</p>
-          ) : ContentSection ? (
-            <ContentSection
+            <p className="text-[15px] text-[var(--admin-muted)]">Loading content…</p>
+          ) : DraftSection ? (
+            <DraftSection
+              commit={commit}
               content={draft}
-              key={`${section}-${revision}`}
+              key={`${route.section}-${revision}`}
               onChange={(patch) => {
                 setDraft((current) => (current ? { ...current, ...patch } : current))
                 setStatus({ kind: "idle" })
               }}
             />
-          ) : section === "messages" ? (
-            <MessagesSection onUnreadCount={handleUnread} />
-          ) : section === "account" ? (
-            <AccountSection email={admin.email} onSignOut={signOut} />
+          ) : ManagedSection ? (
+            <ManagedSection commit={commit} content={draft} itemId={route.itemId} key={`${route.section}-${revision}`} open={open} />
+          ) : route.section === "messages" ? (
+            <MessagesSection itemId={route.itemId} onUnreadCount={handleUnread} open={open} />
+          ) : route.section === "profile" ? (
+            <ProfileSection admin={admin} onProfileChange={onAdminChange} />
           ) : (
-            <DashboardSection content={draft} onOpen={open} unreadMessages={unread} />
+            <DashboardSection admin={admin} content={draft} onOpen={open} />
           )}
         </main>
       </div>
+
+      {toast && (
+        <div
+          className={`fixed bottom-[24px] left-1/2 z-50 flex -translate-x-1/2 items-center gap-[10px] rounded-[12px] px-[16px] py-[11px] text-[14px] font-medium shadow-[0_12px_32px_rgb(16_24_40/22%)] ${
+            toast.kind === "saved" ? "bg-[#101828] text-white" : "bg-[#b42318] text-white"
+          }`}
+          role="status"
+        >
+          <span aria-hidden="true" className={`size-[8px] rounded-full ${toast.kind === "saved" ? "bg-[#32d583]" : "bg-white"}`} />
+          {toast.text}
+        </div>
+      )}
     </div>
   )
 }

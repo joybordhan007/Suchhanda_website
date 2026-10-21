@@ -9,8 +9,9 @@
     "preview": "vite preview",
     "format": "oxfmt",
     "server": "node --watch-path=server server/index.ts",
-    "start": "NODE_ENV=production node server/index.ts",
-    "admin:create": "node server/create-admin.ts"
+    "start": "node server/index.ts --production",
+    "admin:create": "node server/create-admin.ts",
+    "admin:email": "node server/change-email.ts"
   },
   "dependencies": {
     "@hono/node-server": "^2.1.5",

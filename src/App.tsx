@@ -1,15 +1,8 @@
-import { lazy, Suspense, useEffect, useMemo, useState, type ComponentType } from "react"
+import { lazy, startTransition, Suspense, useEffect, useLayoutEffect, useMemo, useState, type ComponentType } from "react"
 import { loadContent, useContentReady, useSiteContent } from "./content/store"
-import About from "./pages/About"
-import Blog from "./pages/Blog"
-import BlogDetails from "./pages/BlogDetails"
-import Contact from "./pages/Contact"
 import Home from "./pages/Home"
-import PrivacyPolicy from "./pages/PrivacyPolicy"
-import ServiceDetails from "./pages/ServiceDetails"
-import TermsOfService from "./pages/TermsOfService"
-import Work from "./pages/Work"
 import { asset, stripBase, withBase } from "./paths"
+import { setupTracking, trackPageView } from "./tracking"
 
 const AdminApp = lazy(() => import("./admin/AdminApp"))
 
@@ -17,22 +10,46 @@ const CANVAS_WIDTH = 1920
 // The design's 1280px content column sits 320px in from each canvas edge.
 const DESIGN_CONTENT_WIDTH = 1280
 const DESIGN_GUTTER = (CANVAS_WIDTH - DESIGN_CONTENT_WIDTH) / 2
-// Fixed gap between the content and the screen edge on every non-mobile screen.
-// Keep in sync with --site-side-margin in index.css.
+// Fixed gap between the content and the screen edge on non-mobile screens:
+// wider on full-HD and larger desktops. The tablet value lives in
+// --site-side-margin in index.css; keep them in sync.
 const SIDE_MARGIN = 130
+const WIDE_SIDE_MARGIN = 180
+const WIDE_SCREEN_MIN_WIDTH = 1920
+
+function sideMarginFor(viewportWidth: number) {
+  return viewportWidth >= WIDE_SCREEN_MIN_WIDTH ? WIDE_SIDE_MARGIN : SIDE_MARGIN
+}
+
+// Home ships with the first load; every other page is its own file, fetched when the
+// browser is idle (see `preloadPages`) so moving between pages stays instant.
+const pageLoaders = {
+  service: () => import("./pages/ServiceDetails"),
+  work: () => import("./pages/Work"),
+  about: () => import("./pages/About"),
+  blog: () => import("./pages/Blog"),
+  post: () => import("./pages/BlogDetails"),
+  contact: () => import("./pages/Contact"),
+  privacy: () => import("./pages/PrivacyPolicy"),
+  terms: () => import("./pages/TermsOfService"),
+}
+
+function preloadPages() {
+  Object.values(pageLoaders).forEach((load) => void load())
+}
 
 // Pages with a fixed height are absolutely positioned design canvases; "auto" pages
 // flow normally and are measured, so their height follows their content.
 const pages = {
   home: { component: Home, height: 4735 },
-  service: { component: ServiceDetails, height: "auto" },
-  work: { component: Work, height: "auto" },
-  about: { component: About, height: 4059 },
-  blog: { component: Blog, height: "auto" },
-  post: { component: BlogDetails, height: "auto" },
-  contact: { component: Contact, height: 3099 },
-  privacy: { component: PrivacyPolicy, height: 2400 },
-  terms: { component: TermsOfService, height: 2400 },
+  service: { component: lazy(pageLoaders.service), height: "auto" },
+  work: { component: lazy(pageLoaders.work), height: "auto" },
+  about: { component: lazy(pageLoaders.about), height: 4059 },
+  blog: { component: lazy(pageLoaders.blog), height: "auto" },
+  post: { component: lazy(pageLoaders.post), height: "auto" },
+  contact: { component: lazy(pageLoaders.contact), height: 3099 },
+  privacy: { component: lazy(pageLoaders.privacy), height: 2400 },
+  terms: { component: lazy(pageLoaders.terms), height: 2400 },
 } as const satisfies Record<string, { component: ComponentType<{ slug?: string }>; height: number | "auto" }>
 
 type PageKey = keyof typeof pages
@@ -78,6 +95,51 @@ const linkMap: Record<string, string> = {
   "free consultation": "/contact",
 }
 
+// Elements that reveal on their own. Cards and carousels reveal as one unit, so
+// anything inside a matched element is left to its parent.
+const REVEAL_SELECTOR = [
+  ".service-card",
+  ".work-case-card",
+  ".blog-card",
+  ".achievement-card",
+  ".home-work-card",
+  ".reviews-window",
+  ".reviews-dots",
+  ".trusted-logo-window",
+  ".contact-form",
+  "[data-name='contact']",
+  "[data-name='CTA']",
+  "figure",
+  "iframe",
+  "h1",
+  "h2",
+  "h3",
+  "p",
+  "ul",
+  "ol",
+  "img",
+].join(",")
+
+function revealItems(section: HTMLElement) {
+  const candidates = Array.from(section.querySelectorAll<HTMLElement>(REVEAL_SELECTOR)).filter(
+    // The reveal moves items with `translate`, which centring utilities also use.
+    (element) => !/(^|\s)-?translate-/.test(element.className),
+  )
+  const set = new Set(candidates)
+  return candidates.filter((element) => {
+    for (let parent = element.parentElement; parent && parent !== section; parent = parent.parentElement) {
+      if (set.has(parent)) return false
+    }
+    return true
+  })
+}
+
+// Rendered next to the page inside Suspense, so it mounts only once the page has.
+function PageMounted({ path, onMount }: { path: string; onMount: (path: string) => void }) {
+  useLayoutEffect(() => onMount(path), [path, onMount])
+  return null
+}
+
 function isAdminPath() {
   const path = stripBase(window.location.pathname)
   return path === "/admin" || !!path?.startsWith("/admin/")
@@ -105,6 +167,8 @@ function Site() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isServiceMenuOpen, setIsServiceMenuOpen] = useState(false)
   const [measured, setMeasured] = useState<{ path: string; height: number } | null>(null)
+  // Path whose page is actually in the DOM (a lazily loaded page mounts a moment later).
+  const [renderedPath, setRenderedPath] = useState<string | null>(null)
   const ready = useContentReady()
   const content = useSiteContent()
   const match = matchPath(path) ?? { page: "home" }
@@ -120,9 +184,17 @@ function Site() {
     void loadContent()
   }, [])
 
+  // Fetch the other pages in the background once the first one is on screen.
+  const firstPageShown = renderedPath !== null
+  useEffect(() => {
+    if (!firstPageShown) return
+    const idle = window.requestIdleCallback ?? ((callback: () => void) => window.setTimeout(callback, 1500))
+    idle(() => preloadPages())
+  }, [firstPageShown])
+
   // Measure flowing pages so the scaled canvas is exactly as tall as the page.
   useEffect(() => {
-    if (!ready || page.height !== "auto") return
+    if (renderedPath === null || page.height !== "auto") return
     const element = document.querySelector<HTMLElement>(".design-canvas > div")
     if (!element) return
     const observer = new ResizeObserver(() =>
@@ -130,7 +202,7 @@ function Site() {
     )
     observer.observe(element)
     return () => observer.disconnect()
-  }, [path, page.height, ready])
+  }, [path, page.height, renderedPath])
 
   useEffect(() => {
     const siteTitle = "Suchhanda Mondol | Performance Marketing"
@@ -140,6 +212,15 @@ function Site() {
     document.title = name ? `${name} | Suchhanda Mondol` : siteTitle
   }, [content, match.page, match.slug])
 
+  const tracking = content.settings.tracking
+  useEffect(() => {
+    if (ready) setupTracking(tracking)
+  }, [ready, tracking])
+
+  useEffect(() => {
+    if (ready) trackPageView(path)
+  }, [ready, path])
+
   useEffect(() => {
     const resize = () => setViewportWidth(document.documentElement.clientWidth)
     const popstate = () => {
@@ -148,7 +229,8 @@ function Site() {
       if (window.location.pathname !== withBase(nextPath)) {
         window.history.replaceState({}, "", `${withBase(nextPath)}${hash}`)
       }
-      setPath(nextPath)
+      // Keep showing the current page until the next one has loaded.
+      startTransition(() => setPath(nextPath))
       setIsMobileMenuOpen(false)
       setIsServiceMenuOpen(false)
       if (hash) setPendingHash(hash.slice(1))
@@ -191,34 +273,61 @@ function Site() {
     sections.forEach(({ element }, order) => {
       element.style.setProperty("--mobile-section-order", String(order))
     })
-  }, [path, ready])
+  }, [renderedPath])
 
   useEffect(() => {
-    const sections = document.querySelectorAll<HTMLElement>(
-      ".design-canvas > div > *",
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>(".design-canvas > div > *"),
     )
-    const observer = new IntersectionObserver(
+    // Sections fade in as a whole; the items inside them rise in one by one.
+    const sectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.setAttribute("data-scroll-visible", "true")
-            observer.unobserve(entry.target)
+            sectionObserver.unobserve(entry.target)
           }
         })
       },
       { threshold: 0.04 },
     )
+    const itemObserver = new IntersectionObserver(
+      (entries) => {
+        // Items that appear together are staggered from top-left to bottom-right.
+        entries
+          .filter((entry) => entry.isIntersecting)
+          .sort(
+            (a, b) =>
+              a.boundingClientRect.top - b.boundingClientRect.top ||
+              a.boundingClientRect.left - b.boundingClientRect.left,
+          )
+          .forEach((entry, index) => {
+            const item = entry.target as HTMLElement
+            item.style.setProperty("--reveal-delay", `${Math.min(index, 8) * 120}ms`)
+            item.setAttribute("data-revealed", "true")
+            itemObserver.unobserve(item)
+          })
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
+    )
 
     sections.forEach((section) => {
       section.setAttribute("data-scroll-reveal", "true")
-      observer.observe(section)
+      sectionObserver.observe(section)
+      revealItems(section).forEach((item) => {
+        item.setAttribute("data-reveal", "true")
+        itemObserver.observe(item)
+      })
     })
 
-    return () => observer.disconnect()
-  }, [path, ready])
+    return () => {
+      sectionObserver.disconnect()
+      itemObserver.disconnect()
+    }
+  }, [renderedPath])
 
   useEffect(() => {
-    if (!pendingHash || !ready) return
+    if (!pendingHash || renderedPath === null) return
     let frame = requestAnimationFrame(() => {
       frame = requestAnimationFrame(() => {
         document.getElementById(pendingHash)?.scrollIntoView({
@@ -229,11 +338,12 @@ function Site() {
       })
     })
     return () => cancelAnimationFrame(frame)
-  }, [path, pendingHash, ready])
+  }, [pendingHash, renderedPath])
 
   // Scale the design so its content column fills the screen minus the side margins.
-  const scale = Math.max(0, viewportWidth - SIDE_MARGIN * 2) / DESIGN_CONTENT_WIDTH
-  const canvasOffsetX = SIDE_MARGIN - DESIGN_GUTTER * scale
+  const sideMargin = sideMarginFor(viewportWidth)
+  const scale = Math.max(0, viewportWidth - sideMargin * 2) / DESIGN_CONTENT_WIDTH
+  const canvasOffsetX = sideMargin - DESIGN_GUTTER * scale
   const Page: ComponentType<{ slug?: string }> = page.component
   const canvasStyle = useMemo(
     () => ({
@@ -251,7 +361,7 @@ function Site() {
     setIsServiceMenuOpen(false)
     if (next !== path || hash) {
       window.history.pushState({}, "", `${withBase(next)}${hash}`)
-      setPath(next)
+      startTransition(() => setPath(next))
       setPendingHash(hash.slice(1))
       if (!hash) window.scrollTo(0, 0)
     }
@@ -306,7 +416,12 @@ function Site() {
         style={{ height: contentHeight * scale }}
       >
         <div className="design-canvas" style={canvasStyle}>
-          {ready && <Page key={path} slug={match.slug} />}
+          {ready && (
+            <Suspense fallback={null}>
+              <Page key={path} slug={match.slug} />
+              <PageMounted onMount={setRenderedPath} path={path} />
+            </Suspense>
+          )}
         </div>
       </main>
       <nav
@@ -368,7 +483,7 @@ function Site() {
               />
             </button>
             <div className="service-menu" id="service-navigation-links">
-              {content.services.map((service) => (
+              {content.services.filter((service) => service.active).map((service) => (
                 <a
                   aria-current={path === `/service/${service.slug}` ? "page" : undefined}
                   data-path={`/service/${service.slug}`}

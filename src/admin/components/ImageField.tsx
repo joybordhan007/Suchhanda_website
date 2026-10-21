@@ -1,6 +1,7 @@
 import { useId, useRef, useState } from "react"
 import { uploadImage } from "../../content/api"
 import { mediaUrl } from "../../paths"
+import Icon from "./Icon"
 
 type ImageFieldProps = {
   label: string
@@ -24,6 +25,7 @@ export default function ImageField({
   const input = useRef<HTMLInputElement>(null)
   const [status, setStatus] = useState<"idle" | "uploading" | "error">("idle")
   const [error, setError] = useState("")
+  const [dragging, setDragging] = useState(false)
 
   const upload = async (file: File | undefined) => {
     if (!file) return
@@ -41,21 +43,40 @@ export default function ImageField({
 
   return (
     <div className="flex flex-col gap-[6px]">
-      <span className="text-[13px] font-medium uppercase tracking-wide text-[#555]" id={id}>
+      <span className="admin-label" id={id}>
         {label}
       </span>
       <div className="flex flex-wrap items-start gap-[16px]">
-        <div
-          className={`flex w-[220px] max-w-full items-center justify-center overflow-hidden rounded-[8px] border border-dashed border-[rgba(25,25,25,0.25)] ${
-            darkPreview ? "bg-[#282828]" : "bg-[#f4f5f7]"
-          } ${previewClass}`}
+        <button
+          aria-label={value ? `Replace ${label}` : `Upload ${label}`}
+          className={`group relative flex w-[220px] max-w-full items-center justify-center overflow-hidden rounded-[12px] border border-dashed transition ${
+            dragging ? "border-[var(--admin-gold)] bg-[#fdf8ee]" : "border-[var(--admin-border-strong)] hover:border-[var(--admin-gold)]"
+          } ${darkPreview ? "bg-[#282828]" : "bg-[#f9fafb]"} ${previewClass}`}
+          onClick={() => input.current?.click()}
+          onDragLeave={() => setDragging(false)}
+          onDragOver={(event) => {
+            event.preventDefault()
+            setDragging(true)
+          }}
+          onDrop={(event) => {
+            event.preventDefault()
+            setDragging(false)
+            void upload(event.dataTransfer.files[0])
+          }}
+          type="button"
         >
           {value ? (
             <img alt="" className="max-h-full max-w-full object-contain" src={mediaUrl(value)} />
           ) : (
-            <span className="p-[12px] text-center text-[13px] text-[#999]">No image</span>
+            <span className="flex flex-col items-center gap-[6px] p-[12px] text-center text-[12px] text-[var(--admin-muted)]">
+              <Icon className="text-[#98a2b3]" name="image" size={22} />
+              Click or drop an image
+            </span>
           )}
-        </div>
+          {status === "uploading" && (
+            <span className="absolute inset-0 flex items-center justify-center bg-white/75 text-[13px] font-semibold text-[var(--admin-text)]">Uploading…</span>
+          )}
+        </button>
         <div className="flex flex-col gap-[8px]">
           <input
             accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
@@ -65,25 +86,18 @@ export default function ImageField({
             ref={input}
             type="file"
           />
-          <button
-            className="rounded-[8px] bg-[#091e39] px-[14px] py-[8px] text-[14px] text-white disabled:opacity-50"
-            disabled={status === "uploading"}
-            onClick={() => input.current?.click()}
-            type="button"
-          >
-            {status === "uploading" ? "Uploading…" : value ? "Replace image" : "Upload image"}
-          </button>
-          {value && (
-            <button
-              className="rounded-[8px] border border-[rgba(25,25,25,0.2)] px-[14px] py-[8px] text-[14px] text-[#555] hover:text-red-700"
-              onClick={() => onChange("")}
-              type="button"
-            >
-              Remove
+          <div className="flex flex-wrap gap-[8px]">
+            <button className="admin-btn admin-btn-secondary h-[36px]" disabled={status === "uploading"} onClick={() => input.current?.click()} type="button">
+              {status === "uploading" ? "Uploading…" : value ? "Replace" : "Upload"}
             </button>
-          )}
-          <p className="max-w-[260px] text-[12px] text-[#777]">{hint ?? "PNG, JPG, WebP, GIF or SVG, up to 5 MB."}</p>
-          {status === "error" && <p className="max-w-[260px] text-[13px] text-red-700">{error}</p>}
+            {value && (
+              <button className="admin-btn admin-btn-ghost h-[36px] hover:text-[#b42318]" onClick={() => onChange("")} type="button">
+                Remove
+              </button>
+            )}
+          </div>
+          <p className="max-w-[280px] text-[12px] leading-[1.45] text-[var(--admin-muted)]">{hint ?? "PNG, JPG, WebP, GIF or SVG, up to 5 MB."}</p>
+          {status === "error" && <p className="max-w-[280px] text-[13px] text-[#b42318]">{error}</p>}
         </div>
       </div>
     </div>

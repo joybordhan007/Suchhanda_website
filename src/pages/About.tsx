@@ -11,8 +11,6 @@ const imgImage5 = `${assetPathPrefix}/72b1a.png`;
 const imgImage6 = `${assetPathPrefix}/953fa.png`;
 const imgArrowForward = `${assetPathPrefix}/b3d9b.svg`;
 const imgGroup4 = `${assetPathPrefix}/0f14c.svg`;
-const imgTextLogo2 = `${assetPathPrefix}/4a673.svg`;
-const imgArrowDownSimple = `${assetPathPrefix}/05e02.svg`;
 
 export default function AboutMe() {
   const { images, settings } = useSiteContent()
@@ -124,38 +122,6 @@ export default function AboutMe() {
             <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[2px] size-full" src={imgImage6} />
           </div>
         </div>
-      </div>
-      <div className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1280px]" data-node-id="1:1541" data-name="Frame">
-        <div className="h-[40px] relative shrink-0 w-[197px]" data-node-id="1:1542" data-name="Text Logo 1">
-          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTextLogo2} />
-        </div>
-        <div className="content-stretch flex gap-[32px] items-center relative shrink-0" data-node-id="1:1573" data-name="Frame">
-          <a className="[word-break:break-word] block cursor-pointer font-['Inter:Medium'] font-medium leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:1574">
-            <p className="leading-[1.2]">Home</p>
-          </a>
-          <a className="content-stretch cursor-pointer flex gap-[2px] items-center relative shrink-0" data-node-id="1:1575" data-name="Frame">
-            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[#191919] text-[20px] text-left whitespace-nowrap" data-node-id="1:1576">
-              Service
-            </p>
-            <div className="relative shrink-0 size-[18px]" data-node-id="1:1577" data-name="arrow-down-simple">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowDownSimple} />
-            </div>
-          </a>
-          <a className="[word-break:break-word] block cursor-pointer font-['Inter:Medium'] font-medium leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:1578">
-            <p className="leading-[1.2]">Work</p>
-          </a>
-          <p className="[word-break:break-word] font-['Inter:Semi_Bold'] font-semibold leading-[1.2] not-italic relative shrink-0 text-[#091e39] text-[20px] whitespace-nowrap" data-node-id="1:1579">
-            About Me
-          </p>
-          <a className="[word-break:break-word] block cursor-pointer font-['Inter:Medium'] font-medium leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap" data-node-id="1:1580">
-            <p className="leading-[1.2]">Blog</p>
-          </a>
-        </div>
-        <a className="bg-[#091e39] content-stretch cursor-pointer flex items-center justify-center px-[19.5px] py-[10px] relative rounded-[999px] shrink-0" data-node-id="1:1581" data-name="Frame">
-          <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[18px] text-left text-white whitespace-nowrap" data-node-id="1:1582">
-            Contact Me
-          </p>
-        </a>
       </div>
     </div>
   );

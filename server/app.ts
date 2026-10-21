@@ -1,8 +1,10 @@
 import { randomBytes } from "node:crypto"
-import { existsSync, readFileSync, statSync, unlinkSync, writeFileSync } from "node:fs"
+import { createReadStream, existsSync, statSync, writeFileSync } from "node:fs"
 import { extname, join, resolve, sep } from "node:path"
+import { Readable } from "node:stream"
 import { getConnInfo } from "@hono/node-server/conninfo"
 import { Hono, type Context } from "hono"
+import { bodyLimit } from "hono/body-limit"
 import {
   createRateLimiter,
   currentAdmin,
@@ -16,11 +18,14 @@ import {
 } from "./auth.ts"
 import { config } from "./config.ts"
 import { db } from "./db.ts"
+import { metaSettings, publicMetaStatus, saveMetaSettings, sendMetaLead } from "./meta.ts"
+import { recordPageView, statsFor } from "./stats.ts"
 
 type Env = { Variables: { admin: Admin } }
 
 const loginLimiter = createRateLimiter(5, 15 * 60 * 1000)
 const messageLimiter = createRateLimiter(5, 10 * 60 * 1000)
+const trackLimiter = createRateLimiter(120, 60 * 1000)
 
 function clientIp(c: Context) {
   if (process.env.TRUST_PROXY === "1") {
@@ -74,28 +79,77 @@ const contentTypes: Record<string, string> = {
   ".woff2": "font/woff2",
 }
 
-// Returns the file inside `dir` for a URL path, or null if it is missing or escapes `dir`.
+// Returns the file inside `dir` for a URL path, or null if it is missing, malformed or escapes `dir`.
 function fileIn(dir: string, urlPath: string) {
-  const file = resolve(dir, "." + decodeURIComponent(urlPath))
+  let decoded: string
+  try {
+    decoded = decodeURIComponent(urlPath)
+  } catch {
+    return null
+  }
+  const file = resolve(dir, "." + decoded)
   if (file !== dir && !file.startsWith(dir + sep)) return null
   return existsSync(file) && statSync(file).isFile() ? file : null
 }
 
-function sendFile(file: string, headers: Record<string, string> = {}) {
-  return new Response(readFileSync(file), {
-    headers: { "Content-Type": contentTypes[extname(file).toLowerCase()] ?? "application/octet-stream", ...headers },
+// Streams a file, answering 304 when the browser already has this version.
+function sendFile(c: Context, file: string, headers: Record<string, string> = {}) {
+  const stats = statSync(file)
+  const lastModified = new Date(Math.floor(stats.mtimeMs / 1000) * 1000)
+  const since = c.req.header("if-modified-since")
+  const common = { "Last-Modified": lastModified.toUTCString(), ...headers }
+  if (since && new Date(since).getTime() >= lastModified.getTime()) {
+    return new Response(null, { status: 304, headers: common })
+  }
+  const stream = Readable.toWeb(createReadStream(file)) as ReadableStream
+  return new Response(stream, {
+    headers: {
+      "Content-Type": contentTypes[extname(file).toLowerCase()] ?? "application/octet-stream",
+      "Content-Length": String(stats.size),
+      ...common,
+    },
   })
 }
 
 const str = (value: unknown, max: number) => (typeof value === "string" ? value.trim().slice(0, max) : "")
 
+const messageFields: Record<string, string> = {
+  firstName: "your first name",
+  lastName: "your last name",
+  email: "your email",
+  phone: "your phone number",
+  company: "your company name",
+  preferredContactTime: "a preferred contact time",
+}
+
+// "_fbp=fb.1.123; other=x" -> value of `name`.
+const cookieValue = (header: string | undefined, name: string) =>
+  header
+    ?.split(";")
+    .map((part) => part.trim().split("="))
+    .find(([key]) => key === name)?.[1]
+
 export function createApp() {
   const app = new Hono<Env>()
 
+  app.use("*", async (c, next) => {
+    await next()
+    c.header("X-Content-Type-Options", "nosniff")
+    c.header("Referrer-Policy", "strict-origin-when-cross-origin")
+    c.header("X-Frame-Options", "SAMEORIGIN")
+  })
   app.use("/api/*", sameOrigin)
   app.use("/api/*", async (c, next) => {
     await next()
     c.header("Cache-Control", "no-store")
+  })
+  // Request size caps: images and the content document are big, everything else is small.
+  const tooLarge = (c: Context) => c.json({ error: "The request is too large." }, 413)
+  app.use("/api/uploads", bodyLimit({ maxSize: config.maxUploadBytes + 64 * 1024, onError: tooLarge }))
+  app.use("/api/content", bodyLimit({ maxSize: config.maxContentBytes, onError: tooLarge }))
+  app.use("/api/*", async (c, next) => {
+    if (c.req.path === "/api/uploads" || c.req.path === "/api/content") return next()
+    return bodyLimit({ maxSize: 64 * 1024, onError: tooLarge })(c, next)
   })
 
   // ---- Content ----------------------------------------------------------
@@ -106,7 +160,6 @@ export function createApp() {
 
   app.put("/api/content", requireAdmin, async (c) => {
     const raw = await c.req.text()
-    if (raw.length > config.maxContentBytes) return c.json({ error: "Content is too large." }, 413)
     let content: unknown
     try {
       content = JSON.parse(raw)
@@ -135,8 +188,8 @@ export function createApp() {
     const body = (await c.req.json().catch(() => ({}))) as Record<string, unknown>
     const email = str(body.email, 200)
     const password = typeof body.password === "string" ? body.password : ""
-    const admin = db.prepare("SELECT id, email, password_hash FROM admins WHERE email = ?").get(email) as
-      | { id: number; email: string; password_hash: string }
+    const admin = db.prepare("SELECT id, email, name, avatar, password_hash FROM admins WHERE email = ?").get(email) as
+      | (Admin & { password_hash: string })
       | undefined
     if (!admin || !(await verifyPassword(password, admin.password_hash))) {
       loginLimiter.hit(ip)
@@ -144,7 +197,7 @@ export function createApp() {
     }
     loginLimiter.reset(ip)
     startSession(c, admin.id)
-    return c.json({ admin: { id: admin.id, email: admin.email } })
+    return c.json({ admin: { id: admin.id, email: admin.email, name: admin.name, avatar: admin.avatar } })
   })
 
   app.post("/api/auth/logout", (c) => {
@@ -155,6 +208,19 @@ export function createApp() {
   app.get("/api/auth/me", (c) => {
     const admin = currentAdmin(c)
     return admin ? c.json({ admin }) : c.json({ error: "Not signed in." }, 401)
+  })
+
+  app.put("/api/auth/profile", requireAdmin, async (c) => {
+    const body = (await c.req.json().catch(() => ({}))) as Record<string, unknown>
+    const name = str(body.name, 100)
+    const avatar = str(body.avatar, 500)
+    // Only images on this site (or none) can be used as the profile photo.
+    if (avatar && !avatar.startsWith("/uploads/") && !avatar.startsWith("/assets/")) {
+      return c.json({ error: "Upload the photo instead of linking to it." }, 400)
+    }
+    const admin = c.get("admin")
+    db.prepare("UPDATE admins SET name = ?, avatar = ? WHERE id = ?").run(name, avatar, admin.id)
+    return c.json({ admin: { ...admin, name, avatar } })
   })
 
   app.post("/api/auth/password", requireAdmin, async (c) => {
@@ -191,18 +257,12 @@ export function createApp() {
   app.get("/uploads/*", (c) => {
     const file = fileIn(config.uploadsDir, c.req.path.slice("/uploads".length))
     if (!file) return c.notFound()
-    return sendFile(file, {
+    return sendFile(c, file, {
       "Cache-Control": "public, max-age=31536000, immutable",
       // Uploaded SVGs can contain scripts; never let them run on this site.
       "Content-Security-Policy": "default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; sandbox",
       "X-Content-Type-Options": "nosniff",
     })
-  })
-
-  app.delete("/api/uploads/:name", requireAdmin, (c) => {
-    const file = fileIn(config.uploadsDir, "/" + c.req.param("name"))
-    if (file) unlinkSync(file)
-    return c.json({ ok: true })
   })
 
   // ---- Contact messages -------------------------------------------------
@@ -223,8 +283,8 @@ export function createApp() {
       preferredContactTime: str(body.preferredContactTime, 50),
       message: str(body.message, 5000),
     }
-    const missing = Object.entries(message).find(([key, value]) => key !== "message" && !value)
-    if (missing) return c.json({ error: `Please fill in ${missing[0]}.` }, 400)
+    const missing = Object.keys(messageFields).find((key) => !message[key as keyof typeof message])
+    if (missing) return c.json({ error: `Please enter ${messageFields[missing]}.` }, 400)
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(message.email)) {
       return c.json({ error: "Please enter a valid email." }, 400)
     }
@@ -242,18 +302,35 @@ export function createApp() {
       message.message,
       new Date().toISOString(),
     )
+    // Server-side copy of the Pixel "Lead" (does nothing until the Conversions API is set up).
+    void sendMetaLead({
+      eventId: str(body.eventId, 64),
+      email: message.email,
+      phone: message.phone,
+      firstName: message.firstName,
+      lastName: message.lastName,
+      ip,
+      userAgent: c.req.header("user-agent") ?? "",
+      sourceUrl: c.req.header("referer") ?? "",
+      fbp: cookieValue(c.req.header("cookie"), "_fbp"),
+      fbc: cookieValue(c.req.header("cookie"), "_fbc"),
+    }).catch(() => undefined)
     return c.json({ ok: true }, 201)
   })
 
+  // ?limit=N returns only the newest N; `unread` always counts every unread message.
   app.get("/api/messages", requireAdmin, (c) => {
+    const requested = c.req.query("limit")
+    const limit = requested === undefined ? 500 : Math.min(500, Math.max(0, Math.floor(Number(requested)) || 0))
     const rows = db
       .prepare(
         `SELECT id, first_name AS firstName, last_name AS lastName, email, phone, company,
                 preferred_time AS preferredContactTime, message, created_at AS createdAt, is_read AS isRead
-         FROM messages ORDER BY id DESC LIMIT 500`,
+         FROM messages ORDER BY id DESC LIMIT ?`,
       )
-      .all() as Record<string, unknown>[]
-    return c.json({ messages: rows.map((row) => ({ ...row, isRead: row.isRead === 1 })) })
+      .all(limit) as Record<string, unknown>[]
+    const unread = (db.prepare("SELECT COUNT(*) AS count FROM messages WHERE is_read = 0").get() as { count: number }).count
+    return c.json({ messages: rows.map((row) => ({ ...row, isRead: row.isRead === 1 })), unread })
   })
 
   app.patch("/api/messages/:id", requireAdmin, async (c) => {
@@ -267,6 +344,47 @@ export function createApp() {
     return c.json({ ok: true })
   })
 
+  // ---- Visit statistics ------------------------------------------------
+  app.post("/api/track", async (c) => {
+    const ip = clientIp(c)
+    // Your own browsing while signed in to the dashboard is not counted.
+    if (trackLimiter.isLimited(ip) || currentAdmin(c)) return c.body(null, 204)
+    trackLimiter.hit(ip)
+    const body = (await c.req.json().catch(() => ({}))) as Record<string, unknown>
+    recordPageView({
+      path: str(body.path, 200),
+      referrer: str(body.referrer, 500),
+      landing: body.landing === true,
+      ip,
+      userAgent: c.req.header("user-agent") ?? "",
+      host: c.req.header("host") ?? "",
+    })
+    return c.body(null, 204)
+  })
+
+  app.get("/api/stats", requireAdmin, (c) => {
+    const days = Math.min(365, Math.max(7, Number(c.req.query("days")) || 30))
+    return c.json(statsFor(days))
+  })
+
+  // ---- Tracking (private part) -----------------------------------------
+  // The Conversions API token stays on the server; the dashboard only learns whether it is set.
+  app.get("/api/tracking", requireAdmin, (c) => c.json({ meta: publicMetaStatus() }))
+
+  app.put("/api/tracking/meta", requireAdmin, async (c) => {
+    const body = (await c.req.json().catch(() => ({}))) as Record<string, unknown>
+    const current = metaSettings()
+    // accessToken: a string replaces it, null removes it, missing keeps it.
+    const accessToken = body.accessToken === null ? "" : typeof body.accessToken === "string" ? body.accessToken.trim() : current.accessToken
+    if (accessToken && !/^[A-Za-z0-9_-]{20,500}$/.test(accessToken)) {
+      return c.json({ error: "That does not look like a Meta access token." }, 400)
+    }
+    const testEventCode = str(body.testEventCode, 40)
+    if (testEventCode && !/^[A-Za-z0-9]+$/.test(testEventCode)) return c.json({ error: "Test event codes contain only letters and numbers." }, 400)
+    saveMetaSettings({ accessToken, testEventCode })
+    return c.json({ meta: publicMetaStatus() })
+  })
+
   app.all("/api/*", (c) => c.json({ error: "Not found." }, 404))
 
   // ---- Website (production) --------------------------------------------
@@ -277,9 +395,9 @@ export function createApp() {
     const file = c.req.path === "/" ? null : fileIn(config.distDir, c.req.path)
     if (file) {
       const hashed = c.req.path.startsWith("/assets/index-") || /-[A-Za-z0-9_-]{8}\.(js|css)$/.test(file)
-      return sendFile(file, { "Cache-Control": hashed ? "public, max-age=31536000, immutable" : "public, max-age=3600" })
+      return sendFile(c, file, { "Cache-Control": hashed ? "public, max-age=31536000, immutable" : "public, max-age=3600" })
     }
-    return sendFile(indexFile, { "Cache-Control": "no-cache" })
+    return sendFile(c, indexFile, { "Cache-Control": "no-cache" })
   })
 
   return app

@@ -1,13 +1,20 @@
-import { useState } from "react"
+import { useState, type ReactNode } from "react"
 import { slugify } from "../../content/selectors"
 import type { BlogPost } from "../../content/types"
-import { withBase } from "../../paths"
+import { mediaUrl, withBase } from "../../paths"
 import BlockEditor from "../components/BlockEditor"
+import EditorBar from "../components/EditorBar"
 import ImageField from "../components/ImageField"
-import ListEditor from "../components/ListEditor"
+import NameModal from "../components/NameModal"
 import SectionHeader from "../components/SectionHeader"
+import Table from "../components/Table"
 import TextField from "../components/TextField"
-import { newId, type SectionProps } from "../types"
+import Toggle from "../components/Toggle"
+import { formatDate, formatId, nextSerial } from "../format"
+import Icon from "../components/Icon"
+import { cell, idClass, primaryButton, rowAction, rowActionDanger, rowClass } from "../styles"
+import { newId, type ManagedSectionProps } from "../types"
+import { useEditableItem } from "../useEditableItem"
 
 // Keeps the typed text (including a trailing comma) while editing.
 function TagsField({ tags, onChange }: { tags: string[]; onChange: (tags: string[]) => void }) {
@@ -25,21 +32,62 @@ function TagsField({ tags, onChange }: { tags: string[]; onChange: (tags: string
   )
 }
 
-function PostEditor({ post, update, duplicateSlug }: { post: BlogPost; update: (patch: Partial<BlogPost>) => void; duplicateSlug: boolean }) {
+function EditorPanel({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="admin-card flex flex-col gap-[16px] p-[18px] sm:p-[24px]">
+      <h2 className="text-[16px] font-semibold text-[var(--admin-text)]">{title}</h2>
+      {children}
+    </section>
+  )
+}
+
+function PostEditor({
+  post,
+  duplicateSlug,
+  onSave,
+  onBack,
+}: {
+  post: BlogPost
+  duplicateSlug: (slug: string) => boolean
+  onSave: (next: BlogPost) => Promise<void>
+  onBack: () => void
+}) {
+  const editor = useEditableItem(post, onSave)
+  const { value, update } = editor
+
   return (
     <div className="flex flex-col gap-[20px]">
-      <section className="flex flex-col gap-[16px] rounded-[10px] border border-[rgba(0,0,0,0.1)] bg-[#fafafa] p-[16px] sm:p-[20px]">
-        <h3 className="text-[15px] font-semibold text-[#091e39]">Card on the Blog page</h3>
+      <EditorBar
+        backLabel="All blog posts"
+        isDirty={editor.isDirty}
+        message={editor.message}
+        onBack={() => editor.confirmLeave() && onBack()}
+        onSave={() => void editor.submit()}
+        saving={editor.saving}
+        status={
+          <Toggle
+            checked={value.status === "published"}
+            label="Publish this post on the website"
+            offText="Draft"
+            onChange={(published) => update({ status: published ? "published" : "draft" })}
+            onText="Published"
+          />
+        }
+        subtitle={`${formatId("BLG", value.serial)} · Created ${formatDate(value.createdAt)}`}
+        title={value.title}
+      />
+
+      <EditorPanel title="Card on the Blog page">
         <ImageField
           hint="Landscape image, about 16:9. Also shown large at the top of the article."
           label="Cover image"
           onChange={(coverImage) => update({ coverImage })}
-          value={post.coverImage}
+          value={value.coverImage}
         />
         <TextField
           label="Title"
-          onChange={(title) => update({ title, ...(!post.slug || post.slug === slugify(post.title) ? { slug: slugify(title) } : {}) })}
-          value={post.title}
+          onChange={(title) => update({ title, ...(!value.slug || value.slug === slugify(value.title) ? { slug: slugify(title) } : {}) })}
+          value={value.title}
         />
         <TextField
           hint="Shown under the title on the card (two lines) and on the article page."
@@ -47,54 +95,39 @@ function PostEditor({ post, update, duplicateSlug }: { post: BlogPost; update: (
           multiline
           onChange={(excerpt) => update({ excerpt })}
           rows={3}
-          value={post.excerpt}
+          value={value.excerpt}
         />
-        <TagsField onChange={(tags) => update({ tags })} tags={post.tags} />
-      </section>
+        <TagsField onChange={(tags) => update({ tags })} tags={value.tags} />
+      </EditorPanel>
 
-      <section className="flex flex-col gap-[16px] rounded-[10px] border border-[rgba(0,0,0,0.1)] bg-[#fafafa] p-[16px] sm:p-[20px]">
-        <h3 className="text-[15px] font-semibold text-[#091e39]">Publishing</h3>
-        <div className="grid gap-[16px] md:grid-cols-3">
+      <EditorPanel title="Publishing">
+        <div className="grid gap-[16px] md:grid-cols-2">
           <TextField
-            hint={duplicateSlug ? "Another post already uses this address." : `Page address: /blog/${post.slug || "…"}`}
+            hint={duplicateSlug(value.slug) ? "Another post already uses this address." : `Page address: /blog/${value.slug || "…"}`}
             label="Page address (slug)"
             onChange={(slug) => update({ slug: slugify(slug) })}
-            value={post.slug}
+            value={value.slug}
           />
-          <TextField label="Publish date" onChange={(publishedAt) => update({ publishedAt })} type="date" value={post.publishedAt} />
-          <div className="flex flex-col gap-[6px]">
-            <span className="text-[13px] font-medium uppercase tracking-wide text-[#555]">Status</span>
-            <div className="flex gap-[8px]">
-              {(["draft", "published"] as const).map((status) => (
-                <button
-                  className={`flex-1 rounded-[8px] border px-[12px] py-[10px] text-[15px] capitalize ${
-                    post.status === status ? "border-[#091e39] bg-[#091e39] text-white" : "border-[rgba(25,25,25,0.2)] bg-white text-[#191919]"
-                  }`}
-                  key={status}
-                  onClick={() => update({ status })}
-                  type="button"
-                >
-                  {status}
-                </button>
-              ))}
-            </div>
-          </div>
+          <TextField
+            hint="Posts are listed newest first by this date."
+            label="Publish date"
+            onChange={(publishedAt) => update({ publishedAt })}
+            type="date"
+            value={value.publishedAt}
+          />
         </div>
-      </section>
+      </EditorPanel>
 
-      <section className="flex flex-col gap-[16px] rounded-[10px] border border-[rgba(0,0,0,0.1)] bg-[#fafafa] p-[16px] sm:p-[20px]">
-        <h3 className="text-[15px] font-semibold text-[#091e39]">Article page</h3>
+      <EditorPanel title="Article page">
         <TextField
           hint="Small gold line above the title, e.g. “New Blog”. Leave empty to hide it."
           label="Label"
           onChange={(label) => update({ label })}
-          value={post.label}
+          value={value.label}
         />
-        <p className="text-[13px] text-[#777]">
-          The article shows the title, summary and cover image above, then these blocks in order.
-        </p>
-        <BlockEditor blocks={post.blocks} onChange={(blocks) => update({ blocks })} />
-      </section>
+        <p className="text-[13px] text-[#777]">The article shows the title, summary and cover image above, then these blocks in order.</p>
+        <BlockEditor blocks={value.blocks} onChange={(blocks) => update({ blocks })} />
+      </EditorPanel>
 
       {post.status === "published" && (
         <a
@@ -110,51 +143,157 @@ function PostEditor({ post, update, duplicateSlug }: { post: BlogPost; update: (
   )
 }
 
-export default function BlogSection({ content, onChange }: SectionProps) {
-  const posts = [...content.blog].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
-  const slugCounts = content.blog.reduce<Record<string, number>>((counts, post) => {
-    counts[post.slug] = (counts[post.slug] ?? 0) + 1
-    return counts
-  }, {})
+export default function BlogSection({ content, commit, itemId, open }: ManagedSectionProps) {
+  // "new" comes from the Dashboard quick actions: open the create popup straight away.
+  const [creating, setCreating] = useState(itemId === "new")
+  const [busyId, setBusyId] = useState<string | null>(null)
+  const posts = [...content.blog].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+
+  if (itemId && itemId !== "new") {
+    const post = content.blog.find((item) => item.id === itemId)
+    if (!post) {
+      return (
+        <div className="flex flex-col items-start gap-[12px]">
+          <p className="text-[15px] text-[#555]">This post no longer exists.</p>
+          <button className={primaryButton} onClick={() => open("blog")} type="button">
+            Back to all posts
+          </button>
+        </div>
+      )
+    }
+    return (
+      <PostEditor
+        duplicateSlug={(slug) => content.blog.some((item) => item.id !== post.id && item.slug === slug)}
+        key={post.id}
+        onBack={() => open("blog")}
+        onSave={(next) => commit((current) => ({ ...current, blog: current.blog.map((item) => (item.id === next.id ? next : item)) }))}
+        post={post}
+      />
+    )
+  }
+
+  const change = async (id: string, apply: (blog: BlogPost[]) => BlogPost[]) => {
+    setBusyId(id)
+    try {
+      await commit((current) => ({ ...current, blog: apply(current.blog) }))
+    } finally {
+      setBusyId(null)
+    }
+  }
+
+  const create = async (title: string) => {
+    const now = new Date().toISOString()
+    const post: BlogPost = {
+      id: newId(),
+      serial: nextSerial(content.blog),
+      createdAt: now,
+      slug: slugify(title),
+      title,
+      excerpt: "",
+      label: "New Blog",
+      tags: [],
+      coverImage: "",
+      publishedAt: now.slice(0, 10),
+      // New posts stay drafts until they are written and switched on.
+      status: "draft",
+      blocks: [],
+    }
+    await commit((current) => ({ ...current, blog: [post, ...current.blog] }))
+    setCreating(false)
+    open("blog", post.id)
+  }
 
   return (
     <div className="flex flex-col gap-[28px]">
-      <SectionHeader
-        description="Blog posts, newest first. Only published posts appear on the website; drafts stay here until you publish them."
-        title="Blog"
-      />
-      <ListEditor
-        addLabel="Add post"
-        addToStart
-        badge={(post) => (
-          <span
-            className={`shrink-0 rounded-full px-[8px] py-[2px] text-[12px] font-medium ${
-              post.status === "published" ? "bg-green-50 text-green-800" : "bg-[#f0f0f0] text-[#666]"
-            }`}
-          >
-            {post.status === "published" ? "Published" : "Draft"}
-          </span>
-        )}
-        createItem={() => ({
-          id: newId(),
-          slug: slugify("New post"),
-          title: "New post",
-          excerpt: "",
-          label: "New Blog",
-          tags: [],
-          coverImage: "",
-          publishedAt: new Date().toISOString().slice(0, 10),
-          status: "draft" as const,
-          blocks: [],
-        })}
-        emptyText="No posts yet."
-        itemTitle={(post) => post.title}
-        items={posts}
-        onChange={(blog) => onChange({ blog })}
-        openByDefault={false}
-        renderItem={(post, update) => <PostEditor duplicateSlug={slugCounts[post.slug] > 1} post={post} update={update} />}
-        sortable={false}
-      />
+      <div className="flex flex-wrap items-end justify-between gap-[16px]">
+        <SectionHeader description="Only published posts appear on the website; drafts stay here until you switch them on." title="Blog" />
+        <button className={primaryButton} onClick={() => setCreating(true)} type="button">
+          <Icon name="plus" size={16} />
+          Add blog
+        </button>
+      </div>
+
+      <Table
+        empty={
+          posts.length === 0 && {
+            icon: "blog",
+            title: "No posts yet",
+            text: "Write your first article; it stays a draft until you publish it.",
+            action: (
+              <button className={primaryButton} onClick={() => setCreating(true)} type="button">
+                <Icon name="plus" size={16} />
+                Add blog
+              </button>
+            ),
+          }
+        }
+        footer={posts.length > 0 && `${posts.filter((post) => post.status === "published").length} published · ${posts.filter((post) => post.status !== "published").length} drafts`}
+        headers={["ID", "Blog", "Created", "Status", { label: "Actions", align: "right", srOnly: true }]}
+      >
+        {posts.map((post) => (
+          <tr className={rowClass} key={post.id}>
+            <td className={`${cell} ${idClass} w-[96px]`}>{formatId("BLG", post.serial)}</td>
+            <td className={cell}>
+              <div className="flex items-center gap-[12px]">
+                <div className="h-[40px] w-[64px] shrink-0 overflow-hidden rounded-[8px] bg-[#f2f4f7] ring-1 ring-black/5">
+                  {post.coverImage && <img alt="" className="size-full object-cover" loading="lazy" src={mediaUrl(post.coverImage)} />}
+                </div>
+                <div className="min-w-0">
+                  <button className="block max-w-[360px] truncate text-left font-medium text-[var(--admin-text)] hover:underline" onClick={() => open("blog", post.id)} type="button">
+                    {post.title || "Untitled"}
+                  </button>
+                  <p className="mt-[2px] truncate text-[12px] text-[var(--admin-muted)]">/blog/{post.slug}</p>
+                </div>
+              </div>
+            </td>
+            <td className={`${cell} whitespace-nowrap text-[13px] text-[var(--admin-muted)]`}>{formatDate(post.createdAt)}</td>
+            <td className={cell}>
+              <Toggle
+                checked={post.status === "published"}
+                disabled={busyId === post.id}
+                label={`Publish ${post.title} on the website`}
+                offText="Draft"
+                onChange={(published) =>
+                  void change(post.id, (list) => list.map((item) => (item.id === post.id ? { ...item, status: published ? "published" : "draft" } : item)))
+                }
+                onText="Published"
+                size="sm"
+              />
+            </td>
+            <td className={`${cell} w-[1%] whitespace-nowrap`}>
+              <div className="flex items-center justify-end gap-[2px]">
+                <button aria-label={`Edit ${post.title}`} className={rowAction} onClick={() => open("blog", post.id)} title="Edit" type="button">
+                  <Icon name="edit" size={16} />
+                </button>
+                <button
+                  aria-label={`Delete ${post.title}`}
+                  className={rowActionDanger}
+                  disabled={busyId === post.id}
+                  onClick={() => {
+                    if (window.confirm(`Delete “${post.title}”? This cannot be undone.`)) void change(post.id, (list) => list.filter((item) => item.id !== post.id))
+                  }}
+                  title="Delete"
+                  type="button"
+                >
+                  <Icon name="trash" size={16} />
+                </button>
+              </div>
+            </td>
+          </tr>
+        ))}
+      </Table>
+
+      {creating && (
+        <NameModal
+          hint="You can write the article on the next screen. It stays a draft until you publish it."
+          label="Blog title"
+          onClose={() => setCreating(false)}
+          onSubmit={create}
+          placeholder="e.g. 5 Meta Ads Mistakes to Avoid"
+          submitLabel="Create blog"
+          title="Add a blog post"
+        />
+      )}
     </div>
   )
 }

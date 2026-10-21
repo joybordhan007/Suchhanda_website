@@ -44,3 +44,27 @@ db.exec(`
     is_read INTEGER NOT NULL DEFAULT 0
   );
 `)
+
+// First-party visit statistics for the dashboard. `visitor` is a daily-changing hash,
+// so visitors can be counted per day without storing IP addresses or cookies.
+db.exec(`
+  CREATE TABLE IF NOT EXISTS page_views (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    day TEXT NOT NULL,
+    path TEXT NOT NULL,
+    source TEXT NOT NULL,
+    visitor TEXT NOT NULL,
+    created_at TEXT NOT NULL
+  );
+  CREATE INDEX IF NOT EXISTS page_views_day ON page_views(day);
+
+  CREATE TABLE IF NOT EXISTS settings (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+  );
+`)
+
+// Columns added after the first release; existing databases get them on start-up.
+const adminColumns = (db.prepare("PRAGMA table_info(admins)").all() as { name: string }[]).map((column) => column.name)
+if (!adminColumns.includes("name")) db.exec("ALTER TABLE admins ADD COLUMN name TEXT NOT NULL DEFAULT ''")
+if (!adminColumns.includes("avatar")) db.exec("ALTER TABLE admins ADD COLUMN avatar TEXT NOT NULL DEFAULT ''")

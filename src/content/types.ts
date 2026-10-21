@@ -8,12 +8,30 @@ export type SocialLink = {
   icon: string
 }
 
+// Public tracker IDs (they appear in the page anyway). A tracker loads only when it is
+// enabled and has a valid ID. Secrets such as the Conversions API token stay on the server.
+export type TrackingSettings = {
+  gtmEnabled: boolean
+  gtmId: string
+  metaPixelEnabled: boolean
+  metaPixelId: string
+}
+
 export type SiteSettings = {
   ownerName: string
   email: string
   phone: string
   address: string
   socials: SocialLink[]
+  tracking: TrackingSettings
+}
+
+// Shared by services, work and blog posts: a short number shown as their ID in the
+// dashboard, and when they were created.
+export type ListEntry = {
+  id: string
+  serial: number
+  createdAt: string
 }
 
 export type PageImages = {
@@ -55,12 +73,13 @@ export type ServiceDetail = {
   features: TitledItem[]
 }
 
-export type Service = {
-  id: string
+export type Service = ListEntry & {
   slug: string
   title: string
   summary: string
   icon: string
+  // Inactive services are hidden from the website but kept in the dashboard.
+  active: boolean
   detail: ServiceDetail
 }
 
@@ -81,12 +100,11 @@ export type Review = {
   image: string
 }
 
-export type WorkItem = {
-  id: string
+export type WorkItem = ListEntry & {
   title: string
   description: string
   image: string
-  createdAt: string
+  active: boolean
 }
 
 export type BlogBlockType = "heading" | "paragraph" | "bullets" | "numbers" | "image"
@@ -99,8 +117,7 @@ export type BlogBlock = {
   image: string
 }
 
-export type BlogPost = {
-  id: string
+export type BlogPost = ListEntry & {
   slug: string
   title: string
   excerpt: string

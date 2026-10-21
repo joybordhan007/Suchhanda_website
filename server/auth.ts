@@ -52,23 +52,23 @@ export function endSession(c: Context) {
   deleteCookie(c, SESSION_COOKIE, { path: "/" })
 }
 
-export type Admin = { id: number; email: string }
+export type Admin = { id: number; email: string; name: string; avatar: string }
 
 export function currentAdmin(c: Context): Admin | null {
   const token = getCookie(c, SESSION_COOKIE)
   if (!token) return null
   const row = db
     .prepare(
-      `SELECT admins.id, admins.email, sessions.expires_at FROM sessions
+      `SELECT admins.id, admins.email, admins.name, admins.avatar, sessions.expires_at FROM sessions
        JOIN admins ON admins.id = sessions.admin_id WHERE sessions.token_hash = ?`,
     )
-    .get(hashToken(token)) as { id: number; email: string; expires_at: number } | undefined
+    .get(hashToken(token)) as (Admin & { expires_at: number }) | undefined
   if (!row) return null
   if (row.expires_at < Date.now()) {
     db.prepare("DELETE FROM sessions WHERE token_hash = ?").run(hashToken(token))
     return null
   }
-  return { id: row.id, email: row.email }
+  return { id: row.id, email: row.email, name: row.name, avatar: row.avatar }
 }
 
 export function deleteExpiredSessions() {
@@ -88,7 +88,14 @@ export const sameOrigin: MiddlewareHandler = async (c, next) => {
     const origin = c.req.header("origin")
     const forwardedHost = process.env.TRUST_PROXY === "1" ? c.req.header("x-forwarded-host") : undefined
     const host = forwardedHost ?? c.req.header("host")
-    if (origin && host && new URL(origin).host !== host) {
+    let originHost: string | null = null
+    try {
+      originHost = origin ? new URL(origin).host : null
+    } catch {
+      // "null" or a malformed origin: treat as another site.
+      originHost = ""
+    }
+    if (originHost !== null && host && originHost !== host) {
       return c.json({ error: "Cross-site request blocked." }, 403)
     }
   }
@@ -98,6 +105,11 @@ export const sameOrigin: MiddlewareHandler = async (c, next) => {
 // Simple in-memory limiter: at most `limit` hits per key within `windowMs`.
 export function createRateLimiter(limit: number, windowMs: number) {
   const hits = new Map<string, number[]>()
+  // Forget idle keys now and then, so the map cannot grow without limit.
+  setInterval(() => {
+    const now = Date.now()
+    for (const [key, times] of hits) if (times.every((time) => now - time >= windowMs)) hits.delete(key)
+  }, windowMs).unref()
   return {
     isLimited(key: string) {
       const now = Date.now()

@@ -71,7 +71,8 @@ function NumberedCard({ item, index, dark = false }: { item: TitledItem; index: 
 
 export default function ServiceDetails({ slug }: { slug?: string }) {
   const { services } = useSiteContent()
-  const service = slug ? services.find((item) => item.slug === slug) : services[0]
+  const visible = services.filter((item) => item.active)
+  const service = slug ? visible.find((item) => item.slug === slug) : visible[0]
 
   if (!service) {
     return (

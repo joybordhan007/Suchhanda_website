@@ -1,5 +1,6 @@
 import type { BlogBlock, BlogBlockType } from "../../content/types"
 import { newId } from "../types"
+import Icon from "./Icon"
 import ImageField from "./ImageField"
 import TextField from "./TextField"
 
@@ -13,8 +14,7 @@ const blockTypes: { type: BlogBlockType; label: string }[] = [
 
 const labelOf = (type: BlogBlockType) => blockTypes.find((item) => item.type === type)?.label ?? type
 
-const smallButton =
-  "rounded-[6px] border border-[rgba(25,25,25,0.15)] bg-white px-[10px] py-[4px] text-[13px] text-[#191919] hover:border-[#c7994b] disabled:cursor-not-allowed disabled:opacity-40"
+const smallButton = "admin-icon-btn h-[30px] w-[30px]"
 
 type BlockEditorProps = {
   blocks: BlogBlock[]
@@ -41,17 +41,17 @@ export default function BlockEditor({ blocks, onChange }: BlockEditorProps) {
   return (
     <div className="flex flex-col gap-[12px]">
       {blocks.length === 0 && (
-        <p className="rounded-[10px] border border-dashed border-[rgba(0,0,0,0.15)] p-[20px] text-center text-[14px] text-[#777]">
+        <p className="rounded-[12px] border border-dashed border-[var(--admin-border-strong)] p-[20px] text-center text-[14px] text-[var(--admin-muted)]">
           The article is empty. Add a heading, paragraph, list or image below.
         </p>
       )}
       {blocks.map((block, index) => (
-        <div className="flex flex-col gap-[10px] rounded-[10px] border border-[rgba(0,0,0,0.1)] bg-white p-[14px]" key={block.id}>
+        <div className="flex flex-col gap-[10px] rounded-[12px] border border-[var(--admin-border)] bg-[#fcfcfd] p-[14px]" key={block.id}>
           <div className="flex flex-wrap items-center justify-between gap-[8px]">
-            <span className="text-[12px] font-semibold uppercase tracking-wide text-[#8a6a2f]">{labelOf(block.type)}</span>
+            <span className="admin-badge bg-[#fdf6e9] text-[var(--admin-gold-ink)]">{labelOf(block.type)}</span>
             <span className="flex gap-[6px]">
               <button aria-label="Move up" className={smallButton} disabled={index === 0} onClick={() => move(index, -1)} type="button">
-                ↑
+                <Icon name="up" size={15} />
               </button>
               <button
                 aria-label="Move down"
@@ -60,10 +60,10 @@ export default function BlockEditor({ blocks, onChange }: BlockEditorProps) {
                 onClick={() => move(index, 1)}
                 type="button"
               >
-                ↓
+                <Icon name="down" size={15} />
               </button>
-              <button className={`${smallButton} text-red-700`} onClick={() => remove(index)} type="button">
-                Delete
+              <button aria-label="Delete" className={`${smallButton} admin-icon-btn-danger`} onClick={() => remove(index)} title="Delete" type="button">
+                <Icon name="trash" size={15} />
               </button>
             </span>
           </div>
@@ -101,12 +101,13 @@ export default function BlockEditor({ blocks, onChange }: BlockEditorProps) {
       <div className="flex flex-wrap gap-[8px]">
         {blockTypes.map(({ type, label }) => (
           <button
-            className="rounded-[8px] border border-dashed border-[#c7994b] px-[12px] py-[8px] text-[14px] font-medium text-[#8a6a2f] hover:bg-[#c7994b]/10"
+            className="admin-btn h-[36px] border-dashed border-[var(--admin-gold)] bg-[#fdf8ee] text-[var(--admin-gold-ink)] hover:bg-[#faefd8]"
             key={type}
             onClick={() => onChange([...blocks, { id: newId(), type, text: "", image: "" }])}
             type="button"
           >
-            + {label}
+            <Icon name="plus" size={15} />
+            {label}
           </button>
         ))}
       </div>

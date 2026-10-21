@@ -17,6 +17,8 @@ pnpm dev                             # ওয়েবসাইট; /api আর 
 
 Password ভুলে গেলে একই `pnpm admin:create you@example.com` আবার চালান, নতুন password সেট হবে।
 
+Login email বদলাতে (password একই থাকে): `pnpm admin:email old@example.com new@example.com`
+
 ## Server-এ (VPS) চালানো
 
 ```bash
@@ -53,4 +55,11 @@ server {
 | `API_HOST` | কোন address-এ শুনবে | `127.0.0.1` |
 | `DATA_DIR` | Database আর ছবির ফোল্ডার | `data` |
 | `TRUST_PROXY` | Nginx-এর পেছনে থাকলে `1` | — |
-| `NODE_ENV` | Server-এ `production` (`pnpm start` নিজেই দেয়) | — |
+| `NODE_ENV` | `production` হলে production mode (`pnpm start` নিজেই `--production` দেয়) | — |
+| `META_GRAPH_VERSION` | Meta Conversions API-র version | `v23.0` |
+
+## Tracking আর পরিসংখ্যান
+
+- **Dashboard-এর চার্ট:** ওয়েবসাইট প্রতিটা page view `/api/track`-এ পাঠায়। Cookie বা IP রাখা হয় না; bot আর login করা অ্যাডমিনের ভিজিট বাদ যায়। ৪০০ দিনের পুরনো তথ্য নিজে থেকে মুছে যায়।
+- **Google Tag Manager / Meta Pixel:** Site Settings → Tracking-এ প্রতিটার আলাদা চালু/বন্ধ আর Save আছে।
+- **Meta Conversions API:** Pixel সেকশনে access token দিলে Contact form-এর Lead server থেকেও Meta-তে যায় (browser-এর Lead-এর সাথে একই event ID, তাই একবারই গোনা হয়)। Token শুধু server-এর database-এ থাকে, ওয়েবসাইটে কখনো যায় না।

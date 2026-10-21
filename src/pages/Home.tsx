@@ -3,7 +3,7 @@ import Reviews from "../components/Reviews"
 import ServiceCard from "../components/ServiceCard"
 import Stats from "../components/Stats"
 import TrustedLogos from "../components/TrustedLogos"
-import { latestWork } from "../content/selectors"
+import { activeServices, latestWork } from "../content/selectors"
 import { useSiteContent } from "../content/store"
 import { assetPathPrefix, mediaUrl, withBase } from "../paths"
 
@@ -16,7 +16,7 @@ const HOME_SERVICE_COUNT = 5
 export default function Home() {
   const content = useSiteContent()
   const cards = [
-    ...content.services.slice(0, HOME_SERVICE_COUNT).map((service) => (
+    ...activeServices(content.services).slice(0, HOME_SERVICE_COUNT).map((service) => (
       <ServiceCard
         description={service.summary}
         icon={service.icon}

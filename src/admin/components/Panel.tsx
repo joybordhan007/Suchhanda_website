@@ -9,13 +9,11 @@ type PanelProps = {
 
 export default function Panel({ title, description, children, className = "" }: PanelProps) {
   return (
-    <section
-      className={`flex flex-col gap-[20px] rounded-[12px] bg-white p-[20px] shadow-[0_1px_3px_rgba(0,0,0,0.06)] sm:p-[24px] ${className}`}
-    >
+    <section className={`admin-card flex flex-col gap-[20px] p-[20px] sm:p-[24px] ${className}`}>
       {(title || description) && (
         <div className="flex flex-col gap-[4px]">
-          {title && <h2 className="text-[18px] font-semibold text-[#191919]">{title}</h2>}
-          {description && <p className="text-[14px] text-[#666]">{description}</p>}
+          {title && <h2 className="text-[16px] font-semibold text-[var(--admin-text)]">{title}</h2>}
+          {description && <p className="text-[14px] leading-[1.5] text-[var(--admin-muted)]">{description}</p>}
         </div>
       )}
       {children}

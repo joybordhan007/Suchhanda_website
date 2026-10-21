@@ -46,6 +46,7 @@ export const defaultContent: SiteContent = {
       { id: "linkedin", label: "LinkedIn", url: "https://www.linkedin.com/", icon: "/assets/0684a.svg" },
       { id: "whatsapp", label: "WhatsApp", url: "https://wa.me/8801947760296", icon: "/assets/a4902.svg" },
     ],
+    tracking: { gtmEnabled: false, gtmId: "", metaPixelEnabled: false, metaPixelId: "" },
   },
   images: {
     homeHero: "/assets/47d1e.png",
@@ -60,6 +61,9 @@ export const defaultContent: SiteContent = {
   services: [
     {
       id: "meta-ads",
+      serial: 1,
+      createdAt: "2026-01-01T00:00:00.000Z",
+      active: true,
       slug: "meta-ads-management",
       title: "Meta Ads Management",
       summary: "Full-funnel Facebook & Instagram campaigns from audience research to creatives that convert.",
@@ -71,6 +75,9 @@ export const defaultContent: SiteContent = {
     },
     {
       id: "google-ads",
+      serial: 2,
+      createdAt: "2026-01-02T00:00:00.000Z",
+      active: true,
       slug: "google-ads-management",
       title: "Google Ads Management",
       summary: "Search, Shopping & Display campaigns managed for maximum ROI and measurable growth.",
@@ -127,6 +134,9 @@ export const defaultContent: SiteContent = {
     },
     {
       id: "tracking",
+      serial: 3,
+      createdAt: "2026-01-03T00:00:00.000Z",
+      active: true,
       slug: "pixel-and-tag-manager",
       title: "Pixel & Tag Manager",
       summary: "Accurate tracking setup so every conversion is captured and every decision is data-backed.",
@@ -138,6 +148,9 @@ export const defaultContent: SiteContent = {
     },
     {
       id: "cro",
+      serial: 4,
+      createdAt: "2026-01-04T00:00:00.000Z",
+      active: true,
       slug: "conversion-rate-optimization",
       title: "Conversion Rate Optimization",
       summary: "Turn more of your existing traffic into paying customers through strategic CRO.",
@@ -149,6 +162,9 @@ export const defaultContent: SiteContent = {
     },
     {
       id: "audit",
+      serial: 5,
+      createdAt: "2026-01-05T00:00:00.000Z",
+      active: true,
       slug: "ads-audit-and-optimization",
       title: "Ads Audit & Optimization",
       summary:
@@ -184,6 +200,8 @@ export const defaultContent: SiteContent = {
   work: [
     {
       id: "work-4",
+      serial: 4,
+      active: true,
       title: "Google Ads",
       description: "Search campaign results with lower cost per conversion.",
       image: "/assets/30d72.png",
@@ -191,6 +209,8 @@ export const defaultContent: SiteContent = {
     },
     {
       id: "work-3",
+      serial: 3,
+      active: true,
       title: "Meta Ads",
       description: "Purchase campaign with steady daily budget and strong return.",
       image: "/assets/29777.png",
@@ -198,6 +218,8 @@ export const defaultContent: SiteContent = {
     },
     {
       id: "work-2",
+      serial: 2,
+      active: true,
       title: "Google Ads",
       description: "Website purchases tracked end to end with clear cost per result.",
       image: "/assets/4492d.png",
@@ -205,6 +227,8 @@ export const defaultContent: SiteContent = {
     },
     {
       id: "work-1",
+      serial: 1,
+      active: true,
       title: "Meta Ads",
       description: "Conversion campaign scaled with consistent ROAS.",
       image: "/assets/cd2eb.png",
@@ -214,6 +238,8 @@ export const defaultContent: SiteContent = {
   blog: [
     {
       id: "post-1",
+      serial: 1,
+      createdAt: "2026-10-20T00:00:00.000Z",
       slug: "why-your-saas-needs-a-design-system",
       title: "Why Your SaaS Needs a Design System",
       excerpt:

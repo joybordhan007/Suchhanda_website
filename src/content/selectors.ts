@@ -1,8 +1,13 @@
-import type { BlogPost, WorkItem } from "./types"
+import type { BlogPost, Service, WorkItem } from "./types"
 
+// Work shown on the website: active items, newest first.
 export function latestWork(work: WorkItem[], count?: number) {
-  const sorted = [...work].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+  const sorted = work.filter((item) => item.active).sort((a, b) => b.createdAt.localeCompare(a.createdAt))
   return count === undefined ? sorted : sorted.slice(0, count)
+}
+
+export function activeServices(services: Service[]) {
+  return services.filter((service) => service.active)
 }
 
 export function publishedPosts(blog: BlogPost[]) {

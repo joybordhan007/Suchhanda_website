@@ -1510,15 +1510,32 @@ button,
   opacity: 1;
 }
 
-/* Hide the old page-specific headers now that navigation is shared and sticky. */
-[data-node-id="1:562"],
-[data-node-id="1:1361"],
-[data-node-id="1:1541"],
-[data-node-id="1:1825"],
-[data-node-id="1:1983"],
-[data-node-id="1:2181"],
-[data-node-id="1:966"] {
-  display: none;
+/* Scroll reveal: each item rises into place as it enters the screen. `translate`
+   is used (not `transform`) so card hover effects keep working. */
+[data-reveal="true"]:not([data-revealed]) {
+  opacity: 0;
+}
+
+[data-reveal="true"][data-revealed] {
+  animation: reveal-rise 1300ms cubic-bezier(0.25, 1, 0.5, 1) var(--reveal-delay, 0ms) backwards;
+}
+
+/* Opacity settles a little before the movement, so items glide in rather than pop. */
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    translate: 0 24px;
+    filter: blur(4px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    filter: blur(0);
+  }
 }
 
 [class*="Aileron:SemiBold"] {
@@ -1538,8 +1555,202 @@ button,
     animation: none;
   }
 
-  [data-scroll-reveal="true"] {
+  [data-scroll-reveal="true"],
+  [data-reveal="true"]:not([data-revealed]) {
     opacity: 1;
     transition: none;
+  }
+
+  [data-reveal="true"][data-revealed] {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Admin dashboard design system
+   ------------------------------------------------------------------------ */
+@font-face {
+  font-family: "Inter Variable";
+  src: url("https://static.figma.com/font/Inter_1") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+.admin-ui {
+  --admin-bg: #f5f6f8;
+  --admin-surface: #ffffff;
+  --admin-border: #e4e7ec;
+  --admin-border-strong: #d0d5dd;
+  --admin-text: #101828;
+  --admin-text-2: #475467;
+  --admin-muted: #667085;
+  --admin-navy: #091e39;
+  --admin-gold: #c7994b;
+  --admin-gold-ink: #8a6a2f;
+  /* Chart roles (validated categorical slots 1-3 on white). */
+  --chart-visitors: #2a78d6;
+  --chart-views: #eb6834;
+  --chart-inquiries: #1baf7a;
+  --chart-grid: #eef0f3;
+  --chart-axis: #d0d5dd;
+  --chart-muted: #98a2b3;
+  font-family: "Inter Variable", "Inter:Regular", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--admin-text);
+  background: var(--admin-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .admin-card {
+    border: 1px solid var(--admin-border);
+    border-radius: 16px;
+    background: var(--admin-surface);
+    box-shadow: 0 1px 2px rgb(16 24 40 / 4%);
+  }
+
+  .admin-btn {
+    display: inline-flex;
+    height: 40px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 16px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      color 150ms ease,
+      box-shadow 150ms ease;
+  }
+
+  .admin-btn:focus-visible,
+  .admin-icon-btn:focus-visible {
+    outline: 2px solid var(--admin-gold);
+    outline-offset: 2px;
+  }
+
+  .admin-btn:disabled,
+  .admin-icon-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  .admin-btn-primary {
+    background: var(--admin-navy);
+    color: #fff;
+    box-shadow: 0 1px 2px rgb(16 24 40 / 12%);
+  }
+
+  .admin-btn-primary:not(:disabled):hover {
+    background: #12305a;
+  }
+
+  .admin-btn-secondary {
+    border-color: var(--admin-border-strong);
+    background: #fff;
+    color: var(--admin-text);
+  }
+
+  .admin-btn-secondary:not(:disabled):hover {
+    border-color: var(--admin-gold);
+    background: #fffcf6;
+  }
+
+  .admin-btn-ghost {
+    background: transparent;
+    color: var(--admin-text-2);
+  }
+
+  .admin-btn-ghost:not(:disabled):hover {
+    background: #eef0f3;
+    color: var(--admin-text);
+  }
+
+  .admin-btn-danger {
+    border-color: #fecdca;
+    background: #fff;
+    color: #b42318;
+  }
+
+  .admin-btn-danger:not(:disabled):hover {
+    background: #fef3f2;
+  }
+
+  .admin-icon-btn {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--admin-border);
+    border-radius: 9px;
+    background: #fff;
+    color: var(--admin-text-2);
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      color 150ms ease;
+  }
+
+  .admin-icon-btn:not(:disabled):hover {
+    border-color: var(--admin-gold);
+    color: var(--admin-text);
+  }
+
+  .admin-icon-btn-danger:not(:disabled):hover {
+    border-color: #fda29b;
+    background: #fef3f2;
+    color: #b42318;
+  }
+
+  .admin-input {
+    width: 100%;
+    border: 1px solid var(--admin-border-strong);
+    border-radius: 10px;
+    background: #fff;
+    padding: 10px 12px;
+    color: var(--admin-text);
+    font-size: 15px;
+    box-shadow: 0 1px 2px rgb(16 24 40 / 4%);
+    outline: none;
+    transition:
+      border-color 150ms ease,
+      box-shadow 150ms ease;
+  }
+
+  .admin-input::placeholder {
+    color: #98a2b3;
+  }
+
+  .admin-input:focus,
+  .admin-input-wrap:focus-within {
+    border-color: var(--admin-gold);
+    box-shadow: 0 0 0 4px rgb(199 153 75 / 16%);
+  }
+
+  .admin-label {
+    color: #344054;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .admin-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 18px;
+    white-space: nowrap;
   }
 }

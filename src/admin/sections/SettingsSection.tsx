@@ -6,6 +6,7 @@ import Panel from "../components/Panel"
 import SectionHeader from "../components/SectionHeader"
 import TextField from "../components/TextField"
 import { newId, type SectionProps } from "../types"
+import TrackingPanels from "./TrackingPanels"
 
 // Built-in icons exist for the platforms the site shipped with; others need an uploaded icon.
 const presets = [
@@ -20,7 +21,7 @@ const presets = [
   { label: "Other", url: "https://", icon: "" },
 ]
 
-export default function SettingsSection({ content, onChange }: SectionProps) {
+export default function SettingsSection({ content, onChange, commit }: SectionProps) {
   const { settings } = content
   const [preset, setPreset] = useState(presets[0].label)
   const set = (patch: Partial<typeof settings>) => onChange({ settings: { ...settings, ...patch } })
@@ -90,7 +91,7 @@ export default function SettingsSection({ content, onChange }: SectionProps) {
         <div className="flex flex-wrap items-center gap-[10px]">
           <select
             aria-label="Social network"
-            className="rounded-[8px] border border-[rgba(25,25,25,0.2)] bg-white px-[12px] py-[9px] text-[15px]"
+            className="admin-input h-[38px] w-auto py-0"
             onChange={(event) => setPreset(event.target.value)}
             value={preset}
           >
@@ -99,7 +100,7 @@ export default function SettingsSection({ content, onChange }: SectionProps) {
             ))}
           </select>
           <button
-            className="rounded-[8px] border border-dashed border-[#c7994b] px-[16px] py-[9px] text-[15px] font-medium text-[#8a6a2f] hover:bg-[#c7994b]/10"
+            className="admin-btn h-[38px] border-dashed border-[var(--admin-gold)] bg-[#fdf8ee] text-[var(--admin-gold-ink)] hover:bg-[#faefd8]"
             onClick={addSocial}
             type="button"
           >
@@ -107,6 +108,8 @@ export default function SettingsSection({ content, onChange }: SectionProps) {
           </button>
         </div>
       </Panel>
+      {commit && <TrackingPanels commit={commit} content={content} />}
     </div>
   )
 }
+

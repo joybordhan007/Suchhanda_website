@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from "react"
 import Footer from "../components/Footer"
-import { api } from "../content/api"
+import { api, ApiError } from "../content/api"
 import { useSiteContent } from "../content/store"
+import { newLeadEventId, trackLead } from "../tracking"
 import { assetPathPrefix } from "../paths"
 const imgTelephone11 = `${assetPathPrefix}/9aeb0.png`
 const imgEllipse123 = `${assetPathPrefix}/78707.svg`
@@ -11,26 +12,30 @@ const imgPhoneCall01 = `${assetPathPrefix}/bfbad.svg`
 const imgMail01 = `${assetPathPrefix}/805c3.svg`
 const imgMarkerPin01 = `${assetPathPrefix}/cb13c.svg`
 const imgClock = `${assetPathPrefix}/ce72e.svg`
-const imgTextLogo2 = `${assetPathPrefix}/c9f23.svg`
-const imgArrowDownSimple = `${assetPathPrefix}/05e02.svg`
 
 export default function ContactMe() {
   const { settings } = useSiteContent()
   const [submitStatus, setSubmitStatus] =
     useState<"idle" | "sending" | "sent" | "error">("idle")
+  const [errorText, setErrorText] = useState("")
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const form = event.currentTarget
-    const formData = Object.fromEntries(new FormData(form).entries())
+    const eventId = newLeadEventId()
+    const formData = { ...Object.fromEntries(new FormData(form).entries()), eventId }
+    setErrorText("")
     setSubmitStatus("sending")
 
     try {
       await api("/messages", { method: "POST", body: JSON.stringify(formData) })
+      trackLead(eventId)
       form.reset()
       setSubmitStatus("sent")
     } catch (error) {
       console.error("Contact form submission failed:", error)
+      // Show what the server said (missing field, too many messages); otherwise a general note.
+      setErrorText(error instanceof ApiError && error.status < 500 ? error.message : "")
       setSubmitStatus("error")
     }
   }
@@ -497,7 +502,7 @@ export default function ContactMe() {
             >
               {submitStatus === "sent"
                 ? "Your inquiry has been sent. Thank you!"
-                : `We couldn't send your inquiry. Please try again or email us directly at ${settings.email}.`}
+                : errorText || `We couldn't send your inquiry. Please try again or email us directly at ${settings.email}.`}
             </p>
           )}
         </form>
@@ -522,88 +527,6 @@ export default function ContactMe() {
           src={`https://www.google.com/maps?q=${encodeURIComponent(settings.address)}&output=embed`}
           title={`Map showing ${settings.address}`}
         />
-      </div>
-      <div
-        className="-translate-x-1/2 absolute bg-white content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[24px] py-[19px] rounded-[999px] top-[31px] w-[1280px]"
-        data-node-id="1:2181"
-        data-name="Frame"
-      >
-        <div
-          className="h-[40px] relative shrink-0 w-[197px]"
-          data-node-id="1:2182"
-          data-name="Text Logo 1"
-        >
-          <img
-            alt=""
-            className="absolute block inset-0 max-w-none size-full"
-            src={imgTextLogo2}
-          />
-        </div>
-        <div
-          className="content-stretch cursor-pointer flex gap-[32px] items-center relative shrink-0"
-          data-node-id="1:2213"
-          data-name="Frame"
-        >
-          <a
-            className="[word-break:break-word] block font-['Inter:Medium'] font-medium leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap"
-            data-node-id="1:2214"
-          >
-            <p className="leading-[1.2]">Home</p>
-          </a>
-          <a
-            className="content-stretch flex gap-[2px] items-center relative shrink-0"
-            data-node-id="1:2215"
-            data-name="Frame"
-          >
-            <p
-              className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[#191919] text-[20px] text-left whitespace-nowrap"
-              data-node-id="1:2216"
-            >
-              Service
-            </p>
-            <div
-              className="relative shrink-0 size-[18px]"
-              data-node-id="1:2217"
-              data-name="arrow-down-simple"
-            >
-              <img
-                alt=""
-                className="absolute block inset-0 max-w-none size-full"
-                src={imgArrowDownSimple}
-              />
-            </div>
-          </a>
-          <a
-            className="[word-break:break-word] block font-['Inter:Medium'] font-medium leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap"
-            data-node-id="1:2218"
-          >
-            <p className="leading-[1.2]">Work</p>
-          </a>
-          <a
-            className="[word-break:break-word] block font-['Inter:Medium'] font-medium leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap"
-            data-node-id="1:2219"
-          >
-            <p className="leading-[1.2]">About Me</p>
-          </a>
-          <a
-            className="[word-break:break-word] block font-['Inter:Medium'] font-medium leading-[0] not-italic relative shrink-0 text-[#191919] text-[20px] whitespace-nowrap"
-            data-node-id="1:2220"
-          >
-            <p className="leading-[1.2]">Blog</p>
-          </a>
-        </div>
-        <div
-          className="bg-[#091e39] content-stretch flex items-center justify-center px-[19.5px] py-[10px] relative rounded-[999px] shrink-0"
-          data-node-id="1:2221"
-          data-name="Frame"
-        >
-          <p
-            className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap"
-            data-node-id="1:2222"
-          >
-            Contact Me
-          </p>
-        </div>
       </div>
     </div>
   )
