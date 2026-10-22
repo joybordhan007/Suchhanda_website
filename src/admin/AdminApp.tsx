@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ComponentType } from "react"
 import { api, ApiError } from "../content/api"
-import { getContent, loadContent, resetContent, saveContent, useContentReady, useSiteContent } from "../content/store"
+import { getContent, loadContent, saveContent, useContentReady, useSiteContent } from "../content/store"
 import type { SiteContent } from "../content/types"
 import { asset, mediaUrl, siteHref, stripBase, withBase } from "../paths"
 import Icon, { type IconName } from "./components/Icon"
@@ -49,7 +49,7 @@ const sectionLabels: Record<string, string> = {
   profile: "Profile",
 }
 
-// Edited as a whole and saved with the shared "Save changes" bar.
+// Edited as a whole and saved with the Save button next to the section title.
 const draftSections: Partial<Record<SectionId, ComponentType<SectionProps>>> = {
   stats: StatsSection,
   logos: LogosSection,
@@ -201,17 +201,6 @@ function Dashboard({
     }
   }
 
-  const reset = async () => {
-    if (!window.confirm("Replace ALL website content with the original content? Your saved changes will be lost.")) return
-    setStatus({ kind: "saving" })
-    try {
-      replaceDraft(await resetContent())
-      setStatus({ kind: "saved" })
-    } catch (error) {
-      if (!isSignedOutError(error)) setStatus({ kind: "error", text: error instanceof Error ? error.message : "Could not save." })
-    }
-  }
-
   const signOut = async () => {
     if (isDirty && !window.confirm("You have unsaved changes. Log out anyway?")) return
     await api("/auth/logout", { method: "POST" }).catch(() => undefined)
@@ -222,6 +211,33 @@ function Dashboard({
   const ManagedSection = managedSections[route.section]
   const sectionLabel = sectionLabels[route.section] ?? "Dashboard"
 
+  const draftActions = (
+    <>
+      <span aria-live="polite" className="text-[13px] font-medium text-[var(--admin-muted)]">
+        {status.kind === "saving" && "Saving…"}
+        {status.kind === "saved" && !isDirty && <span className="text-[#067647]">Saved and live</span>}
+        {status.kind === "error" && <span className="text-[#b42318]">{status.text}</span>}
+        {(status.kind === "idle" || (status.kind === "saved" && isDirty)) && isDirty && (
+          <span className="admin-badge bg-[#fdf6e9] text-[var(--admin-gold-ink)]">Unsaved changes</span>
+        )}
+      </span>
+      <button
+        className="admin-btn admin-btn-secondary h-[36px]"
+        disabled={!isDirty}
+        onClick={() => {
+          replaceDraft(saved)
+          setStatus({ kind: "idle" })
+        }}
+        type="button"
+      >
+        Discard
+      </button>
+      <button className="admin-btn admin-btn-primary h-[36px]" disabled={!isDirty || status.kind === "saving"} onClick={save} type="button">
+        Save changes
+      </button>
+    </>
+  )
+
   return (
     <div className="admin-ui min-h-dvh lg:flex">
       <aside className="relative z-20 bg-[#091e39] text-white lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-[264px] lg:shrink-0 lg:flex-col">
@@ -229,7 +245,7 @@ function Dashboard({
           <div className="flex items-center gap-[10px]">
             <img alt="Suchhanda" className="h-[30px] brightness-0 invert" src={asset("4a673.svg")} />
           </div>
-          <span className="mt-[10px] hidden w-fit rounded-full bg-white/8 px-[10px] py-[3px] text-[11px] font-semibold uppercase tracking-[0.14em] text-[#d9b46e] lg:inline-block">
+          <span className="mt-[10px] hidden w-fit rounded-[4px] bg-white/8 px-[10px] py-[3px] text-[11px] font-semibold uppercase tracking-[0.14em] text-[#d9b46e] lg:inline-block">
             Admin panel
           </span>
         </div>
@@ -243,7 +259,7 @@ function Dashboard({
                 return (
                   <button
                     aria-current={active ? "page" : undefined}
-                    className={`relative flex shrink-0 items-center gap-[12px] rounded-[10px] px-[12px] py-[9px] text-left text-[14px] font-medium transition ${
+                    className={`relative flex shrink-0 items-center gap-[12px] rounded-[4px] px-[12px] py-[9px] text-left text-[14px] font-medium transition ${
                       active ? "bg-white/10 text-white" : "text-white/65 hover:bg-white/5 hover:text-white"
                     }`}
                     key={item.id || "dashboard"}
@@ -266,7 +282,7 @@ function Dashboard({
         <div className="hidden border-t border-white/10 p-[14px] lg:block">
           <button
             aria-current={route.section === "profile" ? "page" : undefined}
-            className={`flex w-full min-w-0 items-center gap-[10px] rounded-[12px] p-[8px] text-left transition ${
+            className={`flex w-full min-w-0 items-center gap-[10px] rounded-[4px] p-[8px] text-left transition ${
               route.section === "profile" ? "bg-white/10" : "hover:bg-white/5"
             }`}
             onClick={() => open("profile")}
@@ -280,7 +296,7 @@ function Dashboard({
             <Icon className="text-white/40" name="user" size={16} />
           </button>
           <button
-            className="mt-[6px] flex w-full items-center gap-[12px] rounded-[10px] px-[12px] py-[9px] text-[14px] font-medium text-white/65 transition hover:bg-white/5 hover:text-[#fda29b]"
+            className="mt-[6px] flex w-full items-center gap-[12px] rounded-[4px] px-[12px] py-[9px] text-[14px] font-medium text-white/65 transition hover:bg-white/5 hover:text-[#fda29b]"
             onClick={() => void signOut()}
             type="button"
           >
@@ -323,40 +339,12 @@ function Dashboard({
           </div>
         </header>
 
-        {DraftSection && (
-          <div className="sticky top-[64px] z-10 flex flex-wrap items-center justify-end gap-[10px] border-b border-[var(--admin-border)] bg-[var(--admin-bg)]/90 px-[16px] py-[10px] backdrop-blur-md sm:px-[32px]">
-            <span aria-live="polite" className="mr-auto text-[13px] font-medium text-[var(--admin-muted)]">
-              {status.kind === "saving" && "Saving…"}
-              {status.kind === "saved" && !isDirty && <span className="text-[#067647]">All changes saved and live on the website.</span>}
-              {status.kind === "error" && <span className="text-[#b42318]">{status.text}</span>}
-              {(status.kind === "idle" || (status.kind === "saved" && isDirty)) &&
-                (isDirty ? <span className="admin-badge bg-[#fdf6e9] text-[var(--admin-gold-ink)]">Unsaved changes</span> : "No changes yet.")}
-            </span>
-            <button className="admin-btn admin-btn-ghost h-[36px] hover:text-[#b42318]" onClick={reset} type="button">
-              Reset to original
-            </button>
-            <button
-              className="admin-btn admin-btn-secondary h-[36px]"
-              disabled={!isDirty}
-              onClick={() => {
-                replaceDraft(saved)
-                setStatus({ kind: "idle" })
-              }}
-              type="button"
-            >
-              Discard
-            </button>
-            <button className="admin-btn admin-btn-primary h-[36px]" disabled={!isDirty || status.kind === "saving"} onClick={save} type="button">
-              Save changes
-            </button>
-          </div>
-        )}
-
         <main className="mx-auto w-full max-w-[1200px] px-[16px] pt-[28px] pb-[48px] sm:px-[32px]">
           {!draft ? (
             <p className="text-[15px] text-[var(--admin-muted)]">Loading content…</p>
           ) : DraftSection ? (
             <DraftSection
+              actions={draftActions}
               commit={commit}
               content={draft}
               key={`${route.section}-${revision}`}
@@ -379,7 +367,7 @@ function Dashboard({
 
       {toast && (
         <div
-          className={`fixed bottom-[24px] left-1/2 z-50 flex -translate-x-1/2 items-center gap-[10px] rounded-[12px] px-[16px] py-[11px] text-[14px] font-medium shadow-[0_12px_32px_rgb(16_24_40/22%)] ${
+          className={`fixed bottom-[24px] left-1/2 z-50 flex -translate-x-1/2 items-center gap-[10px] rounded-[4px] px-[16px] py-[11px] text-[14px] font-medium shadow-[0_12px_32px_rgb(16_24_40/22%)] ${
             toast.kind === "saved" ? "bg-[#101828] text-white" : "bg-[#b42318] text-white"
           }`}
           role="status"

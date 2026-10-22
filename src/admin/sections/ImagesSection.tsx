@@ -3,12 +3,12 @@ import Panel from "../components/Panel"
 import SectionHeader from "../components/SectionHeader"
 import type { SectionProps } from "../types"
 
-export default function ImagesSection({ content, onChange }: SectionProps) {
+export default function ImagesSection({ content, onChange, actions }: SectionProps) {
   const set = (patch: Partial<typeof content.images>) => onChange({ images: { ...content.images, ...patch } })
 
   return (
     <div className="flex flex-col gap-[28px]">
-      <SectionHeader description="Photos that appear in fixed places on the website." title="Page Images" />
+      <SectionHeader actions={actions} description="Photos that appear in fixed places on the website." title="Page Images" />
       <Panel description="The photo next to “High-Converting Meta & Google Ads” at the top of the Home page." title="Home page – hero photo">
         <ImageField
           hint="Portrait photo, 4:5 (for example 800×1000). It is cropped to fill the frame."

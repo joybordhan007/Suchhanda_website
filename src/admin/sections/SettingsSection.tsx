@@ -21,7 +21,7 @@ const presets = [
   { label: "Other", url: "https://", icon: "" },
 ]
 
-export default function SettingsSection({ content, onChange, commit }: SectionProps) {
+export default function SettingsSection({ content, onChange, commit, actions }: SectionProps) {
   const { settings } = content
   const [preset, setPreset] = useState(presets[0].label)
   const set = (patch: Partial<typeof settings>) => onChange({ settings: { ...settings, ...patch } })
@@ -40,6 +40,7 @@ export default function SettingsSection({ content, onChange, commit }: SectionPr
   return (
     <div className="flex flex-col gap-[28px]">
       <SectionHeader
+        actions={actions}
         description="Contact details and social links. They appear in the footer, on the Contact page and in the legal pages."
         title="Site Settings"
       />
@@ -61,6 +62,7 @@ export default function SettingsSection({ content, onChange, commit }: SectionPr
         title="Social links"
       >
         <ListEditor
+          editable
           emptyText="No social links yet."
           itemTitle={(link) => link.label || link.url}
           items={settings.socials}

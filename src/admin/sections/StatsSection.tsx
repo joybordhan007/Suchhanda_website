@@ -3,10 +3,11 @@ import SectionHeader from "../components/SectionHeader"
 import TextField from "../components/TextField"
 import type { SectionProps } from "../types"
 
-export default function StatsSection({ content, onChange }: SectionProps) {
+export default function StatsSection({ content, onChange, actions }: SectionProps) {
   return (
     <div className="flex flex-col gap-[28px]">
       <SectionHeader
+        actions={actions}
         description="The four animated numbers shown on the Home, Work and About Me pages. The design has room for exactly four."
         title="Achievements"
       />

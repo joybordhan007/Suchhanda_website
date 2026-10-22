@@ -80,6 +80,8 @@ export type Service = ListEntry & {
   icon: string
   // Inactive services are hidden from the website but kept in the dashboard.
   active: boolean
+  // Shown in the Home page services section (up to HOME_SERVICE_LIMIT, in list order).
+  showOnHome: boolean
   detail: ServiceDetail
 }
 
@@ -105,6 +107,8 @@ export type WorkItem = ListEntry & {
   description: string
   image: string
   active: boolean
+  // Shown in "Real Result. Real Impact" on the Home page (the newest HOME_WORK_LIMIT).
+  showOnHome: boolean
 }
 
 export type BlogBlockType = "heading" | "paragraph" | "bullets" | "numbers" | "image"

@@ -60,7 +60,7 @@ export default function ColumnChart({ labels, values, color, valueLabel, height 
                     {value}
                   </text>
                 )}
-                {(index % labelEvery === 0 || index === values.length - 1) && (index === values.length - 1 || values.length - 1 - index >= labelEvery * 0.6) && (
+                {(index % labelEvery === 0 || index === values.length - 1) && (index === values.length - 1 || values.length - 1 - index >= labelEvery) && (
                   <text
                     className="fill-[var(--chart-muted)] text-[11px]"
                     // Keep edge labels inside the chart instead of clipping them.
@@ -78,7 +78,7 @@ export default function ColumnChart({ labels, values, color, valueLabel, height 
       )}
       {active !== null && (
         <div
-          className="pointer-events-none absolute top-0 z-10 rounded-[10px] border border-[var(--admin-border)] bg-white/95 px-[12px] py-[8px] shadow-[0_8px_24px_rgb(16_24_40/12%)]"
+          className="pointer-events-none absolute top-0 z-10 rounded-[4px] border border-[var(--admin-border)] bg-white/95 px-[12px] py-[8px] shadow-[0_8px_24px_rgb(16_24_40/12%)]"
           style={{ left: Math.min(Math.max(MARGIN.left + active * band + band / 2 - 70, 0), Math.max(0, width - 140)) }}
         >
           <p className="text-[12px] text-[var(--admin-muted)]">{labels[active]}</p>

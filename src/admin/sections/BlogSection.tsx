@@ -235,7 +235,7 @@ export default function BlogSection({ content, commit, itemId, open }: ManagedSe
             <td className={`${cell} ${idClass} w-[96px]`}>{formatId("BLG", post.serial)}</td>
             <td className={cell}>
               <div className="flex items-center gap-[12px]">
-                <div className="h-[40px] w-[64px] shrink-0 overflow-hidden rounded-[8px] bg-[#f2f4f7] ring-1 ring-black/5">
+                <div className="h-[40px] w-[64px] shrink-0 overflow-hidden rounded-[4px] bg-[#f2f4f7] ring-1 ring-black/5">
                   {post.coverImage && <img alt="" className="size-full object-cover" loading="lazy" src={mediaUrl(post.coverImage)} />}
                 </div>
                 <div className="min-w-0">

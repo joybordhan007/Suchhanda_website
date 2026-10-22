@@ -1,7 +1,8 @@
 import { useSyncExternalStore } from "react"
 import { api } from "./api"
 import { defaultContent } from "./defaults"
-import type { SiteContent, TrackingSettings } from "./types"
+import { HOME_SERVICE_LIMIT, HOME_WORK_LIMIT } from "./selectors"
+import type { Service, SiteContent, TrackingSettings, WorkItem } from "./types"
 
 // Gives entries saved before IDs, dates and on/off status existed a number, a date
 // and the "active" state, keeping their order.
@@ -26,6 +27,19 @@ function withTrackingDefaults(saved: Partial<TrackingSettings> | undefined): Tra
   }
 }
 
+// Saves from before "Show on Home" existed: Home showed the first active services and
+// the newest active work, so those start switched on.
+function withHomeServices(services: Service[]): Service[] {
+  const automatic = new Set(services.filter((service) => service.active).slice(0, HOME_SERVICE_LIMIT).map((service) => service.id))
+  return services.map((service) => ({ ...service, showOnHome: service.showOnHome ?? automatic.has(service.id) }))
+}
+
+function withHomeWork(work: WorkItem[]): WorkItem[] {
+  const newest = work.filter((item) => item.active).sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+  const automatic = new Set(newest.slice(0, HOME_WORK_LIMIT).map((item) => item.id))
+  return work.map((item) => ({ ...item, showOnHome: item.showOnHome ?? automatic.has(item.id) }))
+}
+
 // Fill in anything missing from saved data, so adding new fields never breaks old saves.
 function withDefaults(saved: Partial<SiteContent> | null): SiteContent {
   if (!saved) return defaultContent
@@ -42,14 +56,16 @@ function withDefaults(saved: Partial<SiteContent> | null): SiteContent {
     },
     images: { ...defaultContent.images, ...saved.images },
     stats: pick("stats"),
-    services: withEntryFields(pick("services"), fallbackDate).map((service) => ({
-      ...service,
-      active: service.active ?? true,
-    })),
+    services: withHomeServices(
+      withEntryFields(pick("services"), fallbackDate).map((service) => ({
+        ...service,
+        active: service.active ?? true,
+      })),
+    ),
     consultation: { ...defaultContent.consultation, ...saved.consultation },
     clientLogos: pick("clientLogos"),
     reviews: pick("reviews"),
-    work: withEntryFields(pick("work"), fallbackDate).map((item) => ({ ...item, active: item.active ?? true })),
+    work: withHomeWork(withEntryFields(pick("work"), fallbackDate).map((item) => ({ ...item, active: item.active ?? true }))),
     blog: withEntryFields(pick("blog"), fallbackDate),
     updatedAt: saved.updatedAt ?? null,
   }
@@ -91,10 +107,6 @@ export async function saveContent(next: SiteContent) {
   const saved = withDefaults(content)
   setState({ content: saved, ready: true })
   return saved
-}
-
-export function resetContent() {
-  return saveContent(defaultContent)
 }
 
 // Latest saved content, outside React (for saving changes on top of it).

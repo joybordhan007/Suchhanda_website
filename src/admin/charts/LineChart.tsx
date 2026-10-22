@@ -47,7 +47,7 @@ export default function LineChart({ days, series, height = 260 }: LineChartProps
   return (
     <div
       aria-label="Chart: use the left and right arrow keys to read each day"
-      className="relative w-full rounded-[8px] outline-none focus-visible:ring-2 focus-visible:ring-[var(--admin-gold)]"
+      className="relative w-full rounded-[4px] outline-none focus-visible:ring-2 focus-visible:ring-[var(--admin-gold)]"
       onBlur={() => setActive(null)}
       onFocus={() => setActive(last)}
       onKeyDown={onKey}
@@ -102,7 +102,7 @@ export default function LineChart({ days, series, height = 260 }: LineChartProps
       )}
       {active !== null && (
         <div
-          className="pointer-events-none absolute top-[4px] z-10 w-[168px] rounded-[10px] border border-[var(--admin-border)] bg-white/95 px-[12px] py-[10px] shadow-[0_8px_24px_rgb(16_24_40/12%)] backdrop-blur"
+          className="pointer-events-none absolute top-[4px] z-10 w-[168px] rounded-[4px] border border-[var(--admin-border)] bg-white/95 px-[12px] py-[10px] shadow-[0_8px_24px_rgb(16_24_40/12%)] backdrop-blur"
           style={{ left: tooltipLeft }}
         >
           <p className="mb-[6px] text-[12px] text-[var(--admin-muted)]">{shortDate(days[active])}</p>

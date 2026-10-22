@@ -21,7 +21,7 @@ export default function PasswordField({ label, value, onChange, hint, autoComple
       <div className="admin-input admin-input-wrap flex p-0">
         <input
           autoComplete={autoComplete}
-          className="min-w-0 flex-1 rounded-l-[10px] bg-transparent px-[12px] py-[10px] text-[15px] outline-none"
+          className="min-w-0 flex-1 rounded-l-[4px] bg-transparent px-[12px] py-[10px] text-[15px] outline-none"
           id={id}
           onChange={(event) => onChange(event.target.value)}
           type={visible ? "text" : "password"}

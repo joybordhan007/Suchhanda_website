@@ -34,7 +34,7 @@ export default function Modal({ title, onClose, children, footer }: ModalProps) 
       <div
         aria-labelledby={titleId}
         aria-modal="true"
-        className="flex max-h-[92dvh] w-full max-w-[560px] flex-col overflow-hidden rounded-[20px] bg-white shadow-[0_24px_48px_-12px_rgb(16_24_40/25%)]"
+        className="flex max-h-[92dvh] w-full max-w-[560px] flex-col overflow-hidden rounded-[4px] bg-white shadow-[0_24px_48px_-12px_rgb(16_24_40/25%)]"
         role="dialog"
       >
         <header className="flex items-center justify-between gap-[12px] px-[24px] pt-[20px] pb-[4px]">

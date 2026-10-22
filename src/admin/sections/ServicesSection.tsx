@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react"
 import { basicDetail } from "../../content/defaults"
-import { slugify } from "../../content/selectors"
+import { HOME_SERVICE_LIMIT, slugify } from "../../content/selectors"
 import type { Service, ServiceDetail } from "../../content/types"
 import { siteHref } from "../../paths"
 import EditorBar from "../components/EditorBar"
@@ -18,7 +18,6 @@ import { cell, idClass, primaryButton, rowAction, rowActionDanger, rowClass } fr
 import { newId, type ManagedSectionProps } from "../types"
 import { useEditableItem } from "../useEditableItem"
 
-const HOME_SERVICE_COUNT = 5
 const highlightHint =
   "Put *stars* around words to show them in gold. A new line starts a new line on the page. Leave empty to use the service name."
 
@@ -29,7 +28,7 @@ function PageSection({ step, title, dark = false, children }: { step: number; ti
       className={`admin-card flex flex-col gap-[16px] p-[18px] sm:p-[24px] ${dark ? "border-l-[4px] border-l-[#191919]" : ""}`}
     >
       <h2 className="flex items-center gap-[10px] text-[16px] font-semibold text-[var(--admin-text)]">
-        <span className={`flex size-[26px] items-center justify-center rounded-[8px] text-[12px] font-bold text-white ${dark ? "bg-[#191919]" : "bg-[var(--admin-navy)]"}`}>
+        <span className={`flex size-[26px] items-center justify-center rounded-[4px] text-[12px] font-bold text-white ${dark ? "bg-[#191919]" : "bg-[var(--admin-navy)]"}`}>
           {step}
         </span>
         {title}
@@ -39,11 +38,20 @@ function PageSection({ step, title, dark = false, children }: { step: number; ti
   )
 }
 
-function ServiceEditor({ service, onSave, onBack }: { service: Service; onSave: (next: Service) => Promise<void>; onBack: () => void }) {
+type ServiceEditorProps = {
+  service: Service
+  // Other services already switched on for the Home page.
+  otherHomeCount: number
+  onSave: (next: Service) => Promise<void>
+  onBack: () => void
+}
+
+function ServiceEditor({ service, otherHomeCount, onSave, onBack }: ServiceEditorProps) {
   const editor = useEditableItem(service, onSave)
   const { value, update } = editor
   const detail = value.detail
   const setDetail = (patch: Partial<ServiceDetail>) => update({ detail: { ...detail, ...patch } })
+  const homeFull = !value.showOnHome && otherHomeCount >= HOME_SERVICE_LIMIT
 
   return (
     <div className="flex flex-col gap-[20px]">
@@ -54,7 +62,21 @@ function ServiceEditor({ service, onSave, onBack }: { service: Service; onSave: 
         onBack={() => editor.confirmLeave() && onBack()}
         onSave={() => void editor.submit()}
         saving={editor.saving}
-        status={<Toggle checked={value.active} label="Show this service on the website" onChange={(active) => update({ active })} />}
+        status={
+          <div className="flex flex-wrap items-center gap-x-[20px] gap-y-[8px]">
+            <Toggle checked={value.active} label="Show this service on the website" onChange={(active) => update({ active })} />
+            <span title={homeFull ? `The Home page shows ${HOME_SERVICE_LIMIT} services. Switch one off first.` : value.active ? undefined : "Shown on Home once the service is active."}>
+              <Toggle
+                checked={value.showOnHome}
+                disabled={homeFull}
+                label="Show this service on the Home page"
+                offText="Not on Home"
+                onChange={(showOnHome) => update({ showOnHome })}
+                onText="On Home"
+              />
+            </span>
+          </div>
+        }
         subtitle={`${formatId("SRV", value.serial)} · Created ${formatDate(value.createdAt)}`}
         title={value.title}
       />
@@ -202,7 +224,10 @@ function ServiceEditor({ service, onSave, onBack }: { service: Service; onSave: 
 function ConsultationPanel({ content, commit }: Pick<ManagedSectionProps, "content" | "commit">) {
   const editor = useEditableItem(content.consultation, (consultation) => commit((current) => ({ ...current, consultation })))
   return (
-    <Panel description="The last card in the Home page services section. It links to the Contact page." title="Free Consultation card">
+    <Panel
+      description="The sixth card in the Home page services section, after the services marked “On Home”. Its “Contact Me” button opens the Contact page."
+      title="Free Consultation card (Home page)"
+    >
       <div className="grid gap-[16px] md:grid-cols-2">
         <TextField label="Title" onChange={(title) => editor.update({ title })} value={editor.value.title} />
         <TextField
@@ -230,7 +255,6 @@ export default function ServicesSection({ content, commit, itemId, open }: Manag
   const [creating, setCreating] = useState(itemId === "new")
   const [busyId, setBusyId] = useState<string | null>(null)
   const services = content.services
-  const homeIds = new Set(services.filter((service) => service.active).slice(0, HOME_SERVICE_COUNT).map((service) => service.id))
 
   if (itemId && itemId !== "new") {
     const service = services.find((item) => item.id === itemId)
@@ -247,6 +271,7 @@ export default function ServicesSection({ content, commit, itemId, open }: Manag
     return (
       <ServiceEditor
         key={service.id}
+        otherHomeCount={services.filter((item) => item.id !== service.id && item.active && item.showOnHome).length}
         onBack={() => open("services")}
         onSave={(next) => commit((current) => ({ ...current, services: current.services.map((item) => (item.id === next.id ? next : item)) }))}
         service={service}
@@ -283,6 +308,7 @@ export default function ServicesSection({ content, commit, itemId, open }: Manag
       icon: "",
       // New services stay hidden until they are filled in and switched on.
       active: false,
+      showOnHome: false,
       // Empty headings fall back to the service name on the page.
       detail: { ...basicDetail(title, ""), heroTitle: "", offeringsHeading: "", whyHeading: "" },
     }
@@ -295,7 +321,7 @@ export default function ServicesSection({ content, commit, itemId, open }: Manag
     <div className="flex flex-col gap-[28px]">
       <div className="flex flex-wrap items-end justify-between gap-[16px]">
         <SectionHeader
-          description="Active services appear in the Service menu and get their own page. The first five active ones are also shown on the Home page — use the arrows to change the order."
+          description={`Active services appear in the Service menu and get their own page. Switch on “On Home” in a service to show it on the Home page (up to ${HOME_SERVICE_LIMIT}, in this order).`}
           title="Services"
         />
         <button className={primaryButton} onClick={() => setCreating(true)} type="button">
@@ -328,10 +354,7 @@ export default function ServicesSection({ content, commit, itemId, open }: Manag
               <button className="block text-left font-medium text-[var(--admin-text)] hover:underline" onClick={() => open("services", service.id)} type="button">
                 {service.title || "Untitled"}
               </button>
-              <span className="mt-[2px] flex items-center gap-[8px] text-[12px] text-[var(--admin-muted)]">
-                /service/{service.slug}
-                {homeIds.has(service.id) && <span className="admin-badge bg-[#fdf6e9] py-0 text-[var(--admin-gold-ink)]">On Home</span>}
-              </span>
+              <span className="mt-[2px] block text-[12px] text-[var(--admin-muted)]">/service/{service.slug}</span>
             </td>
             <td className={`${cell} whitespace-nowrap text-[13px] text-[var(--admin-muted)]`}>{formatDate(service.createdAt)}</td>
             <td className={cell}>

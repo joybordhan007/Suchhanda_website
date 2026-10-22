@@ -41,12 +41,12 @@ export default function BlockEditor({ blocks, onChange }: BlockEditorProps) {
   return (
     <div className="flex flex-col gap-[12px]">
       {blocks.length === 0 && (
-        <p className="rounded-[12px] border border-dashed border-[var(--admin-border-strong)] p-[20px] text-center text-[14px] text-[var(--admin-muted)]">
+        <p className="rounded-[4px] border border-dashed border-[var(--admin-border-strong)] p-[20px] text-center text-[14px] text-[var(--admin-muted)]">
           The article is empty. Add a heading, paragraph, list or image below.
         </p>
       )}
       {blocks.map((block, index) => (
-        <div className="flex flex-col gap-[10px] rounded-[12px] border border-[var(--admin-border)] bg-[#fcfcfd] p-[14px]" key={block.id}>
+        <div className="flex flex-col gap-[10px] rounded-[4px] border border-[var(--admin-border)] bg-[#fcfcfd] p-[14px]" key={block.id}>
           <div className="flex flex-wrap items-center justify-between gap-[8px]">
             <span className="admin-badge bg-[#fdf6e9] text-[var(--admin-gold-ink)]">{labelOf(block.type)}</span>
             <span className="flex gap-[6px]">

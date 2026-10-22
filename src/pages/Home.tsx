@@ -3,20 +3,17 @@ import Reviews from "../components/Reviews"
 import ServiceCard from "../components/ServiceCard"
 import Stats from "../components/Stats"
 import TrustedLogos from "../components/TrustedLogos"
-import { activeServices, latestWork } from "../content/selectors"
+import { homeServices, homeWork } from "../content/selectors"
 import { useSiteContent } from "../content/store"
 import { assetPathPrefix, mediaUrl, withBase } from "../paths"
 
 const imgHrManagementFlatIllustration1 = `${assetPathPrefix}/48813.png`
 const imgArrowForward1 = `${assetPathPrefix}/b3d9b.svg`
 
-// The design has room for five services next to the Free Consultation card.
-const HOME_SERVICE_COUNT = 5
-
 export default function Home() {
   const content = useSiteContent()
   const cards = [
-    ...activeServices(content.services).slice(0, HOME_SERVICE_COUNT).map((service) => (
+    ...homeServices(content.services).map((service) => (
       <ServiceCard
         description={service.summary}
         icon={service.icon}
@@ -35,7 +32,7 @@ export default function Home() {
     />,
   ]
   const rows = [cards.slice(0, 3), cards.slice(3, 6)].filter((row) => row.length > 0)
-  const recentWork = latestWork(content.work, 2)
+  const recentWork = homeWork(content.work)
 
   return (
     <div className="bg-[#fefefe] relative size-full" data-node-id="1:347" data-name="Home">

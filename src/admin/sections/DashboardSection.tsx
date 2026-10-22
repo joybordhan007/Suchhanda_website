@@ -7,7 +7,7 @@ import ColumnChart from "../charts/ColumnChart"
 import LineChart from "../charts/LineChart"
 import StatTile from "../charts/StatTile"
 import { compact, shortDate } from "../charts/chartUtils"
-import Icon, { type IconName } from "../components/Icon"
+import Icon from "../components/Icon"
 import { formatDateTime, formatId } from "../format"
 import type { AdminUser } from "../LoginPage"
 
@@ -28,7 +28,14 @@ type DashboardSectionProps = {
   onOpen: (section: string, itemId?: string) => void
 }
 
-const RANGES = [7, 30, 90] as const
+const RANGES = [
+  { days: 7, label: "7D", title: "Last 7 days" },
+  { days: 30, label: "30D", title: "Last 30 days" },
+  { days: 90, label: "90D", title: "Last 90 days" },
+  { days: 365, label: "12M", title: "Last 12 months" },
+] as const
+
+type RangeDays = (typeof RANGES)[number]["days"]
 
 const change = (current: number, previous: number) => (previous > 0 ? (current - previous) / previous : null)
 
@@ -50,7 +57,7 @@ const pageName = (path: string, content: SiteContent) => {
   return names[path] ?? path
 }
 
-// Groups daily rows into weeks for long ranges, so columns stay readable.
+// Groups daily rows into weeks or months for long ranges, so columns stay readable.
 function bucket(daily: Stats["daily"], size: number) {
   const buckets: { label: string; messages: number }[] = []
   for (let index = daily.length; index > 0; index -= size) {
@@ -71,22 +78,22 @@ function greeting() {
 function Meter({ label, value, total, onClick }: { label: string; value: number; total: number; onClick: () => void }) {
   const share = total ? value / total : 0
   return (
-    <button className="flex w-full flex-col gap-[6px] rounded-[10px] p-[8px] text-left transition hover:bg-[#f9fafb]" onClick={onClick} type="button">
+    <button className="flex w-full flex-col gap-[8px] rounded-[4px] px-[10px] py-[10px] text-left transition hover:bg-[#f9fafb]" onClick={onClick} type="button">
       <span className="flex items-baseline justify-between gap-[8px] text-[13px]">
         <span className="font-medium text-[var(--admin-text)]">{label}</span>
-        <span className="text-[var(--admin-muted)]">
-          <span className="font-semibold text-[var(--admin-text)]">{value}</span> of {total} live
+        <span className="text-[var(--admin-muted)] [font-variant-numeric:tabular-nums]">
+          <span className="font-semibold text-[var(--admin-text)]">{value}</span> / {total} live
         </span>
       </span>
-      <span className="h-[6px] w-full overflow-hidden rounded-full bg-[#dbe7f8]">
-        <span className="block h-full rounded-full bg-[var(--chart-visitors)]" style={{ width: `${share * 100}%` }} />
+      <span className="h-[6px] w-full overflow-hidden rounded-[4px] bg-[#f2f4f7]">
+        <span className="block h-full rounded-[4px] bg-[var(--chart-visitors)]" style={{ width: `${share * 100}%` }} />
       </span>
     </button>
   )
 }
 
 export default function DashboardSection({ admin, content, onOpen }: DashboardSectionProps) {
-  const [days, setDays] = useState<(typeof RANGES)[number]>(30)
+  const [days, setDays] = useState<RangeDays>(30)
   const [stats, setStats] = useState<Stats | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
@@ -114,19 +121,17 @@ export default function DashboardSection({ admin, content, onOpen }: DashboardSe
       .catch(() => setMessages([]))
   }, [])
 
-  const periodLabel = `vs previous ${days} days`
+  const range = RANGES.find((item) => item.days === days) ?? RANGES[1]
+  const periodLabel = days === 365 ? "vs previous 12 months" : `vs previous ${days} days`
   const totals = stats?.totals ?? { views: 0, visitors: 0, messages: 0 }
   const previous = stats?.previousTotals ?? { views: 0, visitors: 0, messages: 0 }
   const rate = totals.visitors ? totals.messages / totals.visitors : 0
   const previousRate = previous.visitors ? previous.messages / previous.visitors : 0
   const daily = stats?.daily ?? []
   const recent = daily.slice(-14)
-  const columns = bucket(daily, days === 90 ? 7 : 1)
-  const quickActions: { label: string; section: string; icon: IconName }[] = [
-    { label: "Add service", section: "services", icon: "services" },
-    { label: "Add work", section: "work", icon: "work" },
-    { label: "Write a blog", section: "blog", icon: "blog" },
-  ]
+  const bucketSize = days === 365 ? 30 : days === 90 ? 7 : 1
+  const bucketName = bucketSize === 30 ? "month" : bucketSize === 7 ? "week" : "day"
+  const columns = bucket(daily, bucketSize)
   const liveServices = content.services.filter((service) => service.active).length
   const liveWork = content.work.filter((item) => item.active).length
   const livePosts = content.blog.filter((post) => post.status === "published").length
@@ -141,39 +146,32 @@ export default function DashboardSection({ admin, content, onOpen }: DashboardSe
           </h1>
           <p className="mt-[4px] text-[15px] text-[var(--admin-muted)]">Here is how your website is doing.</p>
         </div>
-        <div className="flex flex-wrap gap-[8px]">
-          {quickActions.map((action) => (
-            <button className="admin-btn admin-btn-secondary" key={action.section} onClick={() => onOpen(action.section, "new")} type="button">
-              <Icon name="plus" size={16} />
-              {action.label}
-            </button>
-          ))}
+        {/* One filter scopes every number and chart below it. */}
+        <div className="flex flex-col items-end gap-[6px]">
+          <div aria-label="Date range" className="flex rounded-[4px] border border-[var(--admin-border)] bg-white p-[3px] shadow-[0_1px_2px_rgb(16_24_40/4%)]" role="group">
+            {RANGES.map((option) => (
+              <button
+                aria-pressed={days === option.days}
+                className={`h-[30px] min-w-[48px] rounded-[4px] px-[12px] text-[13px] font-semibold transition ${
+                  days === option.days ? "bg-[var(--admin-navy)] text-white" : "text-[var(--admin-text-2)] hover:bg-[#f2f4f7]"
+                }`}
+                key={option.days}
+                onClick={() => setDays(option.days)}
+                title={option.title}
+                type="button"
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+          <span className="text-[12px] text-[var(--admin-muted)]">
+            {range.title}
+            {stats?.trackingSince ? ` · counted since ${shortDate(stats.trackingSince)}` : ""}
+          </span>
         </div>
       </div>
 
-      {/* One filter row scopes every number and chart below it. */}
-      <div className="flex flex-wrap items-center gap-[12px]">
-        <div aria-label="Date range" className="flex rounded-[10px] border border-[var(--admin-border)] bg-white p-[3px] shadow-[0_1px_2px_rgb(16_24_40/4%)]" role="group">
-          {RANGES.map((range) => (
-            <button
-              aria-pressed={days === range}
-              className={`h-[32px] rounded-[8px] px-[14px] text-[13px] font-semibold transition ${
-                days === range ? "bg-[var(--admin-navy)] text-white" : "text-[var(--admin-text-2)] hover:bg-[#f2f4f7]"
-              }`}
-              key={range}
-              onClick={() => setDays(range)}
-              type="button"
-            >
-              Last {range} days
-            </button>
-          ))}
-        </div>
-        {stats?.trackingSince && (
-          <span className="text-[13px] text-[var(--admin-muted)]">Visits counted since {shortDate(stats.trackingSince)}</span>
-        )}
-      </div>
-
-      {error && <p className="rounded-[12px] border border-[#fecdca] bg-[#fef3f2] px-[16px] py-[12px] text-[14px] text-[#b42318]">{error}</p>}
+      {error && <p className="rounded-[4px] border border-[#fecdca] bg-[#fef3f2] px-[16px] py-[12px] text-[14px] text-[#b42318]">{error}</p>}
       {stats && !stats.trackingSince && (
         <p className="admin-card flex items-center gap-[10px] px-[16px] py-[12px] text-[14px] text-[var(--admin-text-2)]">
           <Icon className="text-[var(--admin-gold)]" name="trending" />
@@ -227,7 +225,7 @@ export default function DashboardSection({ admin, content, onOpen }: DashboardSe
               { label: "Visitors", color: "var(--chart-visitors)" },
               { label: "Page views", color: "var(--chart-views)" },
             ]}
-            subtitle={`Daily, last ${days} days`}
+            subtitle={`Daily · ${range.title.toLowerCase()}`}
             table={{ headers: ["Day", "Visitors", "Page views"], rows: [...daily].reverse().map((row) => [shortDate(row.day), row.visitors, row.views]) }}
             title="Traffic"
           >
@@ -240,8 +238,8 @@ export default function DashboardSection({ admin, content, onOpen }: DashboardSe
             />
           </ChartCard>
           <ChartCard
-            subtitle={days === 90 ? "Contact form, per week" : "Contact form, per day"}
-            table={{ headers: [days === 90 ? "Week of" : "Day", "Inquiries"], rows: [...columns].reverse().map((column) => [column.label, column.messages]) }}
+            subtitle={`Contact form, per ${bucketName}`}
+            table={{ headers: [bucketSize === 1 ? "Day" : bucketSize === 7 ? "Week of" : "Month from", "Inquiries"], rows: [...columns].reverse().map((column) => [column.label, column.messages]) }}
             title="Inquiries"
           >
             <ColumnChart color="var(--chart-inquiries)" labels={columns.map((column) => column.label)} valueLabel="inquiries" values={columns.map((column) => column.messages)} />
@@ -273,34 +271,34 @@ export default function DashboardSection({ admin, content, onOpen }: DashboardSe
               valueLabel="visits"
             />
           </ChartCard>
-          <section className="admin-card flex flex-col gap-[12px] p-[20px] lg:col-span-2 xl:col-span-1">
-            <div>
-              <h2 className="text-[16px] font-semibold">Website content</h2>
-              <p className="mt-[2px] text-[13px] text-[var(--admin-muted)]">What visitors can see right now</p>
+          <section className="admin-card flex flex-col lg:col-span-2 xl:col-span-1">
+            <div className="border-b border-[var(--admin-border)] px-[20px] py-[14px]">
+              <h2 className="text-[15px] font-semibold">Website content</h2>
+              <p className="mt-[2px] text-[12px] text-[var(--admin-muted)]">What visitors can see right now</p>
             </div>
-            <div className="flex flex-col gap-[4px]">
+            <div className="flex flex-col gap-[2px] px-[10px] pt-[10px]">
               <Meter label="Services" onClick={() => onOpen("services")} total={content.services.length} value={liveServices} />
               <Meter label="Work" onClick={() => onOpen("work")} total={content.work.length} value={liveWork} />
               <Meter label="Blog posts" onClick={() => onOpen("blog")} total={content.blog.length} value={livePosts} />
             </div>
-            <div className="grid grid-cols-2 gap-[8px] pt-[4px]">
-              <button className="rounded-[10px] border border-[var(--admin-border)] p-[12px] text-left transition hover:border-[var(--admin-gold)]" onClick={() => onOpen("logos")} type="button">
-                <span className="block text-[20px] font-semibold">{content.clientLogos.length}</span>
-                <span className="text-[12px] text-[var(--admin-muted)]">Client logos</span>
+            <div className="grid grid-cols-2 gap-[8px] p-[20px] pt-[10px]">
+              <button className="rounded-[4px] border border-[var(--admin-border)] bg-[#fcfcfd] p-[14px] text-left transition hover:border-[var(--admin-gold)] hover:bg-white" onClick={() => onOpen("logos")} type="button">
+                <span className="block text-[24px] font-semibold leading-none tracking-[-0.02em] [font-variant-numeric:tabular-nums]">{content.clientLogos.length}</span>
+                <span className="mt-[6px] block text-[12px] text-[var(--admin-muted)]">Client logos</span>
               </button>
-              <button className="rounded-[10px] border border-[var(--admin-border)] p-[12px] text-left transition hover:border-[var(--admin-gold)]" onClick={() => onOpen("reviews")} type="button">
-                <span className="block text-[20px] font-semibold">{content.reviews.length}</span>
-                <span className="text-[12px] text-[var(--admin-muted)]">Reviews</span>
+              <button className="rounded-[4px] border border-[var(--admin-border)] bg-[#fcfcfd] p-[14px] text-left transition hover:border-[var(--admin-gold)] hover:bg-white" onClick={() => onOpen("reviews")} type="button">
+                <span className="block text-[24px] font-semibold leading-none tracking-[-0.02em] [font-variant-numeric:tabular-nums]">{content.reviews.length}</span>
+                <span className="mt-[6px] block text-[12px] text-[var(--admin-muted)]">Reviews</span>
               </button>
             </div>
           </section>
         </div>
 
         <section className="admin-card overflow-hidden">
-          <div className="flex items-center justify-between gap-[12px] px-[20px] pt-[18px] pb-[12px]">
+          <div className="flex items-center justify-between gap-[12px] px-[20px] py-[14px]">
             <div>
-              <h2 className="text-[16px] font-semibold">Latest messages</h2>
-              <p className="mt-[2px] text-[13px] text-[var(--admin-muted)]">
+              <h2 className="text-[15px] font-semibold">Latest messages</h2>
+              <p className="mt-[2px] text-[12px] text-[var(--admin-muted)]">
                 {stats ? `${stats.unreadMessages} unread` : "Inquiries from the Contact page"}
               </p>
             </div>

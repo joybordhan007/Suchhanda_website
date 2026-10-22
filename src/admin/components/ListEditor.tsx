@@ -16,6 +16,9 @@ type ListEditorProps<T extends { id: string }> = {
   emptyText?: string
   // False for lists the site orders itself (e.g. by date).
   sortable?: boolean
+  // Items can be deleted and reordered; defaults to true when createItem is given.
+  // Lists that add items another way (e.g. social links from a preset) pass true.
+  editable?: boolean
 }
 
 const smallButton = "admin-icon-btn h-[30px] w-[30px]"
@@ -32,6 +35,7 @@ export default function ListEditor<T extends { id: string }>({
   openByDefault,
   emptyText = "Nothing here yet.",
   sortable = true,
+  editable = Boolean(createItem),
 }: ListEditorProps<T>) {
   const update = (index: number, patch: Partial<T>) =>
     onChange(items.map((item, i) => (i === index ? { ...item, ...patch } : item)))
@@ -70,25 +74,25 @@ export default function ListEditor<T extends { id: string }>({
     <div className="flex flex-col gap-[12px]">
       {addToStart && addButton}
       {items.length === 0 && (
-        <p className="rounded-[12px] border border-dashed border-[var(--admin-border-strong)] bg-white p-[24px] text-center text-[14px] text-[var(--admin-muted)]">
+        <p className="rounded-[4px] border border-dashed border-[var(--admin-border-strong)] bg-white p-[24px] text-center text-[14px] text-[var(--admin-muted)]">
           {emptyText}
         </p>
       )}
       {items.map((item, index) => (
         <details
-          className="group admin-card rounded-[12px] open:border-[var(--admin-border-strong)]"
+          className="group admin-card rounded-[4px] open:border-[var(--admin-border-strong)]"
           key={item.id}
           open={openByDefault ?? items.length <= 2}
         >
           <summary className="flex cursor-pointer list-none flex-wrap items-center justify-between gap-[12px] px-[16px] py-[12px] sm:px-[20px]">
             <span className="flex min-w-0 items-center gap-[10px] text-[15px] font-semibold text-[var(--admin-text)]">
-              <span className="flex size-[22px] items-center justify-center rounded-[6px] bg-[#f2f4f7] text-[var(--admin-muted)] transition-transform group-open:rotate-90">
+              <span className="flex size-[22px] items-center justify-center rounded-[4px] bg-[#f2f4f7] text-[var(--admin-muted)] transition-transform group-open:rotate-90">
                 <Icon className="rotate-180" name="back" size={14} />
               </span>
               <span className="truncate">{itemTitle(item, index) || "Untitled"}</span>
               {badge?.(item, index)}
             </span>
-            {createItem && (
+            {editable && (
               <span className="flex gap-[6px]" onClick={(event) => event.preventDefault()}>
                 {sortable && (
                   <>

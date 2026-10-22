@@ -166,7 +166,7 @@ export default function MessagesSection({ itemId, open, onUnreadCount }: Message
       <div className="flex flex-wrap items-center gap-[8px]">
         {(["all", "unread"] as const).map((value) => (
           <button
-            className={`h-[34px] rounded-[9px] border px-[14px] text-[13px] font-semibold capitalize transition ${
+            className={`h-[34px] rounded-[4px] border px-[14px] text-[13px] font-semibold capitalize transition ${
               filter === value ? "border-[var(--admin-navy)] bg-[var(--admin-navy)] text-white" : "border-[var(--admin-border)] bg-white text-[var(--admin-text-2)] hover:border-[var(--admin-gold)]"
             }`}
             key={value}
@@ -181,7 +181,7 @@ export default function MessagesSection({ itemId, open, onUnreadCount }: Message
           Refresh
         </button>
       </div>
-      {error && <p className="rounded-[12px] border border-[#fecdca] bg-[#fef3f2] px-[14px] py-[10px] text-[14px] text-[#b42318]">{error}</p>}
+      {error && <p className="rounded-[4px] border border-[#fecdca] bg-[#fef3f2] px-[14px] py-[10px] text-[14px] text-[#b42318]">{error}</p>}
       <Table
         empty={
           messages !== null &&

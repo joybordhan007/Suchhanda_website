@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { HOME_WORK_LIMIT } from "../../content/selectors"
 import type { WorkItem } from "../../content/types"
 import { mediaUrl } from "../../paths"
 import ImageField from "../components/ImageField"
@@ -68,7 +69,7 @@ export default function WorkSection({ content, commit, itemId }: ManagedSectionP
   const [editing, setEditing] = useState<WorkItem | null | undefined>(itemId === "new" ? null : undefined)
   const [busyId, setBusyId] = useState<string | null>(null)
   const work = [...content.work].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-  const homeIds = new Set(work.filter((item) => item.active).slice(0, 2).map((item) => item.id))
+  const homeCount = work.filter((item) => item.active && item.showOnHome).length
 
   const change = async (id: string, apply: (work: WorkItem[]) => WorkItem[]) => {
     setBusyId(id)
@@ -83,7 +84,7 @@ export default function WorkSection({ content, commit, itemId }: ManagedSectionP
     if (editing) {
       await commit((current) => ({ ...current, work: current.work.map((item) => (item.id === editing.id ? { ...item, ...form } : item)) }))
     } else {
-      const item: WorkItem = { id: newId(), serial: nextSerial(content.work), createdAt: new Date().toISOString(), active: true, ...form }
+      const item: WorkItem = { id: newId(), serial: nextSerial(content.work), createdAt: new Date().toISOString(), active: true, showOnHome: false, ...form }
       await commit((current) => ({ ...current, work: [item, ...current.work] }))
     }
     setEditing(undefined)
@@ -93,7 +94,7 @@ export default function WorkSection({ content, commit, itemId }: ManagedSectionP
     <div className="flex flex-col gap-[28px]">
       <div className="flex flex-wrap items-end justify-between gap-[16px]">
         <SectionHeader
-          description="Work cards on the Work page, newest first. The two newest active ones are also shown in “Real Result. Real Impact” on the Home page."
+          description={`Work cards on the Work page, newest first. Switch on “On Home” to show a card in “Real Result. Real Impact” on the Home page (up to ${HOME_WORK_LIMIT}).`}
           title="Work"
         />
         <button className={primaryButton} onClick={() => setEditing(null)} type="button">
@@ -117,21 +118,20 @@ export default function WorkSection({ content, commit, itemId }: ManagedSectionP
           }
         }
         footer={work.length > 0 && `${work.filter((item) => item.active).length} of ${work.length} live on the website`}
-        headers={["ID", "Work", "Description", "Created", "Status", { label: "Actions", align: "right", srOnly: true }]}
+        headers={["ID", "Work", "Description", "Created", "On Home", "Status", { label: "Actions", align: "right", srOnly: true }]}
       >
         {work.map((item) => (
           <tr className={rowClass} key={item.id}>
             <td className={`${cell} ${idClass} w-[96px]`}>{formatId("WRK", item.serial)}</td>
             <td className={cell}>
               <div className="flex items-center gap-[12px]">
-                <div className="h-[40px] w-[64px] shrink-0 overflow-hidden rounded-[8px] bg-[#f2f4f7] ring-1 ring-black/5">
+                <div className="h-[40px] w-[64px] shrink-0 overflow-hidden rounded-[4px] bg-[#f2f4f7] ring-1 ring-black/5">
                   {item.image && <img alt="" className="size-full object-cover" loading="lazy" src={mediaUrl(item.image)} />}
                 </div>
                 <div className="min-w-0">
                   <button className="block truncate text-left font-medium text-[var(--admin-text)] hover:underline" onClick={() => setEditing(item)} type="button">
                     {item.title || "Untitled"}
                   </button>
-                  {homeIds.has(item.id) && <span className="admin-badge mt-[2px] bg-[#fdf6e9] py-0 text-[var(--admin-gold-ink)]">On Home</span>}
                 </div>
               </div>
             </td>
@@ -139,6 +139,19 @@ export default function WorkSection({ content, commit, itemId }: ManagedSectionP
               <p className="line-clamp-2">{item.description || "—"}</p>
             </td>
             <td className={`${cell} whitespace-nowrap text-[13px] text-[var(--admin-muted)]`}>{formatDate(item.createdAt)}</td>
+            <td className={cell}>
+              <span title={!item.showOnHome && item.active && homeCount >= HOME_WORK_LIMIT ? `The Home page shows ${HOME_WORK_LIMIT} work cards. Switch one off first.` : undefined}>
+                <Toggle
+                  checked={item.showOnHome}
+                  disabled={busyId === item.id || (!item.showOnHome && item.active && homeCount >= HOME_WORK_LIMIT)}
+                  label={`Show ${item.title} on the Home page`}
+                  offText="Off"
+                  onChange={(showOnHome) => void change(item.id, (list) => list.map((entry) => (entry.id === item.id ? { ...entry, showOnHome } : entry)))}
+                  onText="On"
+                  size="sm"
+                />
+              </span>
+            </td>
             <td className={cell}>
               <Toggle
                 checked={item.active}

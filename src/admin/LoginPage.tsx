@@ -53,7 +53,7 @@ export default function LoginPage({ onSignedIn }: { onSignedIn: (admin: AdminUse
           <TextField autoFocus label="Email" onChange={setEmail} placeholder="you@example.com" type="email" value={email} />
           <PasswordField label="Password" onChange={setPassword} value={password} />
           {error && (
-            <p className="rounded-[10px] border border-[#fecdca] bg-[#fef3f2] px-[12px] py-[10px] text-[14px] text-[#b42318]" role="alert">
+            <p className="rounded-[4px] border border-[#fecdca] bg-[#fef3f2] px-[12px] py-[10px] text-[14px] text-[#b42318]" role="alert">
               {error}
             </p>
           )}

@@ -4,10 +4,11 @@ import SectionHeader from "../components/SectionHeader"
 import TextField from "../components/TextField"
 import { newId, type SectionProps } from "../types"
 
-export default function LogosSection({ content, onChange }: SectionProps) {
+export default function LogosSection({ content, onChange, actions }: SectionProps) {
   return (
     <div className="flex flex-col gap-[28px]">
       <SectionHeader
+        actions={actions}
         description="Logos in the scrolling “Trusted by Businesses of all sizes” strip on the Home and Work pages, in this order."
         title="Client Logos"
       />

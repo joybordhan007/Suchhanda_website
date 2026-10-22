@@ -49,7 +49,7 @@ export default function ImageField({
       <div className="flex flex-wrap items-start gap-[16px]">
         <button
           aria-label={value ? `Replace ${label}` : `Upload ${label}`}
-          className={`group relative flex w-[220px] max-w-full items-center justify-center overflow-hidden rounded-[12px] border border-dashed transition ${
+          className={`group relative flex w-[220px] max-w-full items-center justify-center overflow-hidden rounded-[4px] border border-dashed transition ${
             dragging ? "border-[var(--admin-gold)] bg-[#fdf8ee]" : "border-[var(--admin-border-strong)] hover:border-[var(--admin-gold)]"
           } ${darkPreview ? "bg-[#282828]" : "bg-[#f9fafb]"} ${previewClass}`}
           onClick={() => input.current?.click()}

@@ -34,7 +34,7 @@ function TrackerCard({
     <section className="admin-card flex flex-col">
       <header className="flex flex-wrap items-start justify-between gap-[16px] p-[20px] sm:p-[24px]">
         <div className="flex min-w-0 items-start gap-[14px]">
-          <span className="flex size-[44px] shrink-0 items-center justify-center rounded-[12px] border border-[var(--admin-border)] bg-[#f9fafb]">{logo}</span>
+          <span className="flex size-[44px] shrink-0 items-center justify-center rounded-[4px] border border-[var(--admin-border)] bg-[#f9fafb]">{logo}</span>
           <div className="min-w-0">
             <h2 className="flex flex-wrap items-center gap-[8px] text-[16px] font-semibold">
               {title}
@@ -46,7 +46,7 @@ function TrackerCard({
         <Toggle checked={enabled} label={`Turn ${title} on or off`} offText="Off" onChange={onToggle} onText="On" />
       </header>
       <div className="flex flex-col gap-[18px] border-t border-[var(--admin-border)] p-[20px] sm:p-[24px]">{children}</div>
-      <footer className="flex flex-wrap items-center justify-end gap-[12px] rounded-b-[16px] border-t border-[var(--admin-border)] bg-[#fcfcfd] px-[20px] py-[14px] sm:px-[24px]">
+      <footer className="flex flex-wrap items-center justify-end gap-[12px] rounded-b-[4px] border-t border-[var(--admin-border)] bg-[#fcfcfd] px-[20px] py-[14px] sm:px-[24px]">
         {footer}
       </footer>
     </section>
@@ -80,12 +80,12 @@ function IdHint({ value, pattern, problem, hint }: { value: string; pattern: Reg
 }
 
 const EventList = ({ events }: { events: [string, string][] }) => (
-  <div className="rounded-[12px] bg-[#f9fafb] p-[14px]">
+  <div className="rounded-[4px] bg-[#f9fafb] p-[14px]">
     <p className="mb-[8px] text-[13px] font-semibold text-[var(--admin-text-2)]">Events sent automatically</p>
     <ul className="grid gap-[6px] text-[13px] text-[var(--admin-muted)] sm:grid-cols-2">
       {events.map(([name, when]) => (
         <li className="flex items-center gap-[8px]" key={name}>
-          <code className="rounded-[6px] border border-[var(--admin-border)] bg-white px-[6px] py-[1px] text-[12px] text-[var(--admin-text)]">{name}</code>
+          <code className="rounded-[4px] border border-[var(--admin-border)] bg-white px-[6px] py-[1px] text-[12px] text-[var(--admin-text)]">{name}</code>
           {when}
         </li>
       ))}
@@ -221,7 +221,7 @@ function MetaCard({ content, commit }: Props) {
       </div>
       <IdHint hint="Events Manager → Data sources → your Pixel → Settings." pattern={META_PIXEL_ID_PATTERN} problem="A Pixel ID is a number of 10 to 20 digits." value={pixelId} />
 
-      <div className="flex flex-col gap-[14px] rounded-[12px] border border-[var(--admin-border)] p-[16px]">
+      <div className="flex flex-col gap-[14px] rounded-[4px] border border-[var(--admin-border)] p-[16px]">
         <div>
           <h3 className="text-[14px] font-semibold">Conversions API (optional)</h3>
           <p className="mt-[2px] text-[13px] leading-[1.5] text-[var(--admin-muted)]">

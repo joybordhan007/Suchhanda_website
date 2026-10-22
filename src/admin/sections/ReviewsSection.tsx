@@ -4,10 +4,11 @@ import SectionHeader from "../components/SectionHeader"
 import TextField from "../components/TextField"
 import { newId, type SectionProps } from "../types"
 
-export default function ReviewsSection({ content, onChange }: SectionProps) {
+export default function ReviewsSection({ content, onChange, actions }: SectionProps) {
   return (
     <div className="flex flex-col gap-[28px]">
       <SectionHeader
+        actions={actions}
         description="Review images in “Trusted by Businesses Proven by Results” on the Home and Work pages. Three are shown at a time; with more than three, dots let visitors see the rest."
         title="Reviews"
       />
