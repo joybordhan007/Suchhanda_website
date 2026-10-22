@@ -1,3 +1,6 @@
+import { Lines } from "../components/HeroText"
+import HighlightText from "../components/HighlightText"
+import { fontStyle } from "../content/fonts"
 import { useState, type FormEvent } from "react"
 import Footer from "../components/Footer"
 import { api, ApiError } from "../content/api"
@@ -14,7 +17,8 @@ const imgMarkerPin01 = `${assetPathPrefix}/cb13c.svg`
 const imgClock = `${assetPathPrefix}/ce72e.svg`
 
 export default function ContactMe() {
-  const { settings } = useSiteContent()
+  const { settings, heroes } = useSiteContent()
+  const hero = heroes.contact
   const [submitStatus, setSubmitStatus] =
     useState<"idle" | "sending" | "sent" | "error">("idle")
   const [errorText, setErrorText] = useState("")
@@ -57,20 +61,22 @@ export default function ContactMe() {
           data-name="Frame"
         >
           <p
-            className="font-['Noto_Serif:Bold'] font-bold leading-[0] relative shrink-0 text-[64px] whitespace-nowrap"
+            className="font-['Noto_Serif:Bold'] font-bold leading-[0] relative shrink-0 text-[64px] text-center"
             data-node-id="1:2028"
-            style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}
+            style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100', ...fontStyle(hero.titleFont) }}
           >
-            <span className="leading-[1.2]">{`Get `}</span>
-            <span className="leading-[1.2] text-[#c7994b]">in Touch</span>
+            <HighlightText text={hero.title} />
           </p>
           <p
             className="font-['Anuphan:Regular'] font-normal leading-[1.3] min-w-full relative shrink-0 text-[32px] text-center w-[min-content]"
             data-node-id="1:2029"
-          >{`Ready to start your growth journey? We'd love to hear from you.`}</p>
+            style={fontStyle(hero.descriptionFont)}
+          >
+            <Lines text={hero.description} />
+          </p>
         </div>
       </div>
-      <Footer top={2432} />
+      <Footer top={1461} />
       <div
         className="-translate-x-1/2 absolute content-stretch flex gap-[24px] items-center left-1/2 px-[320px] top-[511px] w-[1920px]"
         data-node-id="1:2112"
@@ -506,27 +512,6 @@ export default function ContactMe() {
             </p>
           )}
         </form>
-      </div>
-      <div
-        className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-center justify-center leading-[0] left-1/2 top-[1461px] w-[1280px]"
-        data-node-id="1:2167"
-        data-name="Frame"
-      >
-        <p
-          className="[word-break:break-word] font-['Noto_Serif:Bold'] font-bold relative shrink-0 text-[#191919] text-[64px] whitespace-nowrap"
-          data-node-id="1:2168"
-          style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}
-        >
-          <span className="leading-[1.2]">{`VIEW ON `}</span>
-          <span className="leading-[1.2] text-[#c7994b]">GOOGLE MAPS</span>
-        </p>
-        <iframe
-          className="h-[730px] w-[1280px] rounded-[8px] border-0"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          src={`https://www.google.com/maps?q=${encodeURIComponent(settings.address)}&output=embed`}
-          title={`Map showing ${settings.address}`}
-        />
       </div>
     </div>
   )

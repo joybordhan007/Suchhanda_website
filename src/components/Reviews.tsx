@@ -1,46 +1,38 @@
-import { useState } from "react"
-import { useSiteContent } from "../content/store"
-import { mediaUrl } from "../paths"
+import { useApprovedReviews } from "../content/reviews"
+import ReviewCard from "./ReviewCard"
 
-const PER_PAGE = 3
+const SHOWN = 3
 
-// "Trusted by Businesses Proven by Results": review screenshots, three at a time,
-// with page dots when there are more than three.
+// "Trusted by Businesses Proven by Results": the three newest approved reviews and a
+// button to the Reviews page, where visitors can read them all and add their own.
 export default function Reviews() {
-  const { reviews } = useSiteContent()
-  const [page, setPage] = useState(0)
-  const pages = Math.ceil(reviews.length / PER_PAGE)
-  const current = Math.min(page, Math.max(0, pages - 1))
-  if (reviews.length === 0) return null
+  const { reviews, loaded } = useApprovedReviews()
+  const latest = reviews.slice(0, SHOWN)
 
   return (
     <div className="reviews flex w-full flex-col items-center gap-[40px]">
-      <div className="reviews-window w-full overflow-hidden">
-        <div className="reviews-track" style={{ transform: `translateX(calc(${-current} * (100% + 24px)))` }}>
-          {reviews.map((review) => (
-            <div className="reviews-item" key={review.id}>
-              <img alt={review.name} src={mediaUrl(review.image)} />
-            </div>
+      {latest.length > 0 ? (
+        <div className="reviews-grid grid w-full grid-cols-3 items-stretch gap-[24px]">
+          {latest.map((review) => (
+            <ReviewCard key={review.id} review={review} />
           ))}
         </div>
-      </div>
-      {pages > 1 && (
-        <div aria-label="Review pages" className="reviews-dots flex items-center gap-[4px]" role="tablist">
-          {Array.from({ length: pages }, (_, index) => (
-            <button
-              aria-label={`Show reviews page ${index + 1}`}
-              aria-selected={index === current}
-              className={`h-[12px] rounded-[999px] transition-all ${
-                index === current ? "w-[24px] bg-[#facc15]" : "w-[12px] bg-[#fff9df]"
-              }`}
-              key={index}
-              onClick={() => setPage(index)}
-              role="tab"
-              type="button"
-            />
-          ))}
-        </div>
+      ) : (
+        loaded && (
+          <p className="w-full rounded-[24px] border border-dashed border-[#d9d9d9] px-[32px] py-[48px] text-center font-['Inter:Regular'] text-[18px] text-[#3e3e3e]">
+            No reviews yet. Worked with me? Be the first to share your experience.
+          </p>
+        )
       )}
+      <div
+        className="bg-[#091e39] content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]"
+        data-name="CTA"
+        data-path="/reviews"
+      >
+        <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[16px] text-white whitespace-nowrap">
+          {latest.length > 0 ? "View All" : "Write a Review"}
+        </p>
+      </div>
     </div>
   )
 }

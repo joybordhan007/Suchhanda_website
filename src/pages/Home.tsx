@@ -1,4 +1,7 @@
 import Footer from "../components/Footer"
+import { Lines } from "../components/HeroText"
+import HighlightText from "../components/HighlightText"
+import { fontStyle } from "../content/fonts"
 import Reviews from "../components/Reviews"
 import ServiceCard from "../components/ServiceCard"
 import Stats from "../components/Stats"
@@ -12,6 +15,7 @@ const imgArrowForward1 = `${assetPathPrefix}/b3d9b.svg`
 
 export default function Home() {
   const content = useSiteContent()
+  const hero = content.heroes.home
   const cards = [
     ...homeServices(content.services).map((service) => (
       <ServiceCard
@@ -46,14 +50,14 @@ export default function Home() {
             </ul>
             <div className="content-stretch flex flex-col gap-[32px] items-start relative shrink-0 text-[#191919] w-full whitespace-pre-wrap" data-node-id="1:352" data-name="Frame">
               <div className="font-['Noto_Sans:Bold'] font-bold relative shrink-0 text-[0px] w-[700px]" data-node-id="1:353" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-                <p className="font-['Noto_Serif:Bold'] leading-[1.2] mb-0 text-[64px]" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>{`High-Converting `}</p>
-                <p className="font-['Noto_Serif:Bold'] text-[64px]">
-                  <span className="leading-[1.2] text-[#c7994b]" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>{`Meta & Google`}</span>
-                  <span className="leading-[1.2]" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>{` Ads`}</span>
+                <p className="font-['Noto_Serif:Bold'] text-[64px]" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100', ...fontStyle(hero.titleFont) }}>
+                  <HighlightText text={hero.title} />
                 </p>
               </div>
               <div className="font-['Noto_Sans:Regular'] font-normal relative shrink-0 text-[20px] w-full" data-node-id="1:354" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-                <p className="leading-[1.4]">Helping brands connect with the right audience and achieve meaningful growth through high-converting ads and data-driven marketing strategies.</p>
+                <p className="leading-[1.4]" style={fontStyle(hero.descriptionFont)}>
+                  <Lines text={hero.description} />
+                </p>
               </div>
             </div>
           </div>

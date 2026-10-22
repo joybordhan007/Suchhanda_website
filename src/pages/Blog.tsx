@@ -1,3 +1,6 @@
+import { Lines } from "../components/HeroText"
+import HighlightText from "../components/HighlightText"
+import { fontStyle } from "../content/fonts"
 import CtaBanner from "../components/CtaBanner"
 import Footer from "../components/Footer"
 import { publishedPosts } from "../content/selectors"
@@ -57,19 +60,20 @@ function BlogCard({ post }: { post: BlogPost }) {
 }
 
 export default function Blog() {
-  const posts = publishedPosts(useSiteContent().blog)
+  const { blog, heroes } = useSiteContent()
+  const posts = publishedPosts(blog)
+  const hero = heroes.blog
   const rows = Array.from({ length: Math.ceil(posts.length / 3) }, (_, index) => posts.slice(index * 3, index * 3 + 3))
 
   return (
     <div className="flow-page bg-[#fefefe] relative w-full" data-node-id="1:1583" data-name="Blog">
       <div className="relative h-[480px] overflow-clip w-[1920px]" data-node-id="1:1584" data-name="Hero">
         <div className="[word-break:break-word] absolute content-stretch flex flex-col gap-[32px] items-center left-[410px] text-[#091e39] top-[208px] w-[1100px]" data-node-id="1:1585" data-name="Frame">
-          <p className="font-['Noto_Serif:Bold'] font-bold leading-[0] relative shrink-0 text-[64px] whitespace-nowrap" data-node-id="1:1586" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-            <span className="leading-[1.2]">{`Digital `}</span>
-            <span className="leading-[1.2] text-[#c7994b]">Marketing Blog</span>
+          <p className="font-['Noto_Serif:Bold'] font-bold leading-[0] relative shrink-0 text-[64px] text-center" data-node-id="1:1586" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100', ...fontStyle(hero.titleFont) }}>
+            <HighlightText text={hero.title} />
           </p>
-          <p className="font-['Anuphan:Regular'] font-normal leading-[1.3] min-w-full relative shrink-0 text-[32px] text-center w-[min-content]" data-node-id="1:1587">
-            Practical Marketing Insights to Help Your Business Grow
+          <p className="font-['Anuphan:Regular'] font-normal leading-[1.3] min-w-full relative shrink-0 text-[32px] text-center w-[min-content]" data-node-id="1:1587" style={fontStyle(hero.descriptionFont)}>
+            <Lines text={hero.description} />
           </p>
         </div>
       </div>

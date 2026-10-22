@@ -21,5 +21,6 @@ export const config = {
   siteUrl: (process.env.SITE_URL ?? "").replace(/\/+$/, ""),
   sessionDays: 7,
   maxUploadBytes: 5 * 1024 * 1024,
+  maxReviewPhotoBytes: 2 * 1024 * 1024,
   maxContentBytes: 2 * 1024 * 1024,
 }

@@ -96,10 +96,28 @@ export type ClientLogo = {
   image: string
 }
 
+// A visitor review shown on the website (only approved ones reach the public API).
 export type Review = {
-  id: string
+  id: number
   name: string
+  rating: number
+  text: string
+  // Uploaded photo, or "" to show an avatar with the first letter of the name.
   image: string
+  createdAt: string
+}
+
+export type ReviewStatus = "pending" | "approved" | "rejected"
+
+export type HeroPage = "home" | "work" | "about" | "blog" | "contact" | "reviews"
+
+// The big title and the line under it at the top of a page. The title accepts *stars*
+// around words to show them in gold; both keep line breaks. Fonts are FontStyleId values.
+export type HeroText = {
+  title: string
+  description: string
+  titleFont: string
+  descriptionFont: string
 }
 
 export type WorkItem = ListEntry & {
@@ -133,6 +151,21 @@ export type BlogPost = ListEntry & {
   blocks: BlogBlock[]
 }
 
+// "Featured In" on the About Me page: a logo or screenshot, linking to the article.
+export type FeaturedItem = {
+  id: string
+  name: string
+  image: string
+  // Opens in a new tab when the image is clicked; "" for no link.
+  url: string
+}
+
+export type AboutContent = {
+  // The text beside the portrait. An empty line starts a new paragraph.
+  text: string
+  featured: FeaturedItem[]
+}
+
 export type SiteContent = {
   settings: SiteSettings
   images: PageImages
@@ -140,7 +173,8 @@ export type SiteContent = {
   services: Service[]
   consultation: ConsultationCard
   clientLogos: ClientLogo[]
-  reviews: Review[]
+  heroes: Record<HeroPage, HeroText>
+  about: AboutContent
   work: WorkItem[]
   blog: BlogPost[]
   updatedAt: string | null

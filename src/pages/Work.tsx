@@ -1,5 +1,8 @@
 import CtaBanner from "../components/CtaBanner"
 import Footer from "../components/Footer"
+import { Lines } from "../components/HeroText"
+import HighlightText from "../components/HighlightText"
+import { fontStyle } from "../content/fonts"
 import Reviews from "../components/Reviews"
 import Stats from "../components/Stats"
 import TrustedLogos from "../components/TrustedLogos"
@@ -14,23 +17,21 @@ function chunk<T>(items: T[], size: number) {
 export default function Work() {
   const content = useSiteContent()
   const rows = chunk(latestWork(content.work), 2)
+  const hero = content.heroes.work
 
   return (
     <div className="flow-page bg-[#fefefe] relative w-full pb-0" data-node-id="1:1172" data-name="Work">
       <div className="relative h-[764px] overflow-clip w-[1920px]" data-node-id="1:1173" data-name="Frame">
         <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[64px] items-center justify-center left-1/2 top-[255px] w-[1263px]" data-node-id="1:1174" data-name="Frame">
           <div className="[word-break:break-word] content-stretch flex flex-col gap-[32px] items-start relative shrink-0 text-[#091e39] text-center w-full" data-node-id="1:1175" data-name="Frame">
-            <div className="font-['Noto_Serif:Bold'] font-bold leading-[0] relative shrink-0 text-[64px] w-full whitespace-pre-wrap" data-node-id="1:1176" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-              <p className="mb-0">
-                <span className="leading-[1.2]">{`Real Growth `}</span>
-                <span className="leading-[1.2] text-[#c7994b]">{`Starts with `}</span>
-              </p>
+            <div className="font-['Noto_Serif:Bold'] font-bold leading-[0] relative shrink-0 text-[64px] w-full whitespace-pre-wrap" data-node-id="1:1176" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100', ...fontStyle(hero.titleFont) }}>
               <p>
-                <span className="leading-[1.2] text-[#c7994b]">the Right</span>
-                <span className="leading-[1.2]">{` Strategy`}</span>
+                <HighlightText text={hero.title} />
               </p>
             </div>
-            <p className="font-['Noto_Sans:Regular'] font-normal leading-[1.4] relative shrink-0 text-[24px] w-full" data-node-id="1:1177" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>{`Below you'll find a selection of campaigns I've managed for clients across different industries. Each case study shows the challenge, strategy, and measurable outcome.`}</p>
+            <p className="font-['Noto_Sans:Regular'] font-normal leading-[1.4] relative shrink-0 text-[24px] w-full" data-node-id="1:1177" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100', ...fontStyle(hero.descriptionFont) }}>
+              <Lines text={hero.description} />
+            </p>
           </div>
           <div className="content-stretch flex gap-[16px] items-center relative shrink-0" data-node-id="1:1178" data-name="Frame">
             <div className="bg-[#091e39] content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-node-id="1:1179" data-name="Frame" data-path="/about">

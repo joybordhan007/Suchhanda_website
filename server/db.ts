@@ -132,6 +132,22 @@ db.exec(`
   );
 `)
 
+// Reviews visitors send from the Reviews page. They stay "pending" until approved in the
+// dashboard; only "approved" ones are shown on the website.
+db.exec(`
+  CREATE TABLE IF NOT EXISTS reviews (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    rating INTEGER NOT NULL,
+    text TEXT NOT NULL,
+    image TEXT NOT NULL DEFAULT '',
+    status TEXT NOT NULL DEFAULT 'pending',
+    created_at TEXT NOT NULL,
+    reviewed_at TEXT
+  );
+  CREATE INDEX IF NOT EXISTS reviews_status ON reviews(status);
+`)
+
 // Columns added after the first release; existing databases get them on start-up.
 const adminColumns = (db.prepare("PRAGMA table_info(admins)").all() as { name: string }[]).map((column) => column.name)
 if (!adminColumns.includes("name")) db.exec("ALTER TABLE admins ADD COLUMN name TEXT NOT NULL DEFAULT ''")

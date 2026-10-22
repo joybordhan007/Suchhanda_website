@@ -5,8 +5,10 @@ import type { SiteContent } from "../content/types"
 import { asset, mediaUrl, siteHref, stripBase, withBase } from "../paths"
 import Icon, { type IconName } from "./components/Icon"
 import LoginPage, { type AdminUser } from "./LoginPage"
+import AboutSection from "./sections/AboutSection"
 import BlogSection from "./sections/BlogSection"
 import DashboardSection from "./sections/DashboardSection"
+import HeroesSection from "./sections/HeroesSection"
 import ImagesSection from "./sections/ImagesSection"
 import LogosSection from "./sections/LogosSection"
 import MessagesSection from "./sections/MessagesSection"
@@ -28,13 +30,20 @@ const navGroups = [
       { id: "blog", label: "Blog", icon: "blog" },
     ],
   },
-  { label: "Inbox", items: [{ id: "messages", label: "Messages", icon: "messages" }] },
+  {
+    label: "Inbox",
+    items: [
+      { id: "messages", label: "Messages", icon: "messages" },
+      { id: "reviews", label: "Reviews", icon: "star" },
+    ],
+  },
   {
     label: "Website",
     items: [
+      { id: "heroes", label: "Page Heroes", icon: "type" },
+      { id: "about", label: "About Page", icon: "user" },
       { id: "stats", label: "Achievements", icon: "award" },
       { id: "logos", label: "Client Logos", icon: "logos" },
-      { id: "reviews", label: "Reviews", icon: "star" },
       { id: "images", label: "Page Images", icon: "image" },
       { id: "settings", label: "Site Settings", icon: "settings" },
     ],
@@ -51,9 +60,10 @@ const sectionLabels: Record<string, string> = {
 
 // Edited as a whole and saved with the Save button next to the section title.
 const draftSections: Partial<Record<SectionId, ComponentType<SectionProps>>> = {
+  heroes: HeroesSection,
+  about: AboutSection,
   stats: StatsSection,
   logos: LogosSection,
-  reviews: ReviewsSection,
   images: ImagesSection,
   settings: SettingsSection,
 }
@@ -123,6 +133,7 @@ function Dashboard({
   const [toast, setToast] = useState<{ kind: "saved" | "error"; text: string } | null>(null)
   const toastTimer = useRef<number | undefined>(undefined)
   const [unread, setUnread] = useState<number | null>(null)
+  const [pendingReviews, setPendingReviews] = useState<number | null>(null)
   // The save time is not an edit, so it is left out of the comparison.
   const isDirty = draft !== null && JSON.stringify({ ...draft, updatedAt: null }) !== JSON.stringify({ ...saved, updatedAt: null })
 
@@ -132,6 +143,9 @@ function Dashboard({
     api<{ unread: number }>("/messages?limit=0")
       .then(({ unread: count }) => setUnread(count))
       .catch(() => setUnread(null))
+    api<{ counts: { pending: number } }>("/admin/reviews")
+      .then(({ counts }) => setPendingReviews(counts.pending))
+      .catch(() => setPendingReviews(null))
     const popstate = () => setRoute(getRoute())
     window.addEventListener("popstate", popstate)
     return () => window.removeEventListener("popstate", popstate)
@@ -155,6 +169,7 @@ function Dashboard({
   }
 
   const handleUnread = useCallback((count: number) => setUnread(count), [])
+  const handlePendingReviews = useCallback((count: number) => setPendingReviews(count), [])
 
   const open = useCallback((section: string, itemId?: string) => {
     const id = sectionIds.has(section) ? (section as SectionId) : ""
@@ -272,6 +287,11 @@ function Dashboard({
                     {item.id === "messages" && (unread ?? 0) > 0 && (
                       <span className="ml-auto rounded-full bg-[#d9b46e] px-[7px] py-[1px] text-[11px] font-bold text-[#091e39]">{unread}</span>
                     )}
+                    {item.id === "reviews" && (pendingReviews ?? 0) > 0 && (
+                      <span className="ml-auto rounded-full bg-[#d9b46e] px-[7px] py-[1px] text-[11px] font-bold text-[#091e39]" title="Waiting for approval">
+                        {pendingReviews}
+                      </span>
+                    )}
                   </button>
                 )
               })}
@@ -357,6 +377,8 @@ function Dashboard({
             <ManagedSection commit={commit} content={draft} itemId={route.itemId} key={`${route.section}-${revision}`} open={open} />
           ) : route.section === "messages" ? (
             <MessagesSection itemId={route.itemId} onUnreadCount={handleUnread} open={open} />
+          ) : route.section === "reviews" ? (
+            <ReviewsSection itemId={route.itemId} onPendingCount={handlePendingReviews} open={open} />
           ) : route.section === "profile" ? (
             <ProfileSection admin={admin} onProfileChange={onAdminChange} />
           ) : (

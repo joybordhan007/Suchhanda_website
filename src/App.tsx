@@ -30,6 +30,7 @@ const pageLoaders = {
   blog: () => import("./pages/Blog"),
   post: () => import("./pages/BlogDetails"),
   contact: () => import("./pages/Contact"),
+  reviews: () => import("./pages/Reviews"),
   privacy: () => import("./pages/PrivacyPolicy"),
   terms: () => import("./pages/TermsOfService"),
 }
@@ -47,7 +48,8 @@ const pages = {
   about: { component: lazy(pageLoaders.about), height: 3830 },
   blog: { component: lazy(pageLoaders.blog), height: "auto" },
   post: { component: lazy(pageLoaders.post), height: "auto" },
-  contact: { component: lazy(pageLoaders.contact), height: 2895 },
+  contact: { component: lazy(pageLoaders.contact), height: 1925 },
+  reviews: { component: lazy(pageLoaders.reviews), height: "auto" },
   privacy: { component: lazy(pageLoaders.privacy), height: "auto" },
   terms: { component: lazy(pageLoaders.terms), height: "auto" },
 } as const satisfies Record<string, { component: ComponentType<{ slug?: string }>; height: number | "auto" }>
@@ -62,6 +64,7 @@ const staticRoutes: Record<string, PageKey> = {
   "/about": "about",
   "/blog": "blog",
   "/contact": "contact",
+  "/reviews": "reviews",
   "/privacy-policy": "privacy",
   "/terms-of-service": "terms",
 }
@@ -84,6 +87,7 @@ const linkMap: Record<string, string> = {
   work: "/work",
   "about me": "/about",
   blog: "/blog",
+  reviews: "/reviews",
   "contact me": "/contact",
   "contact us": "/contact",
   "privacy policy": "/privacy-policy",
@@ -103,8 +107,8 @@ const REVEAL_SELECTOR = [
   ".blog-card",
   ".achievement-card",
   ".home-work-card",
-  ".reviews-window",
-  ".reviews-dots",
+  ".review-card",
+  ".reviews-add",
   ".trusted-logo-window",
   ".contact-form",
   "[data-name='contact']",
@@ -208,7 +212,7 @@ function Site() {
 
   useEffect(() => {
     // Keep in sync with "title" in .figma/make/site.json (used for the first page load).
-    const siteTitle = "Professional Digital Marketing Services | Suchhanda Mondol"
+    const siteTitle = "Suchhanda Mondol | Digital Marketing Expert"
     const service = match.page === "service" ? content.services.find((item) => item.slug === match.slug) : null
     const post = match.page === "post" ? content.blog.find((item) => item.slug === match.slug) : null
     const name = service?.title ?? post?.title
@@ -524,6 +528,13 @@ function Site() {
             href={withBase("/blog")}
           >
             Blog
+          </a>
+          <a
+            aria-current={path === "/reviews" ? "page" : undefined}
+            data-path="/reviews"
+            href={withBase("/reviews")}
+          >
+            Reviews
           </a>
           <a
             className="site-contact-link"

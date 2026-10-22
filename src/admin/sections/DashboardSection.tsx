@@ -20,6 +20,7 @@ type Stats = {
   topPages: { path: string; views: number }[]
   sources: { source: string; views: number }[]
   unreadMessages: number
+  reviews: { pending: number; approved: number; rejected: number }
 }
 
 type DashboardSectionProps = {
@@ -287,8 +288,11 @@ export default function DashboardSection({ admin, content, onOpen }: DashboardSe
                 <span className="mt-[6px] block text-[12px] text-[var(--admin-muted)]">Client logos</span>
               </button>
               <button className="rounded-[4px] border border-[var(--admin-border)] bg-[#fcfcfd] p-[14px] text-left transition hover:border-[var(--admin-gold)] hover:bg-white" onClick={() => onOpen("reviews")} type="button">
-                <span className="block text-[24px] font-semibold leading-none tracking-[-0.02em] [font-variant-numeric:tabular-nums]">{content.reviews.length}</span>
-                <span className="mt-[6px] block text-[12px] text-[var(--admin-muted)]">Reviews</span>
+                <span className="block text-[24px] font-semibold leading-none tracking-[-0.02em] [font-variant-numeric:tabular-nums]">{stats?.reviews.approved ?? "–"}</span>
+                <span className="mt-[6px] block text-[12px] text-[var(--admin-muted)]">
+                  Reviews live
+                  {(stats?.reviews.pending ?? 0) > 0 && <span className="font-semibold text-[var(--admin-gold-ink)]"> · {stats?.reviews.pending} waiting</span>}
+                </span>
               </button>
             </div>
           </section>

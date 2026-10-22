@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto"
-import { createReadStream, existsSync, statSync, writeFileSync } from "node:fs"
+import { createReadStream, existsSync, rmSync, statSync, writeFileSync } from "node:fs"
 import { extname, join, resolve, sep } from "node:path"
 import { Readable } from "node:stream"
 import { getConnInfo } from "@hono/node-server/conninfo"
@@ -25,6 +25,7 @@ type Env = { Variables: { admin: Admin } }
 
 const loginLimiter = createRateLimiter(5, 15 * 60 * 1000)
 const messageLimiter = createRateLimiter(5, 10 * 60 * 1000)
+const reviewLimiter = createRateLimiter(3, 60 * 60 * 1000)
 const trackLimiter = createRateLimiter(120, 60 * 1000)
 
 function clientIp(c: Context) {
@@ -113,6 +114,14 @@ function sendFile(c: Context, file: string, headers: Record<string, string> = {}
 
 const str = (value: unknown, max: number) => (typeof value === "string" ? value.trim().slice(0, max) : "")
 
+const reviewColumns = "id, name, rating, text, image, created_at AS createdAt"
+
+function reviewCounts() {
+  const rows = db.prepare("SELECT status, COUNT(*) AS count FROM reviews GROUP BY status").all() as { status: string; count: number }[]
+  const count = (status: string) => Number(rows.find((row) => row.status === status)?.count ?? 0)
+  return { pending: count("pending"), approved: count("approved"), rejected: count("rejected") }
+}
+
 const messageFields: Record<string, string> = {
   firstName: "your first name",
   lastName: "your last name",
@@ -168,8 +177,9 @@ export function createApp() {
   const tooLarge = (c: Context) => c.json({ error: "The request is too large." }, 413)
   app.use("/api/uploads", bodyLimit({ maxSize: config.maxUploadBytes + 64 * 1024, onError: tooLarge }))
   app.use("/api/content", bodyLimit({ maxSize: config.maxContentBytes, onError: tooLarge }))
+  app.use("/api/reviews", bodyLimit({ maxSize: config.maxReviewPhotoBytes + 64 * 1024, onError: tooLarge }))
   app.use("/api/*", async (c, next) => {
-    if (c.req.path === "/api/uploads" || c.req.path === "/api/content") return next()
+    if (c.req.path === "/api/uploads" || c.req.path === "/api/content" || c.req.path === "/api/reviews") return next()
     return bodyLimit({ maxSize: 64 * 1024, onError: tooLarge })(c, next)
   })
 
@@ -388,7 +398,77 @@ export function createApp() {
 
   app.get("/api/stats", requireAdmin, (c) => {
     const days = Math.min(365, Math.max(7, Number(c.req.query("days")) || 30))
-    return c.json(statsFor(days))
+    return c.json({ ...statsFor(days), reviews: reviewCounts() })
+  })
+
+  // ---- Reviews ----------------------------------------------------------
+  // Approved reviews, newest first, for the website.
+  app.get("/api/reviews", (c) => {
+    const rows = db
+      .prepare(`SELECT ${reviewColumns} FROM reviews WHERE status = 'approved' ORDER BY COALESCE(reviewed_at, created_at) DESC, id DESC LIMIT 500`)
+      .all()
+    return c.json({ reviews: rows })
+  })
+
+  // A visitor's review: name, rating 1–5, text and an optional photo. It waits for approval.
+  app.post("/api/reviews", async (c) => {
+    const ip = clientIp(c)
+    if (reviewLimiter.isLimited(ip)) return c.json({ error: "Too many reviews. Please try again later." }, 429)
+    const body = await c.req.parseBody().catch(() => null)
+    if (!body) return c.json({ error: "The review could not be read. Please try again." }, 400)
+    // Hidden field that people never fill in; bots usually do.
+    if (str(body.website, 200)) return c.json({ ok: true }, 201)
+    const name = str(body.name, 80)
+    const text = str(body.text, 1000)
+    const rating = Math.round(Number(body.rating))
+    if (!name) return c.json({ error: "Please enter your name." }, 400)
+    if (!(rating >= 1 && rating <= 5)) return c.json({ error: "Please choose a rating from 1 to 5 stars." }, 400)
+    if (text.length < 10) return c.json({ error: "Please write a few words about your experience." }, 400)
+    let image = ""
+    const photo = body.photo
+    if (typeof photo === "object" && "arrayBuffer" in photo && photo.size > 0) {
+      if (photo.size > config.maxReviewPhotoBytes) return c.json({ error: "The photo must be 2 MB or smaller." }, 413)
+      const bytes = Buffer.from(await photo.arrayBuffer())
+      // Photographs only: SVG is not accepted from visitors.
+      const kind = imageTypes.find((type) => type.ext !== ".svg" && type.test(bytes))
+      if (!kind) return c.json({ error: "The photo must be a JPG, PNG, WebP or GIF image." }, 400)
+      const fileName = `review-${Date.now().toString(36)}-${randomBytes(6).toString("hex")}${kind.ext}`
+      writeFileSync(join(config.uploadsDir, fileName), bytes)
+      image = `/uploads/${fileName}`
+    }
+    reviewLimiter.hit(ip)
+    db.prepare("INSERT INTO reviews (name, rating, text, image, status, created_at) VALUES (?, ?, ?, ?, 'pending', ?)").run(
+      name,
+      rating,
+      text,
+      image,
+      new Date().toISOString(),
+    )
+    return c.json({ ok: true }, 201)
+  })
+
+  // Every review, for approving in the dashboard.
+  app.get("/api/admin/reviews", requireAdmin, (c) => {
+    const rows = db.prepare(`SELECT ${reviewColumns}, status FROM reviews ORDER BY id DESC LIMIT 1000`).all()
+    return c.json({ reviews: rows, counts: reviewCounts() })
+  })
+
+  app.patch("/api/admin/reviews/:id", requireAdmin, async (c) => {
+    const body = (await c.req.json().catch(() => ({}))) as Record<string, unknown>
+    const status = body.status
+    if (status !== "approved" && status !== "rejected" && status !== "pending") return c.json({ error: "Unknown status." }, 400)
+    db.prepare("UPDATE reviews SET status = ?, reviewed_at = ? WHERE id = ?").run(status, new Date().toISOString(), Number(c.req.param("id")))
+    return c.json({ ok: true, counts: reviewCounts() })
+  })
+
+  app.delete("/api/admin/reviews/:id", requireAdmin, (c) => {
+    const id = Number(c.req.param("id"))
+    const row = db.prepare("SELECT image FROM reviews WHERE id = ?").get(id) as { image: string } | undefined
+    db.prepare("DELETE FROM reviews WHERE id = ?").run(id)
+    // The photo belongs to the review alone, so it goes with it.
+    const photo = row?.image.startsWith("/uploads/review-") ? fileIn(config.uploadsDir, row.image.slice("/uploads".length)) : null
+    if (photo) rmSync(photo, { force: true })
+    return c.json({ ok: true, counts: reviewCounts() })
   })
 
   // ---- Tracking (private part) -----------------------------------------

@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react"
 import { api } from "./api"
 import { defaultContent } from "./defaults"
 import { HOME_SERVICE_LIMIT, HOME_WORK_LIMIT } from "./selectors"
-import type { Service, SiteContent, TrackingSettings, WorkItem } from "./types"
+import type { HeroPage, HeroText, Service, SiteContent, TrackingSettings, WorkItem } from "./types"
 
 // Gives entries saved before IDs, dates and on/off status existed a number, a date
 // and the "active" state, keeping their order.
@@ -40,6 +40,11 @@ function withHomeWork(work: WorkItem[]): WorkItem[] {
   return work.map((item) => ({ ...item, showOnHome: item.showOnHome ?? automatic.has(item.id) }))
 }
 
+function withHeroDefaults(saved: Partial<Record<HeroPage, Partial<HeroText>>> | undefined): Record<HeroPage, HeroText> {
+  const pages = Object.keys(defaultContent.heroes) as HeroPage[]
+  return Object.fromEntries(pages.map((page) => [page, { ...defaultContent.heroes[page], ...saved?.[page] }])) as Record<HeroPage, HeroText>
+}
+
 // Fill in anything missing from saved data, so adding new fields never breaks old saves.
 function withDefaults(saved: Partial<SiteContent> | null): SiteContent {
   if (!saved) return defaultContent
@@ -64,7 +69,11 @@ function withDefaults(saved: Partial<SiteContent> | null): SiteContent {
     ),
     consultation: { ...defaultContent.consultation, ...saved.consultation },
     clientLogos: pick("clientLogos"),
-    reviews: pick("reviews"),
+    heroes: withHeroDefaults(saved.heroes),
+    about: {
+      text: saved.about?.text ?? defaultContent.about.text,
+      featured: Array.isArray(saved.about?.featured) ? saved.about.featured : defaultContent.about.featured,
+    },
     work: withHomeWork(withEntryFields(pick("work"), fallbackDate).map((item) => ({ ...item, active: item.active ?? true }))),
     blog: withEntryFields(pick("blog"), fallbackDate),
     updatedAt: saved.updatedAt ?? null,

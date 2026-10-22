@@ -50,7 +50,7 @@ export default function SettingsSection({ content, onChange, commit, actions }: 
           <TextField label="Email" onChange={(email) => set({ email })} type="email" value={settings.email} />
           <TextField label="Phone" onChange={(phone) => set({ phone })} type="tel" value={settings.phone} />
           <TextField
-            hint="Also used for the Google Map on the Contact page."
+            hint="Shown on the Contact page and in the footer, with a link to Google Maps."
             label="Address"
             onChange={(address) => set({ address })}
             value={settings.address}

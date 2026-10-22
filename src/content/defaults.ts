@@ -197,11 +197,54 @@ export const defaultContent: SiteContent = {
     { id: "teams", name: "Microsoft Teams", image: "/assets/3efa1.svg" },
     { id: "twitter", name: "Twitter", image: "/assets/975d6.svg" },
   ],
-  reviews: [
-    { id: "review-1", name: "Client review", image: "/assets/bbc34.png" },
-    { id: "review-2", name: "Client review", image: "/assets/bbc34.png" },
-    { id: "review-3", name: "Client review", image: "/assets/bbc34.png" },
-  ],
+  about: {
+    text: "I’m Suchhanda Mondol, a Digital Marketing Specialist focused on Meta Ads and Google Ads, helping businesses improve their advertising performance through strategic planning, campaign management, and continuous optimization.\n\nI also work with Google Tag Manager, Meta Pixel, conversion tracking, Ads Audit & Optimization, and Conversion Rate Optimization (CRO) to support more effective and measurable marketing.\n\nFor me, marketing goes beyond simply launching campaigns. Every project starts with understanding the business, its audience, and its goals, followed by a strategy tailored to create meaningful and sustainable growth.",
+    featured: [
+      { id: "featured-1", name: "Featured article", image: "/assets/1b092.png", url: "" },
+      { id: "featured-2", name: "Featured article", image: "/assets/233a8.png", url: "" },
+      { id: "featured-3", name: "Featured article", image: "/assets/06998.png", url: "" },
+    ],
+  },
+  heroes: {
+    home: {
+      title: "High-Converting\n*Meta & Google* Ads",
+      description: "Helping brands connect with the right audience and achieve meaningful growth through high-converting ads and data-driven marketing strategies.",
+      titleFont: "noto-serif-bold",
+      descriptionFont: "noto-sans-regular",
+    },
+    work: {
+      title: "Real Growth *Starts with*\n*the Right* Strategy",
+      description:
+        "Below you'll find a selection of campaigns I've managed for clients across different industries. Each case study shows the challenge, strategy, and measurable outcome.",
+      titleFont: "noto-serif-bold",
+      descriptionFont: "noto-sans-regular",
+    },
+    about: {
+      title: "Getting to *Know Me*\n*Beyond* the Work",
+      description:
+        "I believe successful marketing starts with understanding people, building trust, and creating\nstrategies that support long-term business growth.",
+      titleFont: "noto-serif-bold",
+      descriptionFont: "noto-sans-regular",
+    },
+    blog: {
+      title: "Digital *Marketing Blog*",
+      description: "Practical Marketing Insights to Help Your Business Grow",
+      titleFont: "noto-serif-bold",
+      descriptionFont: "anuphan-regular",
+    },
+    contact: {
+      title: "Get *in Touch*",
+      description: "Ready to start your growth journey? We'd love to hear from you.",
+      titleFont: "noto-serif-bold",
+      descriptionFont: "anuphan-regular",
+    },
+    reviews: {
+      title: "What My *Clients Say*",
+      description: "Honest feedback from the businesses I've worked with.\nWorked with me? Share your experience.",
+      titleFont: "noto-serif-bold",
+      descriptionFont: "anuphan-regular",
+    },
+  },
   work: [
     {
       id: "work-4",

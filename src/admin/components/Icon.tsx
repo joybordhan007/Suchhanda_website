@@ -168,6 +168,14 @@ const icons = {
       <path d="m6 6 12 12" />
     </>
   ),
+  check: <path d="M20 6 9 17l-5-5" />,
+  type: (
+    <>
+      <path d="M4 7V4h16v3" />
+      <path d="M9 20h6" />
+      <path d="M12 4v16" />
+    </>
+  ),
   table: (
     <>
       <path d="M12 3v18" />

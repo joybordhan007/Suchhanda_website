@@ -1,11 +1,11 @@
+import { Lines } from "../components/HeroText"
+import HighlightText from "../components/HighlightText"
+import { fontStyle } from "../content/fonts"
 import Footer from "../components/Footer"
 import Stats from "../components/Stats"
 
 import { useSiteContent } from "../content/store"
-import { assetPathPrefix, mediaUrl } from "../paths";
-const imgImage1 = `${assetPathPrefix}/1b092.png`;
-const imgImage2 = `${assetPathPrefix}/233a8.png`;
-const imgImage3 = `${assetPathPrefix}/06998.png`;
+import { assetPathPrefix, mediaUrl, safeHref } from "../paths";
 const imgImage4 = `${assetPathPrefix}/164ce.png`;
 const imgImage5 = `${assetPathPrefix}/72b1a.png`;
 const imgImage6 = `${assetPathPrefix}/953fa.png`;
@@ -13,25 +13,24 @@ const imgArrowForward = `${assetPathPrefix}/b3d9b.svg`;
 const imgGroup4 = `${assetPathPrefix}/0f14c.svg`;
 
 export default function AboutMe() {
-  const { images, settings } = useSiteContent()
+  const { images, settings, heroes, about } = useSiteContent()
+  const hero = heroes.about
+  // An empty line in the dashboard text starts a new paragraph.
+  const paragraphs = about.text.split(/\n\s*\n/).map((paragraph) => paragraph.trim()).filter(Boolean)
   return (
     <div className="bg-[#fefefe] relative size-full" data-node-id="1:1403" data-name="About Me">
       <div className="absolute h-[764px] left-0 overflow-clip top-0 w-[1920px]" data-node-id="1:1404" data-name="Frame">
         <div className="-translate-x-1/2 -translate-y-1/2 absolute content-stretch flex flex-col gap-[64px] items-center justify-center left-1/2 top-[calc(50%+58px)] w-[1140px]" data-node-id="1:1405" data-name="Frame">
           <div className="[word-break:break-word] content-stretch flex flex-col gap-[32px] items-center justify-center leading-[0] relative shrink-0 text-[#091e39] text-center w-full" data-node-id="1:1406" data-name="Frame">
-            <div className="font-['Noto_Serif:Bold'] font-bold min-w-full relative shrink-0 text-[64px] w-[min-content] whitespace-pre-wrap" data-node-id="1:1407" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-              <p className="mb-0">
-                <span className="leading-[1.2]">{`Getting to `}</span>
-                <span className="leading-[1.2] text-[#c7994b]">{`Know Me `}</span>
-              </p>
+            <div className="font-['Noto_Serif:Bold'] font-bold min-w-full relative shrink-0 text-[64px] w-[min-content] whitespace-pre-wrap" data-node-id="1:1407" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100', ...fontStyle(hero.titleFont) }}>
               <p>
-                <span className="leading-[1.2] text-[#c7994b]">Beyond</span>
-                <span className="leading-[1.2]">{` the Work`}</span>
+                <HighlightText text={hero.title} />
               </p>
             </div>
-            <div className="font-['Noto_Sans:Regular'] font-normal relative shrink-0 text-[24px] whitespace-nowrap" data-node-id="1:1408" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-              <p className="leading-[1.4] mb-0 whitespace-pre">{`I believe successful marketing starts with understanding people, building trust, and creating `}</p>
-              <p className="leading-[1.4] whitespace-pre">strategies that support long-term business growth.</p>
+            <div className="font-['Noto_Sans:Regular'] font-normal relative shrink-0 text-[24px] w-full" data-node-id="1:1408" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100', ...fontStyle(hero.descriptionFont) }}>
+              <p className="leading-[1.4]">
+                <Lines text={hero.description} />
+              </p>
             </div>
           </div>
           <div className="content-stretch flex gap-[16px] items-center relative shrink-0" data-node-id="1:1409" data-name="Frame">
@@ -76,15 +75,17 @@ export default function AboutMe() {
         </div>
         <div className="flex flex-row items-center self-stretch" data-node-id="1:1518">
           <div className="bg-white content-stretch drop-shadow-[0px_2px_4px_rgba(0,0,0,0.1)] flex flex-col gap-[24px] h-full items-start justify-center px-[40px] py-[32px] relative rounded-[16px] shrink-0 w-[630px]" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#3e3e3e] text-[24px] w-[min-content]" data-node-id="1:1519">
-              <p className="leading-[1.4]">I’m Suchhanda Mondol, a Digital Marketing Specialist focused on Meta Ads and Google Ads, helping businesses improve their advertising performance through strategic planning, campaign management, and continuous optimization.</p>
-            </div>
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#3e3e3e] text-[24px] w-[min-content]" data-node-id="1:1520">
-              <p className="leading-[1.4]">{`I also work with Google Tag Manager, Meta Pixel, conversion tracking, Ads Audit & Optimization, and Conversion Rate Optimization (CRO) to support more effective and measurable marketing.`}</p>
-            </div>
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#3e3e3e] text-[24px] w-[min-content]" data-node-id="1:1521">
-              <p className="leading-[1.4]">or me, marketing goes beyond simply launching campaigns. Every project starts with understanding the business, its audience, and its goals, followed by a strategy tailored to create meaningful and sustainable growth.</p>
-            </div>
+            {paragraphs.map((paragraph, index) => (
+              <div
+                className="[word-break:break-word] flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#3e3e3e] text-[24px] w-[min-content]"
+                data-node-id={index === 0 ? "1:1519" : undefined}
+                key={index}
+              >
+                <p className="leading-[1.4]">
+                  <Lines text={paragraph} />
+                </p>
+              </div>
+            ))}
             <div className="absolute inset-[12.75%_24.75%]" data-node-id="1:1522">
               <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup4} />
             </div>
@@ -95,16 +96,27 @@ export default function AboutMe() {
         <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] whitespace-nowrap" data-node-id="1:1530" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
           <p className="leading-[1.2]">Featured In</p>
         </div>
-        <div className="content-stretch flex gap-[24px] items-center relative shrink-0 w-full" data-node-id="1:1531" data-name="Frame">
-          <div className="aspect-[765/677] flex-[1_0_0] min-w-px relative rounded-[2px] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.1)]" data-node-id="1:1532" data-name="image 1">
-            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[2px] size-full" src={imgImage1} />
-          </div>
-          <div className="aspect-[853/755] flex-[1_0_0] min-w-px relative rounded-[2px] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.1)]" data-node-id="1:1533" data-name="image 2">
-            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[2px] size-full" src={imgImage2} />
-          </div>
-          <div className="aspect-[1000/885] flex-[1_0_0] min-w-px relative rounded-[2px] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.1)]" data-node-id="1:1534" data-name="image 3">
-            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[2px] size-full" src={imgImage3} />
-          </div>
+        <div className="featured-row content-stretch flex gap-[24px] items-center justify-center relative shrink-0 w-full" data-node-id="1:1531" data-name="Frame">
+          {about.featured.map((item) => {
+            const image = <img alt={item.name} className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[2px] size-full" src={mediaUrl(item.image)} />
+            const box = "featured-item aspect-[765/677] flex-[1_0_0] max-w-[411px] min-w-px relative rounded-[2px] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.1)]"
+            return item.url ? (
+              <a
+                aria-label={`${item.name || "Featured article"} (opens in a new tab)`}
+                className={`${box} block transition-shadow hover:shadow-[0px_6px_18px_0px_rgba(0,0,0,0.16)]`}
+                href={safeHref(/^([a-z]+:|\/)/i.test(item.url) ? item.url : `https://${item.url}`)}
+                key={item.id}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {image}
+              </a>
+            ) : (
+              <div className={box} key={item.id}>
+                {image}
+              </div>
+            )
+          })}
         </div>
       </div>
       <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-center left-1/2 top-[2375px] w-[1280px]" data-node-id="1:1535" data-name="Frame">
