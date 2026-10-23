@@ -1,4 +1,5 @@
 import { lazy, startTransition, Suspense, useEffect, useLayoutEffect, useMemo, useState, type ComponentType } from "react"
+import { googleFontsHref, loadGoogleFonts, usedGoogleFonts } from "./content/fonts"
 import { loadContent, useContentReady, useSiteContent } from "./content/store"
 import Txt from "./components/Txt"
 import Home from "./pages/Home"
@@ -219,6 +220,10 @@ function Site() {
     const name = service?.title ?? post?.title
     document.title = name ? `${name} | Suchhanda Mondol` : siteTitle
   }, [content, match.page, match.slug])
+
+  // Google Fonts chosen in the dashboard; only the ones in use are downloaded.
+  const fontsHref = useMemo(() => googleFontsHref(usedGoogleFonts(content)), [content])
+  useEffect(() => loadGoogleFonts("site", fontsHref), [fontsHref])
 
   const tracking = content.settings.tracking
   useEffect(() => {

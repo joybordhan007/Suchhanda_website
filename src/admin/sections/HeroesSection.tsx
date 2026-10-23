@@ -29,9 +29,9 @@ function HeroPanel({ page, hero, onChange }: { page: (typeof PAGES)[number]; her
           rows={2}
           value={hero.title}
         />
-        <FontSelect allowDefault={false} label="Title font" onChange={(titleFont) => onChange({ titleFont })} value={hero.titleFont} />
+        <FontSelect label="Title font" onChange={(titleFont) => onChange({ titleFont })} value={hero.titleFont} />
         <TextField hint="Press Enter for a new line." label="Description" multiline onChange={(description) => onChange({ description })} rows={3} value={hero.description} />
-        <FontSelect allowDefault={false} label="Description font" onChange={(descriptionFont) => onChange({ descriptionFont })} value={hero.descriptionFont} />
+        <FontSelect label="Description font" onChange={(descriptionFont) => onChange({ descriptionFont })} value={hero.descriptionFont} />
       </div>
       {/* Preview at a smaller size; the website keeps its own text sizes. */}
       <div className="flex flex-col gap-[10px] rounded-[4px] border border-dashed border-[var(--admin-border-strong)] bg-[#fcfcfd] px-[20px] py-[18px] text-center">
