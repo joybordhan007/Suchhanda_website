@@ -1,3 +1,4 @@
+import Txt, { useSiteText } from "../components/Txt"
 import { Lines } from "../components/HeroText"
 import HighlightText from "../components/HighlightText"
 import { fontStyle } from "../content/fonts"
@@ -19,6 +20,7 @@ const imgClock = `${assetPathPrefix}/ce72e.svg`
 export default function ContactMe() {
   const { settings, heroes } = useSiteContent()
   const hero = heroes.contact
+  const details = useSiteText()("contact.details").style
   const [submitStatus, setSubmitStatus] =
     useState<"idle" | "sending" | "sent" | "error">("idle")
   const [errorText, setErrorText] = useState("")
@@ -109,15 +111,13 @@ export default function ContactMe() {
                 className="leading-[1.2] relative shrink-0 text-[32px] whitespace-nowrap"
                 data-node-id="1:2116"
               >
-                Contact Information
+                <Txt k="contact.infoHeading" />
               </p>
               <p
                 className="leading-[1.3] min-w-full relative shrink-0 text-[18px] w-[min-content]"
                 data-node-id="1:2117"
               >
-                Find all the ways to reach us, including email, phone, and our
-                office address, so you can get the support and answers you need
-                quickly and easily.
+                <Txt className="leading-[1.3]" k="contact.infoText" />
               </p>
             </div>
             <div
@@ -178,7 +178,7 @@ export default function ContactMe() {
                   className="[word-break:break-word] font-['Aileron:Regular'] leading-[1.5] not-italic relative shrink-0 text-[#191919] text-[18px] whitespace-nowrap"
                   data-node-id="1:2124"
                 >
-                  {settings.phone}
+                  <span style={details}>{settings.phone}</span>
                 </p>
               </div>
               <div
@@ -201,7 +201,7 @@ export default function ContactMe() {
                   className="[word-break:break-word] font-['Aileron:Regular'] leading-[1.5] not-italic relative shrink-0 text-[#191919] text-[18px] whitespace-nowrap"
                   data-node-id="1:2127"
                 >
-                  {settings.email}
+                  <span style={details}>{settings.email}</span>
                 </p>
               </div>
               <div
@@ -224,7 +224,7 @@ export default function ContactMe() {
                   className="[word-break:break-word] font-['Aileron:Regular'] leading-[1.5] not-italic relative shrink-0 text-[#191919] text-[18px] w-[392px]"
                   data-node-id="1:2130"
                 >
-                  {settings.address}
+                  <span style={details}>{settings.address}</span>
                 </p>
               </div>
             </div>
@@ -264,7 +264,9 @@ export default function ContactMe() {
                   data-node-id="1:2135"
                 >
                   <p>
-                    <span className="leading-[1.1]">{`First Name `}</span>
+                    <span className="leading-[1.1]">
+                      <Txt className="leading-[1.1]" k="contact.firstName" />{" "}
+                    </span>
                     <span className="leading-[1.1] text-[red]">*</span>
                   </p>
                 </div>
@@ -293,7 +295,9 @@ export default function ContactMe() {
                   data-node-id="1:2139"
                 >
                   <p>
-                    <span className="leading-[1.1]">{`Last Name `}</span>
+                    <span className="leading-[1.1]">
+                      <Txt className="leading-[1.1]" k="contact.lastName" />{" "}
+                    </span>
                     <span className="leading-[1.1] text-[red]">*</span>
                   </p>
                 </div>
@@ -328,7 +332,9 @@ export default function ContactMe() {
                   data-node-id="1:2144"
                 >
                   <p>
-                    <span className="leading-[1.1]">{`Email `}</span>
+                    <span className="leading-[1.1]">
+                      <Txt className="leading-[1.1]" k="contact.email" />{" "}
+                    </span>
                     <span className="leading-[1.1] text-[red]">*</span>
                   </p>
                 </div>
@@ -358,7 +364,9 @@ export default function ContactMe() {
                   data-node-id="1:2148"
                 >
                   <p>
-                    <span className="leading-[1.1]">{`Phone Number `}</span>
+                    <span className="leading-[1.1]">
+                      <Txt className="leading-[1.1]" k="contact.phone" />{" "}
+                    </span>
                     <span className="leading-[1.1] text-[red]">*</span>
                   </p>
                 </div>
@@ -394,7 +402,9 @@ export default function ContactMe() {
                   data-node-id="1:2153"
                 >
                   <p>
-                    <span className="leading-[1.1]">{`Company Name `}</span>
+                    <span className="leading-[1.1]">
+                      <Txt className="leading-[1.1]" k="contact.company" />{" "}
+                    </span>
                     <span className="leading-[1.1] text-[#e80000]">*</span>
                   </p>
                 </div>
@@ -423,7 +433,9 @@ export default function ContactMe() {
                   data-node-id="1:2157"
                 >
                   <p>
-                    <span className="leading-[1.1]">{` Preferred Contact Time `}</span>
+                    <span className="leading-[1.1]">
+                      <Txt className="leading-[1.1]" k="contact.time" />{" "}
+                    </span>
                     <span className="leading-[1.1] text-[red]">*</span>
                   </p>
                 </div>
@@ -469,7 +481,9 @@ export default function ContactMe() {
                 className="[word-break:break-word] flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] not-italic relative shrink-0 text-[#191919] text-[16px] uppercase w-full"
                 data-node-id="1:2162"
               >
-                <p className="leading-[1.1]">Message</p>
+                <p>
+                  <Txt className="leading-[1.1]" k="contact.message" />
+                </p>
               </div>
               <div
                 className="border border-[rgba(25,25,25,0.2)] border-solid content-stretch flex h-[226px] items-start px-[16px] py-[20px] relative rounded-[8px] shrink-0 w-full"
@@ -496,7 +510,7 @@ export default function ContactMe() {
               className="[word-break:break-word] block font-['Aileron:SemiBold'] leading-[1.2] not-italic relative shrink-0 text-[16px] text-white whitespace-nowrap"
               data-node-id="1:2166"
             >
-              {submitStatus === "sending" ? "Sending..." : "Send Inquiry"}
+              {submitStatus === "sending" ? "Sending..." : <Txt k="contact.sendButton" />}
             </span>
           </button>
           {submitStatus !== "idle" && submitStatus !== "sending" && (
@@ -507,7 +521,7 @@ export default function ContactMe() {
               }`}
             >
               {submitStatus === "sent"
-                ? "Your inquiry has been sent. Thank you!"
+                ? <Txt k="contact.sent" />
                 : errorText || `We couldn't send your inquiry. Please try again or email us directly at ${settings.email}.`}
             </p>
           )}

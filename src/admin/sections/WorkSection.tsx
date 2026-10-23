@@ -3,6 +3,7 @@ import { HOME_WORK_LIMIT } from "../../content/selectors"
 import type { WorkItem } from "../../content/types"
 import { mediaUrl } from "../../paths"
 import ImageField from "../components/ImageField"
+import ItemFontsFields from "../components/ItemFontsFields"
 import Modal from "../components/Modal"
 import SectionHeader from "../components/SectionHeader"
 import Table from "../components/Table"
@@ -13,10 +14,10 @@ import Icon from "../components/Icon"
 import { cell, idClass, primaryButton, rowAction, rowActionDanger, rowClass, secondaryButton } from "../styles"
 import { newId, type ManagedSectionProps } from "../types"
 
-type WorkForm = Pick<WorkItem, "image" | "title" | "description">
+type WorkForm = Pick<WorkItem, "image" | "title" | "description" | "fonts">
 
 function WorkModal({ item, onSave, onClose }: { item: WorkItem | null; onSave: (form: WorkForm) => Promise<void>; onClose: () => void }) {
-  const [form, setForm] = useState<WorkForm>({ image: item?.image ?? "", title: item?.title ?? "", description: item?.description ?? "" })
+  const [form, setForm] = useState<WorkForm>({ image: item?.image ?? "", title: item?.title ?? "", description: item?.description ?? "", fonts: item?.fonts })
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState("")
   const set = (patch: Partial<WorkForm>) => setForm((current) => ({ ...current, ...patch }))
@@ -59,6 +60,7 @@ function WorkModal({ item, onSave, onClose }: { item: WorkItem | null; onSave: (
       />
       <TextField autoFocus hint="For example “Meta Ads” or the client's name." label="Work name" onChange={(title) => set({ title })} value={form.title} />
       <TextField label="Short description" multiline onChange={(description) => set({ description })} rows={3} value={form.description} />
+      <ItemFontsFields headingHint="The work name on the Work page." onChange={(fonts) => set({ fonts })} textHint="The short description." value={form.fonts} />
       {error && <p className="text-[14px] text-red-700">{error}</p>}
     </Modal>
   )

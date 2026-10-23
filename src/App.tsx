@@ -1,5 +1,6 @@
 import { lazy, startTransition, Suspense, useEffect, useLayoutEffect, useMemo, useState, type ComponentType } from "react"
 import { loadContent, useContentReady, useSiteContent } from "./content/store"
+import Txt from "./components/Txt"
 import Home from "./pages/Home"
 import { asset, stripBase, withBase } from "./paths"
 import { setupTracking, trackPageView } from "./tracking"
@@ -474,7 +475,7 @@ function Site() {
             data-path="/"
             href={withBase("/")}
           >
-            Home
+            <Txt k="nav.home" />
           </a>
           <div
             className={`site-service-navigation${isServiceMenuOpen ? " is-open" : ""}`}
@@ -486,7 +487,7 @@ function Site() {
               onClick={() => setIsServiceMenuOpen((open) => !open)}
               type="button"
             >
-              Service
+              <Txt k="nav.service" />
               <img
                 alt=""
                 aria-hidden="true"
@@ -513,35 +514,35 @@ function Site() {
             data-path="/work"
             href={withBase("/work")}
           >
-            Work
+            <Txt k="nav.work" />
           </a>
           <a
             aria-current={path === "/about" ? "page" : undefined}
             data-path="/about"
             href={withBase("/about")}
           >
-            About Me
+            <Txt k="nav.about" />
           </a>
           <a
             aria-current={path === "/blog" ? "page" : undefined}
             data-path="/blog"
             href={withBase("/blog")}
           >
-            Blog
+            <Txt k="nav.blog" />
           </a>
           <a
             aria-current={path === "/reviews" ? "page" : undefined}
             data-path="/reviews"
             href={withBase("/reviews")}
           >
-            Reviews
+            <Txt k="nav.reviews" />
           </a>
           <a
             className="site-contact-link"
             data-path="/contact"
             href={withBase("/contact")}
           >
-            Contact Me
+            <Txt k="nav.contact" />
           </a>
         </div>
       </nav>

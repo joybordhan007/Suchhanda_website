@@ -1,9 +1,14 @@
-import { Fragment } from "react"
+import { Fragment, type CSSProperties, type ReactNode } from "react"
 import Footer from "../components/Footer"
 import HighlightText from "../components/HighlightText"
+import { fontStyle } from "../content/fonts"
 import { useSiteContent } from "../content/store"
 import type { TitledItem } from "../content/types"
 import { asset, mediaUrl, withBase } from "../paths"
+import Txt from "../components/Txt"
+
+// The service's chosen fonts: one for headings and titles, one for other text.
+type Fonts = { heading: CSSProperties; body: CSSProperties }
 
 const number = (index: number) => String(index + 1).padStart(2, "0")
 
@@ -11,7 +16,7 @@ function chunk<T>(items: T[], size: number) {
   return Array.from({ length: Math.ceil(items.length / size) }, (_, index) => items.slice(index * size, index * size + size))
 }
 
-function Eyebrow({ children, light = false }: { children: string; light?: boolean }) {
+function Eyebrow({ children, light = false }: { children: ReactNode; light?: boolean }) {
   return (
     <div className="content-stretch flex gap-[19px] items-center relative shrink-0">
       <div className="bg-[#c7994b] h-px relative shrink-0 w-[30px]" />
@@ -25,19 +30,21 @@ function Eyebrow({ children, light = false }: { children: string; light?: boolea
   )
 }
 
-function SectionIntro({ eyebrow, heading, description, light = false }: { eyebrow: string; heading: string; description: string; light?: boolean }) {
+function SectionIntro({ eyebrow, heading, description, fonts, light = false }: { eyebrow: ReactNode; heading: string; description: string; fonts: Fonts; light?: boolean }) {
   return (
     <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full">
       <Eyebrow light={light}>{eyebrow}</Eyebrow>
       <div className={`[word-break:break-word] content-stretch flex flex-col gap-[16px] items-start leading-[0] relative shrink-0 w-full ${light ? "text-white" : "text-[#091e39]"}`}>
         <div className="flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center relative shrink-0 text-[32px] w-full" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-          <p>
+          <p style={fonts.heading}>
             <HighlightText text={heading} />
           </p>
         </div>
         {description && (
           <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center not-italic relative shrink-0 text-[16px] w-full">
-            <p className="leading-[1.4]">{description}</p>
+            <p className="leading-[1.4]" style={fonts.body}>
+              {description}
+            </p>
           </div>
         )}
       </div>
@@ -45,7 +52,7 @@ function SectionIntro({ eyebrow, heading, description, light = false }: { eyebro
   )
 }
 
-function NumberedCard({ item, index, dark = false }: { item: TitledItem; index: number; dark?: boolean }) {
+function NumberedCard({ item, index, fonts, dark = false }: { item: TitledItem; index: number; fonts: Fonts; dark?: boolean }) {
   return (
     <div
       className={`border border-solid content-stretch flex flex-[1_0_0] flex-col gap-[10px] items-start min-w-px p-[16px] relative rounded-[4px] ${
@@ -59,10 +66,14 @@ function NumberedCard({ item, index, dark = false }: { item: TitledItem; index: 
       </div>
       <div className="[word-break:break-word] content-stretch flex flex-col gap-[4px] items-start justify-center leading-[0] not-italic relative shrink-0 w-full">
         <div className={`flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[16px] w-full ${dark ? "text-white" : "text-[#191919]"}`}>
-          <p className="leading-[1.2]">{item.title}</p>
+          <p className="leading-[1.2]" style={fonts.heading}>
+            {item.title}
+          </p>
         </div>
         <div className={`flex flex-col font-['Inter:Regular'] font-normal justify-center relative shrink-0 text-[12px] w-full ${dark ? "text-[#f0f0f0]" : "text-[#1f1f1f]"}`}>
-          <p className="leading-[1.2]">{item.description}</p>
+          <p className="leading-[1.2]" style={fonts.body}>
+            {item.description}
+          </p>
         </div>
       </div>
     </div>
@@ -90,6 +101,7 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
   }
 
   const { detail } = service
+  const fonts: Fonts = { heading: fontStyle(service.fonts?.heading), body: fontStyle(service.fonts?.text) }
 
   return (
     <div className="flow-page bg-[#fefefe] relative w-full" data-node-id="1:877" data-name="Service Details">
@@ -97,14 +109,18 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
         <div className="-translate-x-1/2 [word-break:break-word] absolute content-stretch flex flex-col gap-[32px] items-center left-1/2 text-[#091e39] text-center top-[208px] w-[1132px]" data-node-id="1:879" data-name="Frame">
           <div className="content-stretch flex flex-col gap-[16px] items-center relative shrink-0" data-name="Frame">
             {detail.tagline && (
-              <p className="font-['Anuphan:Regular'] font-normal leading-[1.3] relative shrink-0 text-[16px] uppercase">{detail.tagline}</p>
+              <p className="font-['Anuphan:Regular'] font-normal leading-[1.3] relative shrink-0 text-[16px] uppercase" style={fonts.body}>
+                {detail.tagline}
+              </p>
             )}
-            <h1 className="font-['Noto_Serif:Bold'] font-bold leading-[0] relative shrink-0 text-[64px]" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
+            <h1 className="font-['Noto_Serif:Bold'] font-bold leading-[0] relative shrink-0 text-[64px]" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100', ...fonts.heading }}>
               <HighlightText className="leading-[1.1]" text={detail.heroTitle || service.title} />
             </h1>
           </div>
           {detail.heroDescription && (
-            <p className="font-['Anuphan:Regular'] font-normal leading-[1.3] relative shrink-0 text-[20px] w-full">{detail.heroDescription}</p>
+            <p className="font-['Anuphan:Regular'] font-normal leading-[1.3] relative shrink-0 text-[20px] w-full" style={fonts.body}>
+              {detail.heroDescription}
+            </p>
           )}
         </div>
       </div>
@@ -112,7 +128,7 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
       {detail.offerings.length > 0 && (
         <div className="mx-auto mt-[120px] content-stretch flex gap-[24px] items-center relative w-[1280px]" data-node-id="1:1008" data-name="Frame">
           <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-[504px]">
-            <SectionIntro description={detail.offeringsDescription} eyebrow="Our Services" heading={detail.offeringsHeading || `What's included in *${service.title}*`} />
+            <SectionIntro fonts={fonts} description={detail.offeringsDescription} eyebrow={<Txt k="service.offeringsEyebrow" />} heading={detail.offeringsHeading || `What's included in *${service.title}*`} />
           </div>
           <div className="content-stretch flex flex-[1_0_0] flex-col gap-[24px] items-start min-w-px relative">
             {chunk(detail.offerings, 3).map((row, rowIndex) => (
@@ -126,10 +142,14 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
                     </div>
                     <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start justify-center leading-[0] not-italic relative shrink-0 w-full">
                       <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#191919] text-[20px] w-full">
-                        <p className="leading-[1.2]">{item.title}</p>
+                        <p className="leading-[1.2]" style={fonts.heading}>
+                          {item.title}
+                        </p>
                       </div>
                       <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center relative shrink-0 text-[#1f1f1f] text-[14px] w-full">
-                        <p className="leading-[1.2]">{item.description}</p>
+                        <p className="leading-[1.2]" style={fonts.body}>
+                          {item.description}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -148,12 +168,12 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
         )}
         <div className="content-stretch flex flex-[1_0_0] flex-col gap-[16px] items-start min-w-px relative">
           <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-[504px]">
-            <SectionIntro description={detail.processDescription} eyebrow="How It Works" heading={detail.processHeading || "My Simple *4-Step Process*"} />
+            <SectionIntro fonts={fonts} description={detail.processDescription} eyebrow={<Txt k="service.processEyebrow" />} heading={detail.processHeading || "My Simple *4-Step Process*"} />
           </div>
           {detail.steps.length > 0 && (
             <div className="content-stretch flex gap-[16px] items-stretch relative shrink-0 w-full">
               {detail.steps.map((step, index) => (
-                <NumberedCard index={index} item={step} key={step.id} />
+                <NumberedCard fonts={fonts} index={index} item={step} key={step.id} />
               ))}
             </div>
           )}
@@ -162,9 +182,9 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
 
       <div className="mx-auto mt-[120px] bg-[#191919] content-stretch flex gap-[24px] items-center p-[40px] rounded-[2px] relative w-[1280px]" data-node-id="1:1128" data-name="Frame">
         <div className="content-stretch flex flex-col gap-[57px] items-start relative shrink-0 w-[745px]">
-          <SectionIntro description={detail.whyDescription} eyebrow="Why Choose Me" heading={detail.whyHeading || `Results-Driven *${service.title}*`} light />
+          <SectionIntro fonts={fonts} description={detail.whyDescription} eyebrow={<Txt k="service.whyEyebrow" />} heading={detail.whyHeading || `Results-Driven *${service.title}*`} light />
           <div className="border border-solid border-white content-stretch flex gap-[4px] items-center justify-center p-[16px] relative rounded-[999px] shrink-0" data-name="CTA" data-path="/contact">
-            <p className="[word-break:break-word] font-['Anuphan:Medium'] font-medium leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[0.64px] uppercase whitespace-nowrap">{`Let's work Together`}</p>
+            <p className="[word-break:break-word] font-['Anuphan:Medium'] font-medium leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[0.64px] uppercase whitespace-nowrap"><Txt k="service.button" /></p>
             <div className="relative shrink-0 size-[20px]" data-name="arrow-forward">
               <img alt="" className="absolute block inset-0 max-w-none size-full" src={asset("b3d9b.svg")} />
             </div>
@@ -184,7 +204,7 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
                   {pair.map((feature, index) => (
                     <Fragment key={feature.id}>
                       {index > 0 && <div className="service-features-divider bg-[#d9d9d9] h-[110px] relative shrink-0 w-px" />}
-                      <NumberedCard dark index={rowIndex * 2 + index} item={feature} />
+                      <NumberedCard dark fonts={fonts} index={rowIndex * 2 + index} item={feature} />
                     </Fragment>
                   ))}
                 </div>

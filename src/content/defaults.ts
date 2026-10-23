@@ -197,6 +197,7 @@ export const defaultContent: SiteContent = {
     { id: "teams", name: "Microsoft Teams", image: "/assets/3efa1.svg" },
     { id: "twitter", name: "Twitter", image: "/assets/975d6.svg" },
   ],
+  texts: {},
   about: {
     text: "I’m Suchhanda Mondol, a Digital Marketing Specialist focused on Meta Ads and Google Ads, helping businesses improve their advertising performance through strategic planning, campaign management, and continuous optimization.\n\nI also work with Google Tag Manager, Meta Pixel, conversion tracking, Ads Audit & Optimization, and Conversion Rate Optimization (CRO) to support more effective and measurable marketing.\n\nFor me, marketing goes beyond simply launching campaigns. Every project starts with understanding the business, its audience, and its goals, followed by a strategy tailored to create meaningful and sustainable growth.",
     featured: [

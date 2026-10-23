@@ -70,6 +70,7 @@ function withDefaults(saved: Partial<SiteContent> | null): SiteContent {
     consultation: { ...defaultContent.consultation, ...saved.consultation },
     clientLogos: pick("clientLogos"),
     heroes: withHeroDefaults(saved.heroes),
+    texts: saved.texts && typeof saved.texts === "object" ? saved.texts : {},
     about: {
       text: saved.about?.text ?? defaultContent.about.text,
       featured: Array.isArray(saved.about?.featured) ? saved.about.featured : defaultContent.about.featured,

@@ -1,5 +1,6 @@
 import { useApprovedReviews } from "../content/reviews"
 import ReviewCard from "./ReviewCard"
+import Txt from "./Txt"
 
 const SHOWN = 3
 
@@ -20,7 +21,7 @@ export default function Reviews() {
       ) : (
         loaded && (
           <p className="w-full rounded-[24px] border border-dashed border-[#d9d9d9] px-[32px] py-[48px] text-center font-['Inter:Regular'] text-[18px] text-[#3e3e3e]">
-            No reviews yet. Worked with me? Be the first to share your experience.
+            <Txt className="leading-[1.5]" k="sections.reviewsEmpty" />
           </p>
         )
       )}
@@ -30,7 +31,7 @@ export default function Reviews() {
         data-path="/reviews"
       >
         <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[16px] text-white whitespace-nowrap">
-          {latest.length > 0 ? "View All" : "Write a Review"}
+          <Txt k={latest.length > 0 ? "sections.reviewsButton" : "sections.reviewsEmptyButton"} />
         </p>
       </div>
     </div>

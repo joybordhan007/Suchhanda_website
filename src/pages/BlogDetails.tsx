@@ -1,19 +1,24 @@
 import CtaBanner from "../components/CtaBanner"
 import Footer from "../components/Footer"
 import HighlightText from "../components/HighlightText"
+import { fontStyle } from "../content/fonts"
 import { useSiteContent } from "../content/store"
-import type { BlogBlock } from "../content/types"
+import type { BlogBlock, ItemFonts } from "../content/types"
 import { mediaUrl, withBase } from "../paths"
 
 const lines = (text: string) => text.split("\n").map((line) => line.trim()).filter(Boolean)
 
-function Block({ block }: { block: BlogBlock }) {
+function Block({ block, fonts }: { block: BlogBlock; fonts?: ItemFonts }) {
   switch (block.type) {
     case "heading":
-      return <h2 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[20px]">{block.text}</h2>
+      return (
+        <h2 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[20px]" style={fontStyle(fonts?.heading)}>
+          {block.text}
+        </h2>
+      )
     case "paragraph":
       return (
-        <div className="font-['Inter:Regular'] font-normal text-[18px] w-full">
+        <div className="font-['Inter:Regular'] font-normal text-[18px] w-full" style={fontStyle(fonts?.text)}>
           {lines(block.text).map((line, index) => (
             <p className="leading-[1.3] mb-0" key={index}>
               <HighlightText className="leading-[1.3]" text={line} />
@@ -25,7 +30,7 @@ function Block({ block }: { block: BlogBlock }) {
     case "numbers": {
       const List = block.type === "bullets" ? "ul" : "ol"
       return (
-        <List className={`font-['Inter:Regular'] font-normal text-[18px] w-full ${block.type === "bullets" ? "list-disc" : "list-decimal"}`}>
+        <List className={`font-['Inter:Regular'] font-normal text-[18px] w-full ${block.type === "bullets" ? "list-disc" : "list-decimal"}`} style={fontStyle(fonts?.text)}>
           {lines(block.text).map((line, index) => (
             <li className="ms-[27px] leading-[1.3]" key={index}>
               <HighlightText className="leading-[1.3]" text={line} />
@@ -38,7 +43,11 @@ function Block({ block }: { block: BlogBlock }) {
       return block.image ? (
         <figure className="w-full">
           <img alt={block.text} className="block w-full h-auto border border-[#091e39] border-solid rounded-[2px]" src={mediaUrl(block.image)} />
-          {block.text && <figcaption className="mt-[8px] text-[14px] text-[#3e3e3e]">{block.text}</figcaption>}
+          {block.text && (
+            <figcaption className="mt-[8px] text-[14px] text-[#3e3e3e]" style={fontStyle(fonts?.text)}>
+              {block.text}
+            </figcaption>
+          )}
         </figure>
       ) : null
   }
@@ -85,11 +94,13 @@ export default function BlogDetails({ slug }: { slug?: string }) {
                 {post.label}
               </p>
             )}
-            <h1 className="font-['Inter:Bold'] font-bold leading-[1.2] not-italic relative shrink-0 text-[#091e39] text-[60px] w-full">
+            <h1 className="font-['Inter:Bold'] font-bold leading-[1.2] not-italic relative shrink-0 text-[#091e39] text-[60px] w-full" style={fontStyle(post.fonts?.heading)}>
               {post.title}
             </h1>
             {post.excerpt && (
-              <p className="font-['Inter:Regular'] font-normal leading-[1.2] not-italic relative shrink-0 text-[#091e39] text-[16px] w-full">{post.excerpt}</p>
+              <p className="font-['Inter:Regular'] font-normal leading-[1.2] not-italic relative shrink-0 text-[#091e39] text-[16px] w-full" style={fontStyle(post.fonts?.text)}>
+                {post.excerpt}
+              </p>
             )}
           </div>
         </div>
@@ -102,7 +113,7 @@ export default function BlogDetails({ slug }: { slug?: string }) {
           {groupBlocks(post.blocks).map((group) => (
             <div className="[word-break:break-word] flex flex-col gap-[16px] items-start w-full" key={group[0].id}>
               {group.map((block) => (
-                <Block block={block} key={block.id} />
+                <Block block={block} fonts={post.fonts} key={block.id} />
               ))}
             </div>
           ))}

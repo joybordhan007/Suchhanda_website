@@ -9,6 +9,7 @@ import TrustedLogos from "../components/TrustedLogos"
 import { homeServices, homeWork } from "../content/selectors"
 import { useSiteContent } from "../content/store"
 import { assetPathPrefix, mediaUrl, withBase } from "../paths"
+import Txt from "../components/Txt"
 
 const imgHrManagementFlatIllustration1 = `${assetPathPrefix}/48813.png`
 const imgArrowForward1 = `${assetPathPrefix}/b3d9b.svg`
@@ -20,6 +21,7 @@ export default function Home() {
     ...homeServices(content.services).map((service) => (
       <ServiceCard
         description={service.summary}
+        fonts={service.fonts}
         icon={service.icon}
         key={service.id}
         path={`/service/${service.slug}`}
@@ -27,8 +29,9 @@ export default function Home() {
       />
     )),
     <ServiceCard
-      actionLabel="Contact Me "
+      actionLabel={<Txt k="home.consultationButton" />}
       description={content.consultation.description}
+      fonts={content.consultation.fonts}
       icon={imgHrManagementFlatIllustration1}
       key="consultation"
       path="/contact"
@@ -45,7 +48,7 @@ export default function Home() {
           <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-start leading-[0] relative shrink-0 w-full" data-node-id="1:350" data-name="Frame">
             <ul className="block font-['Inter:Regular'] font-normal not-italic relative shrink-0 text-[18px] text-black uppercase w-full" data-node-id="1:351">
               <li className="list-disc ms-[27px]">
-                <span className="leading-[1.2]">Meta Ads · Google Ads · Specialist</span>
+                <Txt k="home.tagline" />
               </li>
             </ul>
             <div className="content-stretch flex flex-col gap-[32px] items-start relative shrink-0 text-[#191919] w-full whitespace-pre-wrap" data-node-id="1:352" data-name="Frame">
@@ -64,12 +67,12 @@ export default function Home() {
           <div className="content-stretch flex gap-[16px] items-center relative shrink-0" data-node-id="1:355" data-name="Frame">
             <div className="bg-[#091e39] content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-name="CTA" data-path="/work">
               <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[16px] text-white whitespace-nowrap" data-node-id="1:357">
-                Explore Me
+                <Txt k="home.exploreButton" />
               </p>
             </div>
             <div className="border border-[#091e39] border-solid content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-name="CTA" data-path="/contact">
               <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[#091e39] text-[16px] whitespace-nowrap" data-node-id="1:359">
-                Contact Me
+                <Txt k="home.contactButton" />
               </p>
             </div>
           </div>
@@ -85,8 +88,7 @@ export default function Home() {
       <div className="absolute content-stretch flex flex-col gap-[56px] items-start left-[320px] top-[1076px] w-[1280px]" data-node-id="1:376" data-name="Frame">
         <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-full" data-node-id="1:377" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
           <p>
-            <span className="leading-[1.2]">{`End-to-End Digital `}</span>
-            <span className="leading-[1.2] text-[#c7994b]">Marketing Solutions</span>
+            <Txt k="home.servicesHeading" />
           </p>
         </div>
         <div className="content-stretch flex flex-col gap-[56px] items-start relative shrink-0 w-full" data-node-id="1:378" data-name="Frame">
@@ -101,8 +103,7 @@ export default function Home() {
         <div className="content-stretch flex flex-col gap-[56px] items-start relative shrink-0 w-full" data-node-id="1:448" data-name="Frame">
           <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-full" data-node-id="1:449" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
             <p>
-              <span className="leading-[1.2]">{`Real Result. `}</span>
-              <span className="leading-[1.2] text-[#c7994b]">Real Impact</span>
+              <Txt k="home.workHeading" />
             </p>
           </div>
           <div className="content-stretch flex gap-[24px] items-start relative shrink-0 w-full" data-node-id="1:450" data-name="Frame">
@@ -121,15 +122,14 @@ export default function Home() {
         </div>
         <div className="bg-[#091e39] content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-name="CTA" data-path="/work">
           <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[16px] text-white whitespace-nowrap" data-node-id="1:457">
-            View All
+            <Txt k="home.workButton" />
           </p>
         </div>
       </div>
       <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-start left-1/2 top-[2543px] w-[1280px]" data-node-id="1:458" data-name="Frame">
         <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-[1280px]" data-node-id="1:459" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
           <p>
-            <span className="leading-[1.2]">{`Trusted by `}</span>
-            <span className="leading-[1.2] text-[#c7994b]">Businesses of all sizes</span>
+            <Txt k="sections.logosHeading" />
           </p>
         </div>
         <TrustedLogos className="h-[40px] shrink-0 w-[1280px]" />
@@ -138,8 +138,7 @@ export default function Home() {
         <div className="content-stretch flex flex-col gap-[56px] items-start relative shrink-0 w-full" data-node-id="1:462" data-name="Frame">
           <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] w-[1280px]" data-node-id="1:463" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
             <p>
-              <span className="leading-[1.2]">{`Trusted by `}</span>
-              <span className="leading-[1.2] text-[#c7994b]">Businesses Proven by Results</span>
+              <Txt k="sections.reviewsHeading" />
             </p>
           </div>
           <Reviews />
@@ -149,17 +148,17 @@ export default function Home() {
         <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-center leading-[0] not-italic relative shrink-0 text-center w-full" data-node-id="1:474" data-name="Frame">
           <div className="flex flex-col font-['Inter:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[40px] text-white w-[min-content]" data-node-id="1:475">
             <p>
-              <span className="leading-[1.2]">{`Ready to Elevate `}</span>
-              <span className="leading-[1.2] text-[#c7994b]">Your Brand?</span>
+              <Txt k="sections.ctaTitle" />
             </p>
           </div>
           <div className="flex flex-col font-['Aileron:Regular'] justify-center relative shrink-0 text-[#e8e8e8] text-[20px] w-[1189px] whitespace-pre-wrap" data-node-id="1:476">
-            <p className="leading-[1.5] mb-0">{`Let's create something extraordinary together. Schedule a consultation `}</p>
-            <p className="leading-[1.5]">to discuss your vision.</p>
+            <p className="leading-[1.5]">
+              <Txt className="leading-[1.5]" k="sections.ctaText" />
+            </p>
           </div>
         </div>
         <div className="border border-solid border-white content-stretch flex gap-[4px] items-center justify-center p-[16px] relative rounded-[999px] shrink-0" data-name="CTA" data-path="/contact">
-          <p className="[word-break:break-word] font-['Anuphan:Medium'] font-medium leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[0.64px] uppercase whitespace-nowrap" data-node-id="1:478">{`Let's work Together`}</p>
+          <p className="[word-break:break-word] font-['Anuphan:Medium'] font-medium leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[0.64px] uppercase whitespace-nowrap" data-node-id="1:478"><Txt k="sections.ctaButton" /></p>
           <div className="relative shrink-0 size-[20px]" data-node-id="1:479" data-name="arrow-forward">
             <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForward1} />
           </div>

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { useSiteContent } from "../content/store"
+import { useSiteText } from "./Txt"
 
 function AnimatedValue({ value, suffix }: { value: number; suffix: string }) {
   const [count, setCount] = useState(0)
@@ -51,6 +52,7 @@ function AnimatedValue({ value, suffix }: { value: number; suffix: string }) {
 
 export default function Stats({ className }: { className: string }) {
   const { stats } = useSiteContent()
+  const text = useSiteText()
   return (
     <div
       className={`achievement-stats ${className}`}
@@ -61,10 +63,10 @@ export default function Stats({ className }: { className: string }) {
           className="achievement-card"
           key={id}
         >
-          <div className="achievement-value">
+          <div className="achievement-value" style={text("sections.achievementNumber").style}>
             <AnimatedValue value={value} suffix={suffix} />
           </div>
-          <div className="achievement-label">
+          <div className="achievement-label" style={text("sections.achievementLabel").style}>
             <p>{label}</p>
           </div>
         </div>

@@ -5,6 +5,7 @@ import type { Service, ServiceDetail } from "../../content/types"
 import { siteHref } from "../../paths"
 import EditorBar from "../components/EditorBar"
 import ImageField from "../components/ImageField"
+import ItemFontsFields from "../components/ItemFontsFields"
 import ListEditor from "../components/ListEditor"
 import NameModal from "../components/NameModal"
 import Panel from "../components/Panel"
@@ -111,6 +112,16 @@ function ServiceEditor({ service, otherHomeCount, onSave, onBack }: ServiceEdito
           value={value.icon}
         />
       </PageSection>
+
+      <section className="admin-card flex flex-col gap-[16px] p-[18px] sm:p-[24px]">
+        <h2 className="text-[16px] font-semibold text-[var(--admin-text)]">Fonts</h2>
+        <ItemFontsFields
+          headingHint="Service name on the card and all headings and titles on the service page."
+          onChange={(fonts) => update({ fonts })}
+          textHint="Short description and all other text on the service page."
+          value={value.fonts}
+        />
+      </section>
 
       <PageSection step={2} title="Page top (hero)">
         <TextField
@@ -238,6 +249,7 @@ function ConsultationPanel({ content, commit }: Pick<ManagedSectionProps, "conte
           value={editor.value.description}
         />
       </div>
+      <ItemFontsFields onChange={(fonts) => editor.update({ fonts })} value={editor.value.fonts} />
       <div className="flex items-center gap-[12px]">
         <button className={primaryButton} disabled={!editor.isDirty || editor.saving} onClick={() => void editor.submit()} type="button">
           {editor.saving ? "Saving…" : "Save card"}

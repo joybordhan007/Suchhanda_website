@@ -6,6 +6,7 @@ import Stats from "../components/Stats"
 
 import { useSiteContent } from "../content/store"
 import { assetPathPrefix, mediaUrl, safeHref } from "../paths";
+import Txt, { useSiteText } from "../components/Txt"
 const imgImage4 = `${assetPathPrefix}/164ce.png`;
 const imgImage5 = `${assetPathPrefix}/72b1a.png`;
 const imgImage6 = `${assetPathPrefix}/953fa.png`;
@@ -15,6 +16,7 @@ const imgGroup4 = `${assetPathPrefix}/0f14c.svg`;
 export default function AboutMe() {
   const { images, settings, heroes, about } = useSiteContent()
   const hero = heroes.about
+  const aboutTextStyle = useSiteText()("about.aboutText").style
   // An empty line in the dashboard text starts a new paragraph.
   const paragraphs = about.text.split(/\n\s*\n/).map((paragraph) => paragraph.trim()).filter(Boolean)
   return (
@@ -36,12 +38,12 @@ export default function AboutMe() {
           <div className="content-stretch flex gap-[16px] items-center relative shrink-0" data-node-id="1:1409" data-name="Frame">
             <div className="bg-[#091e39] content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-node-id="1:1410" data-name="Frame" data-path="/work">
               <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[16px] text-white whitespace-nowrap" data-node-id="1:1411">
-                View Work
+                <Txt k="about.workButton" />
               </p>
             </div>
             <div className="border border-[#091e39] border-solid content-stretch flex items-center justify-center px-[20px] py-[16.5px] relative rounded-[999px] shrink-0 w-[176px]" data-node-id="1:1412" data-name="Frame" data-path="/contact">
               <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.2] not-italic relative shrink-0 text-[#091e39] text-[16px] whitespace-nowrap" data-node-id="1:1413">
-                Contact Me
+                <Txt k="about.contactButton" />
               </p>
             </div>
           </div>
@@ -52,17 +54,17 @@ export default function AboutMe() {
         <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-center leading-[0] not-italic relative shrink-0 text-center w-full" data-node-id="1:1428" data-name="Frame">
           <div className="flex flex-col font-['Inter:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[40px] text-white w-[min-content]" data-node-id="1:1429">
             <p>
-              <span className="leading-[1.2]">{`Ready to Elevate `}</span>
-              <span className="leading-[1.2] text-[#c7994b]">Your Brand?</span>
+              <Txt k="sections.ctaTitle" />
             </p>
           </div>
           <div className="flex flex-col font-['Aileron:Regular'] justify-center relative shrink-0 text-[#e8e8e8] text-[20px] w-[1189px] whitespace-pre-wrap" data-node-id="1:1430">
-            <p className="leading-[1.5] mb-0">{`Let's create something extraordinary together. Schedule a consultation `}</p>
-            <p className="leading-[1.5]">to discuss your vision.</p>
+            <p className="leading-[1.5]">
+              <Txt className="leading-[1.5]" k="sections.ctaText" />
+            </p>
           </div>
         </div>
         <div className="border border-solid border-white content-stretch flex gap-[4px] items-center justify-center p-[16px] relative rounded-[999px] shrink-0" data-name="CTA" data-path="/contact">
-          <p className="[word-break:break-word] font-['Anuphan:Medium'] font-medium leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[0.64px] uppercase whitespace-nowrap" data-node-id="1:1432">{`Let's work Together`}</p>
+          <p className="[word-break:break-word] font-['Anuphan:Medium'] font-medium leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[0.64px] uppercase whitespace-nowrap" data-node-id="1:1432"><Txt k="sections.ctaButton" /></p>
           <div className="relative shrink-0 size-[20px]" data-node-id="1:1433" data-name="arrow-forward">
             <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForward} />
           </div>
@@ -81,7 +83,7 @@ export default function AboutMe() {
                 data-node-id={index === 0 ? "1:1519" : undefined}
                 key={index}
               >
-                <p className="leading-[1.4]">
+                <p className="leading-[1.4]" style={aboutTextStyle}>
                   <Lines text={paragraph} />
                 </p>
               </div>
@@ -94,7 +96,9 @@ export default function AboutMe() {
       </div>
       <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-center left-1/2 top-[1802px] w-[1280px]" data-node-id="1:1529" data-name="Frame">
         <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] whitespace-nowrap" data-node-id="1:1530" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-          <p className="leading-[1.2]">Featured In</p>
+          <p>
+            <Txt k="about.featuredHeading" />
+          </p>
         </div>
         <div className="featured-row content-stretch flex gap-[24px] items-center justify-center relative shrink-0 w-full" data-node-id="1:1531" data-name="Frame">
           {about.featured.map((item) => {
@@ -121,7 +125,9 @@ export default function AboutMe() {
       </div>
       <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[56px] items-center left-1/2 top-[2375px] w-[1280px]" data-node-id="1:1535" data-name="Frame">
         <div className="[word-break:break-word] flex flex-col font-['Noto_Serif:SemiBold'] font-semibold justify-center leading-[0] relative shrink-0 text-[#191919] text-[32px] whitespace-nowrap" data-node-id="1:1536" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-          <p className="leading-[1.2]">Certification &amp; Award</p>
+          <p>
+            <Txt k="about.certificationsHeading" />
+          </p>
         </div>
         <div className="content-stretch flex gap-[24px] items-center relative shrink-0 w-full" data-node-id="1:1537" data-name="Frame">
           <div className="aspect-[1024/791] flex-[1_0_0] min-w-px relative rounded-[2px] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.1)]" data-node-id="1:1538" data-name="image 4">

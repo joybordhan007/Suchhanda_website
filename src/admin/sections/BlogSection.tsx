@@ -5,6 +5,7 @@ import { mediaUrl, siteHref } from "../../paths"
 import BlockEditor from "../components/BlockEditor"
 import EditorBar from "../components/EditorBar"
 import ImageField from "../components/ImageField"
+import ItemFontsFields from "../components/ItemFontsFields"
 import NameModal from "../components/NameModal"
 import SectionHeader from "../components/SectionHeader"
 import Table from "../components/Table"
@@ -98,6 +99,15 @@ function PostEditor({
           value={value.excerpt}
         />
         <TagsField onChange={(tags) => update({ tags })} tags={value.tags} />
+      </EditorPanel>
+
+      <EditorPanel title="Fonts">
+        <ItemFontsFields
+          headingHint="Title on the card and the article page, and headings in the article."
+          onChange={(fonts) => update({ fonts })}
+          textHint="Summary and the article text."
+          value={value.fonts}
+        />
       </EditorPanel>
 
       <EditorPanel title="Publishing">

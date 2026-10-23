@@ -1,3 +1,5 @@
+import type { SiteTexts } from "./siteText"
+
 // Image fields hold a URL: "/uploads/..." for uploaded images, "/assets/..." for the
 // images the site shipped with, or a full https:// link.
 
@@ -73,10 +75,15 @@ export type ServiceDetail = {
   features: TitledItem[]
 }
 
+// Fonts chosen for one service, work item or post (FontStyleId values; "" keeps the
+// design's font): one for its headings and titles, one for its other text.
+export type ItemFonts = { heading: string; text: string }
+
 export type Service = ListEntry & {
   slug: string
   title: string
   summary: string
+  fonts?: ItemFonts
   icon: string
   // Inactive services are hidden from the website but kept in the dashboard.
   active: boolean
@@ -88,6 +95,7 @@ export type Service = ListEntry & {
 export type ConsultationCard = {
   title: string
   description: string
+  fonts?: ItemFonts
 }
 
 export type ClientLogo = {
@@ -123,6 +131,7 @@ export type HeroText = {
 export type WorkItem = ListEntry & {
   title: string
   description: string
+  fonts?: ItemFonts
   image: string
   active: boolean
   // Shown in "Real Result. Real Impact" on the Home page (the newest HOME_WORK_LIMIT).
@@ -143,6 +152,7 @@ export type BlogPost = ListEntry & {
   slug: string
   title: string
   excerpt: string
+  fonts?: ItemFonts
   label: string
   tags: string[]
   coverImage: string
@@ -175,6 +185,8 @@ export type SiteContent = {
   clientLogos: ClientLogo[]
   heroes: Record<HeroPage, HeroText>
   about: AboutContent
+  // Changes to the fixed website text (see content/siteText.ts).
+  texts: SiteTexts
   work: WorkItem[]
   blog: BlogPost[]
   updatedAt: string | null

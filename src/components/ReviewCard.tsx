@@ -1,5 +1,6 @@
 import type { Review } from "../content/types"
 import { mediaUrl } from "../paths"
+import { useSiteText } from "./Txt"
 
 export function Stars({ rating, size = 18 }: { rating: number; size?: number }) {
   return (
@@ -31,20 +32,23 @@ export function ReviewAvatar({ name, image, size = 56 }: { name: string; image: 
 
 // Review text first, then the reviewer: photo, name and star rating.
 export default function ReviewCard({ review, clamp = true }: { review: Review; clamp?: boolean }) {
+  const text = useSiteText()
   return (
     <figure className="review-card flex h-full flex-col justify-between gap-[32px] rounded-[24px] border border-[#ececec] bg-white p-[32px] shadow-[0px_1px_5px_rgba(0,0,0,0.06)]">
       <div className="flex flex-col gap-[16px]">
         <svg aria-hidden="true" className="shrink-0" fill="#c7994b" height="28" viewBox="0 0 32 24" width="36">
           <path d="M0 24V14.4C0 6.4 4.3 1.6 12.8 0l1.4 3.2C9.4 4.6 7.2 7.3 7 11.2h6v12.8H0zm18 0V14.4C18 6.4 22.3 1.6 30.8 0l1.4 3.2c-4.8 1.4-7 4.1-7.2 8H31v12.8H18z" />
         </svg>
-        <blockquote className={`font-['Inter:Regular'] text-[18px] leading-[1.5] text-[#3e3e3e] whitespace-pre-line [word-break:break-word] ${clamp ? "line-clamp-6" : ""}`}>
+        <blockquote className={`font-['Inter:Regular'] text-[18px] leading-[1.5] text-[#3e3e3e] whitespace-pre-line [word-break:break-word] ${clamp ? "line-clamp-6" : ""}`} style={text("sections.reviewText").style}>
           {review.text}
         </blockquote>
       </div>
       <figcaption className="flex items-center gap-[16px] border-t border-[#f0f0f0] pt-[24px]">
         <ReviewAvatar image={review.image} name={review.name} />
         <span className="flex min-w-0 flex-col gap-[6px]">
-          <span className="truncate font-['Inter:Semi_Bold'] text-[18px] font-semibold leading-[1.2] text-[#191919]">{review.name}</span>
+          <span className="truncate font-['Inter:Semi_Bold'] text-[18px] font-semibold leading-[1.2] text-[#191919]" style={text("sections.reviewName").style}>
+            {review.name}
+          </span>
           <Stars rating={review.rating} />
         </span>
       </figcaption>

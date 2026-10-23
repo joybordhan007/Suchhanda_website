@@ -7,6 +7,7 @@ import { publishedPosts } from "../content/selectors"
 import { useSiteContent } from "../content/store"
 import type { BlogPost } from "../content/types"
 import { assetPathPrefix, mediaUrl, withBase } from "../paths"
+import Txt from "../components/Txt"
 
 const imgArrowForward = `${assetPathPrefix}/b1262.svg`
 
@@ -38,16 +39,22 @@ function BlogCard({ post }: { post: BlogPost }) {
             )}
             <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 text-[#091e39] text-left w-full">
               <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[20px] w-full">
-                <p className="blog-card-title leading-[1.2]">{post.title}</p>
+                <p className="blog-card-title leading-[1.2]" style={fontStyle(post.fonts?.heading)}>
+                  {post.title}
+                </p>
               </div>
               <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center relative shrink-0 text-[18px] w-full">
-                <p className="blog-card-excerpt leading-[1.3]">{post.excerpt}</p>
+                <p className="blog-card-excerpt leading-[1.3]" style={fontStyle(post.fonts?.text)}>
+                  {post.excerpt}
+                </p>
               </div>
             </div>
           </div>
           <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-full">
             <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#c7994b] text-[16px] text-left whitespace-nowrap">
-              <p className="leading-[1.2]">Read Now</p>
+              <p>
+                <Txt k="blog.readMore" />
+              </p>
             </div>
             <div className="relative shrink-0 size-[20px]" data-name="arrow-forward">
               <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForward} />
@@ -78,7 +85,9 @@ export default function Blog() {
         </div>
       </div>
       <div className="mx-auto flex flex-col gap-[56px] items-start w-[1280px]" data-node-id="1:1588" data-name="Frame">
-        {posts.length === 0 && <p className="w-full text-center text-[18px] text-[#3e3e3e]">New articles are coming soon.</p>}
+        {posts.length === 0 && <p className="w-full text-center text-[18px] text-[#3e3e3e]">
+            <Txt k="blog.empty" />
+          </p>}
         {rows.map((row, index) => (
           <div className="content-stretch flex gap-[24px] items-stretch relative shrink-0 w-full" key={index}>
             {row.map((post) => (

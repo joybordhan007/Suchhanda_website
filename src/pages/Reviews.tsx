@@ -8,6 +8,7 @@ import ReviewModal from "../components/ReviewModal"
 import { fontStyle } from "../content/fonts"
 import { useApprovedReviews } from "../content/reviews"
 import { useSiteContent } from "../content/store"
+import Txt from "../components/Txt"
 
 // Same layout as the Blog page, so it shares the Blog hero's node ids (and their mobile styles).
 // Every approved review, newest first, and the "Add Review" popup for visitors.
@@ -39,7 +40,7 @@ export default function Reviews() {
               <span aria-hidden="true" className="text-[20px] leading-[0.8]">
                 +
               </span>
-              Add Review
+              <Txt k="reviews.addButton" />
             </button>
             {reviews.length > 0 && (
               <span className="flex items-center gap-[10px] font-['Inter:Regular'] text-[16px] text-[#3e3e3e]">
@@ -56,7 +57,7 @@ export default function Reviews() {
       <div className="mx-auto flex flex-col gap-[24px] items-start w-[1280px]" data-name="Frame">
         {loaded && reviews.length === 0 && (
           <p className="w-full rounded-[24px] border border-dashed border-[#d9d9d9] px-[32px] py-[56px] text-center font-['Inter:Regular'] text-[18px] text-[#3e3e3e]">
-            No reviews yet. Be the first to share your experience.
+            <Txt className="leading-[1.5]" k="reviews.empty" />
           </p>
         )}
         {rows.map((row, index) => (

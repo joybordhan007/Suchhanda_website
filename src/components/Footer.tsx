@@ -1,42 +1,50 @@
+import type { CSSProperties } from "react"
+import type { TextKey } from "../content/siteText"
 import { useSiteContent } from "../content/store"
 import { asset, mediaUrl, safeHref, withBase } from "../paths"
+import Txt, { useSiteText } from "./Txt"
 
 type FooterProps = {
   top?: number
 }
 
+// Labels come from Site Text; the quick links share the menu's labels.
 const quickLinks = [
-  ["Home", "/"],
-  ["Service", "/service"],
-  ["Work", "/work"],
-  ["About Me", "/about"],
-  ["Blog", "/blog"],
-  ["Reviews", "/reviews"],
-] as const
+  ["nav.home", "/"],
+  ["nav.service", "/service"],
+  ["nav.work", "/work"],
+  ["nav.about", "/about"],
+  ["nav.blog", "/blog"],
+  ["nav.reviews", "/reviews"],
+] as const satisfies readonly (readonly [TextKey, string])[]
 
 const supportLinks = [
-  ["Contact Us", "/contact"],
-  ["Privacy Policy", "/privacy-policy"],
-  ["Terms of Service", "/terms-of-service"],
-] as const
+  ["footer.contactUs", "/contact"],
+  ["footer.privacy", "/privacy-policy"],
+  ["footer.terms", "/terms-of-service"],
+] as const satisfies readonly (readonly [TextKey, string])[]
 
 function FooterLinks({
   title,
   links,
+  linkStyle,
 }: {
-  title: string
-  links: readonly (readonly [string, string])[]
+  title: TextKey
+  links: readonly (readonly [TextKey, string])[]
+  linkStyle: CSSProperties
 }) {
   return (
     <section className="flex flex-col items-start gap-[24px]">
       <h2 className="font-['Inter:Semi_Bold'] text-[20px] font-semibold leading-[1.2] text-[#191919]">
-        {title}
+        <Txt k={title} />
       </h2>
       <ul className="flex flex-col items-start gap-[16px]">
         {links.map(([label, href]) => (
           <li key={href}>
             <a className="footer-link" data-path={href} href={withBase(href)}>
-              {label}
+              <span style={linkStyle}>
+                <Txt k={label} />
+              </span>
             </a>
           </li>
         ))}
@@ -47,6 +55,7 @@ function FooterLinks({
 
 export default function Footer({ top }: FooterProps) {
   const { settings } = useSiteContent()
+  const linkStyle = useSiteText()("footer.links").style
   // Pages laid out in normal flow omit `top`; the design-canvas pages position it absolutely.
   const isAbsolute = top !== undefined
   return (
@@ -64,9 +73,7 @@ export default function Footer({ top }: FooterProps) {
             />
           </div>
           <p>
-            I’m {settings.ownerName} — helping brands scale faster with
-            high-converting ads, precise tracking, and performance-driven
-            strategy that delivers real, lasting results.
+            <Txt className="" k="footer.about" />
           </p>
           <div
             aria-label="Social media"
@@ -93,16 +100,16 @@ export default function Footer({ top }: FooterProps) {
           </div>
         </div>
         <div className="site-footer-navigation">
-          <FooterLinks links={quickLinks} title="Quick Links" />
-          <FooterLinks links={supportLinks} title="Support" />
+          <FooterLinks linkStyle={linkStyle} links={quickLinks} title="footer.quickLinks" />
+          <FooterLinks linkStyle={linkStyle} links={supportLinks} title="footer.support" />
           <section className="site-footer-contact flex flex-col items-start gap-[24px]">
             <h2 className="font-['Inter:Semi_Bold'] text-[20px] font-semibold leading-[1.2] text-[#191919]">
-              Contact Info
+              <Txt k="footer.contactInfo" />
             </h2>
             <ul className="flex flex-col items-start gap-[16px]">
               <li>
                 <a className="footer-link" href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>
-                  {settings.phone}
+                  <span style={linkStyle}>{settings.phone}</span>
                 </a>
               </li>
               <li>
@@ -110,7 +117,7 @@ export default function Footer({ top }: FooterProps) {
                   className="footer-link"
                   href={`mailto:${settings.email}`}
                 >
-                  {settings.email}
+                  <span style={linkStyle}>{settings.email}</span>
                 </a>
               </li>
               <li>
@@ -120,7 +127,7 @@ export default function Footer({ top }: FooterProps) {
                   rel="noreferrer"
                   target="_blank"
                 >
-                  {settings.address}
+                  <span style={linkStyle}>{settings.address}</span>
                 </a>
               </li>
             </ul>
@@ -128,7 +135,9 @@ export default function Footer({ top }: FooterProps) {
         </div>
       </div>
       <div className="site-footer-bottom">
-        <p>Copyright © {new Date().getFullYear()} SUCHHANDA MONDOL</p>
+        <p>
+          <Txt className="" k="footer.copyright" />
+        </p>
         <p>
           Website Designed and Developed by{" "}
           <a href="https://designops.agency" rel="noopener" target="_blank">

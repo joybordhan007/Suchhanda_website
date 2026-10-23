@@ -1,8 +1,8 @@
-import { useId } from "react"
 import { Lines } from "../../components/HeroText"
 import HighlightText from "../../components/HighlightText"
-import { FONT_STYLES, fontStyle } from "../../content/fonts"
+import { fontStyle } from "../../content/fonts"
 import type { HeroPage, HeroText } from "../../content/types"
+import FontSelect from "../components/FontSelect"
 import Panel from "../components/Panel"
 import SectionHeader from "../components/SectionHeader"
 import TextField from "../components/TextField"
@@ -17,24 +17,6 @@ const PAGES: { id: HeroPage; label: string; path: string }[] = [
   { id: "contact", label: "Contact", path: "/contact" },
 ]
 
-function FontSelect({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
-  const id = useId()
-  return (
-    <div className="flex flex-col gap-[6px]">
-      <label className="admin-label" htmlFor={id}>
-        {label}
-      </label>
-      <select className="admin-input" id={id} onChange={(event) => onChange(event.target.value)} style={fontStyle(value)} value={value}>
-        {FONT_STYLES.map((font) => (
-          <option key={font.id} style={fontStyle(font.id)} value={font.id}>
-            {font.label}
-          </option>
-        ))}
-      </select>
-    </div>
-  )
-}
-
 function HeroPanel({ page, hero, onChange }: { page: (typeof PAGES)[number]; hero: HeroText; onChange: (patch: Partial<HeroText>) => void }) {
   return (
     <Panel description={`Top of the ${page.label} page (${page.path}).`} title={page.label}>
@@ -47,9 +29,9 @@ function HeroPanel({ page, hero, onChange }: { page: (typeof PAGES)[number]; her
           rows={2}
           value={hero.title}
         />
-        <FontSelect label="Title font" onChange={(titleFont) => onChange({ titleFont })} value={hero.titleFont} />
+        <FontSelect allowDefault={false} label="Title font" onChange={(titleFont) => onChange({ titleFont })} value={hero.titleFont} />
         <TextField hint="Press Enter for a new line." label="Description" multiline onChange={(description) => onChange({ description })} rows={3} value={hero.description} />
-        <FontSelect label="Description font" onChange={(descriptionFont) => onChange({ descriptionFont })} value={hero.descriptionFont} />
+        <FontSelect allowDefault={false} label="Description font" onChange={(descriptionFont) => onChange({ descriptionFont })} value={hero.descriptionFont} />
       </div>
       {/* Preview at a smaller size; the website keeps its own text sizes. */}
       <div className="flex flex-col gap-[10px] rounded-[4px] border border-dashed border-[var(--admin-border-strong)] bg-[#fcfcfd] px-[20px] py-[18px] text-center">

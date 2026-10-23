@@ -1,4 +1,5 @@
 import { asset } from "../paths"
+import Txt from "./Txt"
 
 // "Ready to Elevate Your Brand?" band shown above the footer. `nodeId` keeps the
 // page-specific mobile styles in index.css working.
@@ -12,13 +13,13 @@ export default function CtaBanner({ className = "", nodeId }: { className?: stri
       <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-center leading-[0] not-italic relative shrink-0 text-center w-full">
         <div className="flex flex-col font-['Inter:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[40px] text-white w-[min-content]">
           <p>
-            <span className="leading-[1.2]">{`Ready to Elevate `}</span>
-            <span className="leading-[1.2] text-[#c7994b]">Your Brand?</span>
+            <Txt k="sections.ctaTitle" />
           </p>
         </div>
         <div className="flex flex-col font-['Aileron:Regular'] justify-center relative shrink-0 text-[#e8e8e8] text-[20px] w-[1189px] whitespace-pre-wrap">
-          <p className="leading-[1.5] mb-0">{`Let's create something extraordinary together. Schedule a consultation `}</p>
-          <p className="leading-[1.5]">to discuss your vision.</p>
+          <p className="leading-[1.5]">
+            <Txt className="leading-[1.5]" k="sections.ctaText" />
+          </p>
         </div>
       </div>
       <div
@@ -26,7 +27,7 @@ export default function CtaBanner({ className = "", nodeId }: { className?: stri
         data-name="CTA"
         data-path="/contact"
       >
-        <p className="[word-break:break-word] font-['Anuphan:Medium'] font-medium leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[0.64px] uppercase whitespace-nowrap">{`Let's work Together`}</p>
+        <p className="[word-break:break-word] font-['Anuphan:Medium'] font-medium leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[0.64px] uppercase whitespace-nowrap"><Txt k="sections.ctaButton" /></p>
         <div className="relative shrink-0 size-[20px]" data-name="arrow-forward">
           <img alt="" className="absolute block inset-0 max-w-none size-full" src={asset("b3d9b.svg")} />
         </div>

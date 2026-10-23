@@ -16,6 +16,7 @@ import ProfileSection from "./sections/ProfileSection"
 import ReviewsSection from "./sections/ReviewsSection"
 import ServicesSection from "./sections/ServicesSection"
 import SettingsSection from "./sections/SettingsSection"
+import SiteTextSection from "./sections/SiteTextSection"
 import StatsSection from "./sections/StatsSection"
 import WorkSection from "./sections/WorkSection"
 import type { ManagedSectionProps, SectionProps } from "./types"
@@ -40,7 +41,8 @@ const navGroups = [
   {
     label: "Website",
     items: [
-      { id: "heroes", label: "Page Heroes", icon: "type" },
+      { id: "texts", label: "Site Text", icon: "type" },
+      { id: "heroes", label: "Page Heroes", icon: "edit" },
       { id: "about", label: "About Page", icon: "user" },
       { id: "stats", label: "Achievements", icon: "award" },
       { id: "logos", label: "Client Logos", icon: "logos" },
@@ -60,6 +62,7 @@ const sectionLabels: Record<string, string> = {
 
 // Edited as a whole and saved with the Save button next to the section title.
 const draftSections: Partial<Record<SectionId, ComponentType<SectionProps>>> = {
+  texts: SiteTextSection,
   heroes: HeroesSection,
   about: AboutSection,
   stats: StatsSection,

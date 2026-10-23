@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react"
 import { createPortal } from "react-dom"
 import { submitReview } from "../content/reviews"
+import Txt from "./Txt"
 
 const MAX_PHOTO_BYTES = 2 * 1024 * 1024
 const MAX_TEXT = 1000
@@ -77,9 +78,13 @@ export default function ReviewModal({ onClose }: { onClose: () => void }) {
         <div className="flex items-start justify-between gap-[16px] border-b border-[#f0f0f0] px-[24px] py-[20px]">
           <div>
             <h2 className="font-['Noto_Serif:Bold'] text-[24px] font-bold leading-[1.2] text-[#191919]" id="review-modal-title">
-              {status === "sent" ? "Thank you!" : <>Share your <span className="text-[#c7994b]">experience</span></>}
+              <Txt k={status === "sent" ? "reviews.thanksTitle" : "reviews.formTitle"} />
             </h2>
-            {status !== "sent" && <p className="mt-[6px] text-[14px] text-[#667085]">Your review appears on the website after it is approved.</p>}
+            {status !== "sent" && (
+              <p className="mt-[6px] text-[14px] text-[#667085]">
+                <Txt className="leading-[1.4]" k="reviews.formText" />
+              </p>
+            )}
           </div>
           <button aria-label="Close" className="flex size-[36px] shrink-0 items-center justify-center rounded-full text-[#667085] transition hover:bg-[#f5f5f5] hover:text-[#191919]" onClick={onClose} type="button">
             <svg aria-hidden="true" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeWidth="2" viewBox="0 0 24 24" width="20">
@@ -95,7 +100,8 @@ export default function ReviewModal({ onClose }: { onClose: () => void }) {
                 <path d="M5 12.5l4.5 4.5L19 7.5" />
               </svg>
             </span>
-            <p className="max-w-[360px] text-[16px] leading-[1.5] text-[#3e3e3e]">Your review has been sent. It will be shown on the website as soon as it is approved.</p>
+            <p className="max-w-[360px] text-[16px] leading-[1.5] text-[#3e3e3e]"><Txt className="leading-[1.5]" k="reviews.thanksText" />
+            </p>
             <button className="mt-[8px] rounded-full bg-[#091e39] px-[28px] py-[14px] text-[15px] font-medium text-white transition hover:bg-[#12305a]" onClick={onClose} type="button">
               Done
             </button>
@@ -197,7 +203,7 @@ export default function ReviewModal({ onClose }: { onClose: () => void }) {
               disabled={status === "sending"}
               type="submit"
             >
-              {status === "sending" ? "Sending…" : "Submit review"}
+              {status === "sending" ? "Sending…" : <Txt k="reviews.formButton" />}
             </button>
           </form>
         )}
