@@ -491,6 +491,44 @@ export function createApp() {
 
   app.all("/api/*", (c) => c.json({ error: "Not found." }, 404))
 
+  // ---- Search engines ---------------------------------------------------
+  // The admin domain is never indexed; the website lists its sitemap.
+  app.get("/robots.txt", (c) => {
+    const body = isAdminHost(c)
+      ? "User-agent: *\nDisallow: /\n"
+      : `User-agent: *\nAllow: /\nDisallow: /admin\n\nSitemap: ${siteUrlFor(c)}/sitemap.xml\n`
+    return c.text(body, 200, { "Cache-Control": "public, max-age=3600" })
+  })
+
+  // Every public page, including each active service and published post, built from the
+  // saved content so new pages appear as soon as they are published.
+  app.get("/sitemap.xml", (c) => {
+    if (isAdminHost(c)) return c.notFound()
+    const row = db.prepare("SELECT json, updated_at AS updatedAt FROM content WHERE id = 1").get() as { json: string; updatedAt: string } | undefined
+    const content = (row ? JSON.parse(row.json) : {}) as {
+      services?: { slug?: string; active?: boolean }[]
+      blog?: { slug?: string; status?: string; publishedAt?: string }[]
+    }
+    const base = siteUrlFor(c)
+    const day = (date: string | undefined) => (date && !Number.isNaN(Date.parse(date)) ? new Date(date).toISOString().slice(0, 10) : undefined)
+    const siteDay = day(row?.updatedAt)
+    const pages: { path: string; lastmod?: string }[] = [
+      ...["/", "/work", "/about", "/blog", "/reviews", "/contact", "/privacy-policy", "/terms-of-service"].map((path) => ({ path, lastmod: siteDay })),
+      ...(content.services ?? [])
+        .filter((service) => service.slug && service.active !== false)
+        .map((service) => ({ path: `/service/${service.slug}`, lastmod: siteDay })),
+      ...(content.blog ?? [])
+        .filter((post) => post.slug && post.status === "published")
+        .map((post) => ({ path: `/blog/${post.slug}`, lastmod: day(post.publishedAt) ?? siteDay })),
+    ]
+    const escape = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    const urls = pages
+      .map(({ path, lastmod }) => `  <url>\n    <loc>${escape(base + path)}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ""}\n  </url>`)
+      .join("\n")
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
+    return c.body(xml, 200, { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" })
+  })
+
   // ---- Website (production) --------------------------------------------
   // Serves the built site; any other path gets index.html so the app can route it.
   app.get("*", (c) => {
