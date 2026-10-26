@@ -79,7 +79,7 @@ export default function Blog() {
           <p className="font-['Noto_Serif:Bold'] font-bold leading-[0] relative shrink-0 text-[64px] text-center" data-node-id="1:1586" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100', ...fontStyle(hero.titleFont) }}>
             <HighlightText text={hero.title} />
           </p>
-          <p className="font-['Anuphan:Regular'] font-normal leading-[1.3] min-w-full relative shrink-0 text-[32px] text-center w-[min-content]" data-node-id="1:1587" style={fontStyle(hero.descriptionFont)}>
+          <p className="font-['Anuphan:Regular'] font-normal leading-[1.3] min-w-full relative shrink-0 text-[20px] text-center w-[min-content]" data-node-id="1:1587" style={fontStyle(hero.descriptionFont)}>
             <Lines text={hero.description} />
           </p>
         </div>

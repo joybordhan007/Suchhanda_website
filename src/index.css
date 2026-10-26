@@ -195,9 +195,29 @@ button,
   white-space: nowrap;
 }
 
-.site-navbar a[aria-current="page"] {
-  color: #091e39;
+/* The page the visitor is on: gold, with a short gold line under it. */
+.site-navbar a[aria-current="page"],
+.site-navbar .site-service-navigation.is-current > button {
+  position: relative;
+  color: #c7994b;
   font-family: "Inter:Semi Bold", sans-serif;
+}
+
+.site-nav-links > a[aria-current="page"]:not(.site-contact-link)::after,
+.site-navbar .site-service-navigation.is-current > button::after {
+  position: absolute;
+  right: 0;
+  bottom: -8px;
+  left: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: #c7994b;
+  content: "";
+}
+
+.site-navbar .site-contact-link[aria-current="page"] {
+  background: #c7994b;
+  color: white;
 }
 
 .site-navbar .site-contact-link {
@@ -378,6 +398,64 @@ button,
   object-fit: contain;
 }
 
+
+/* "Trusted by Businesses Proven by Results": review cards in an endless sideways loop.
+   The track holds the cards twice and moves by half its width, so it loops seamlessly;
+   each card carries its own right padding so both halves are exactly equal. */
+/* Three cards share the content column (inside the page margins), 24px apart. */
+.reviews-marquee {
+  width: 100%;
+  overflow: hidden;
+  padding: 8px 0 20px;
+  container-type: inline-size;
+}
+
+.reviews-marquee-track {
+  display: flex;
+  width: max-content;
+  align-items: stretch;
+  animation: reviews-marquee var(--reviews-duration, 40s) linear infinite;
+}
+
+.reviews-marquee:hover .reviews-marquee-track,
+.reviews-marquee:focus-within .reviews-marquee-track {
+  animation-play-state: paused;
+}
+
+/* The gap is each card's right padding, so three cards and two gaps fill the row. */
+.reviews-marquee-item {
+  display: flex;
+  width: calc((100cqw - 48px) / 3 + 24px);
+  flex: none;
+  padding-right: 24px;
+}
+
+.reviews-marquee-item > .review-card {
+  min-width: 0;
+  flex: 1;
+}
+
+@keyframes reviews-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Without motion: a row that can be swiped sideways, with the scrollbar hidden. */
+@media (prefers-reduced-motion: reduce) {
+  .reviews-marquee {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .reviews-marquee::-webkit-scrollbar {
+    display: none;
+  }
+
+  .reviews-marquee-track {
+    animation: none;
+  }
+}
 
 .site-footer-flow {
   position: relative;
@@ -857,6 +935,22 @@ button,
 
 .reviews-grid {
   grid-template-columns: 1fr !important;
+}
+
+.reviews-marquee {
+  width: 100%;
+}
+
+.reviews-marquee-item {
+  width: 316px;
+}
+
+.reviews-list {
+  width: 100% !important;
+}
+
+.review-card blockquote {
+  font-size: 18px !important;
 }
 
 .review-card {
@@ -1439,6 +1533,18 @@ button,
   padding: 12px;
   font-size: 14px;
   text-align: left;
+}
+
+/* In the stacked menu the current page gets a soft gold row instead of a line. */
+.site-nav-links > a[aria-current="page"]:not(.site-contact-link),
+.site-navbar .site-service-navigation.is-current > button {
+  border-radius: 8px;
+  background: #fdf6e9;
+}
+
+.site-nav-links > a[aria-current="page"]:not(.site-contact-link)::after,
+.site-navbar .site-service-navigation.is-current > button::after {
+  display: none;
 }
 
 .site-nav-links > a:not(.site-contact-link) {

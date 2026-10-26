@@ -6,6 +6,7 @@ import Panel from "../components/Panel"
 import SectionHeader from "../components/SectionHeader"
 import TextField from "../components/TextField"
 import { newId, type SectionProps } from "../types"
+import MailPanel from "./MailPanel"
 import TrackingPanels from "./TrackingPanels"
 
 // Built-in icons exist for the platforms the site shipped with; others need an uploaded icon.
@@ -57,6 +58,7 @@ export default function SettingsSection({ content, onChange, commit, actions }: 
           />
         </div>
       </Panel>
+      <MailPanel />
       <Panel
         description="Shown as icons in the footer, in this order. Add as many as you like."
         title="Social links"

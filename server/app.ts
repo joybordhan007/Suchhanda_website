@@ -1,4 +1,4 @@
-import { randomBytes } from "node:crypto"
+import { createHash, randomBytes } from "node:crypto"
 import { createReadStream, existsSync, rmSync, statSync, writeFileSync } from "node:fs"
 import { extname, join, resolve, sep } from "node:path"
 import { Readable } from "node:stream"
@@ -18,6 +18,7 @@ import {
 } from "./auth.ts"
 import { config } from "./config.ts"
 import { db } from "./db.ts"
+import { mailSettings, publicMailStatus, saveMailSettings, sendContactEmail, sendTestEmail } from "./mail.ts"
 import { metaSettings, publicMetaStatus, saveMetaSettings, sendMetaLead } from "./meta.ts"
 import { recordPageView, statsFor } from "./stats.ts"
 
@@ -114,7 +115,12 @@ function sendFile(c: Context, file: string, headers: Record<string, string> = {}
 
 const str = (value: unknown, max: number) => (typeof value === "string" ? value.trim().slice(0, max) : "")
 
-const reviewColumns = "id, name, rating, text, image, created_at AS createdAt"
+// Forms carry a hidden checkbox that people never see; bots tick every box. (A hidden
+// text field was used before, but browsers and password managers sometimes autofill
+// those, which silently dropped real messages.)
+const caughtByTrap = (body: Record<string, unknown>) => body.confirm_robot !== undefined && body.confirm_robot !== "" && body.confirm_robot !== false
+
+const reviewColumns = "id, name, company, role, rating, text, image, created_at AS createdAt"
 
 function reviewCounts() {
   const rows = db.prepare("SELECT status, COUNT(*) AS count FROM reviews GROUP BY status").all() as { status: string; count: number }[]
@@ -185,7 +191,18 @@ export function createApp() {
 
   // ---- Content ----------------------------------------------------------
   // For checking a deployment: which host this app saw and how it treats it.
-  app.get("/api/health", (c) => c.json({ ok: true, host: requestHost(c), admin: isAdminHost(c), node: process.version }))
+  app.get("/api/health", (c) => {
+    const content = db.prepare("SELECT updated_at AS updatedAt FROM content WHERE id = 1").get() as { updatedAt: string } | undefined
+    return c.json({
+      ok: true,
+      host: requestHost(c),
+      admin: isAdminHost(c),
+      node: process.version,
+      // Same on both apps when they share one data folder (the website and dashboard must).
+      dataId: createHash("sha256").update(config.dataDir).digest("hex").slice(0, 8),
+      contentSavedAt: content?.updatedAt ?? null,
+    })
+  })
 
   app.get("/api/content", (c) => {
     const row = db.prepare("SELECT json FROM content WHERE id = 1").get() as { json: string } | undefined
@@ -306,8 +323,10 @@ export function createApp() {
       return c.json({ error: "Too many messages. Please try again later." }, 429)
     }
     const body = (await c.req.json().catch(() => ({}))) as Record<string, unknown>
-    // Hidden field that people never fill in; bots usually do.
-    if (str(body.website, 200)) return c.json({ ok: true })
+    if (caughtByTrap(body)) {
+      console.warn("Contact message dropped: the hidden bot checkbox was ticked.")
+      return c.json({ ok: true })
+    }
     const message = {
       firstName: str(body.firstName, 100),
       lastName: str(body.lastName, 100),
@@ -336,6 +355,8 @@ export function createApp() {
       message.message,
       new Date().toISOString(),
     )
+    // Email copy for the owner; failures are recorded, never lost (the message is saved).
+    void sendContactEmail(message, requestHost(c))
     // Server-side copy of the Pixel "Lead" (does nothing until the Conversions API is set up).
     void sendMetaLead({
       eventId: str(body.eventId, 64),
@@ -416,9 +437,10 @@ export function createApp() {
     if (reviewLimiter.isLimited(ip)) return c.json({ error: "Too many reviews. Please try again later." }, 429)
     const body = await c.req.parseBody().catch(() => null)
     if (!body) return c.json({ error: "The review could not be read. Please try again." }, 400)
-    // Hidden field that people never fill in; bots usually do.
-    if (str(body.website, 200)) return c.json({ ok: true }, 201)
+    if (caughtByTrap(body)) return c.json({ ok: true }, 201)
     const name = str(body.name, 80)
+    const company = str(body.company, 80)
+    const role = str(body.role, 80)
     const text = str(body.text, 1000)
     const rating = Math.round(Number(body.rating))
     if (!name) return c.json({ error: "Please enter your name." }, 400)
@@ -437,8 +459,10 @@ export function createApp() {
       image = `/uploads/${fileName}`
     }
     reviewLimiter.hit(ip)
-    db.prepare("INSERT INTO reviews (name, rating, text, image, status, created_at) VALUES (?, ?, ?, ?, 'pending', ?)").run(
+    db.prepare("INSERT INTO reviews (name, company, role, rating, text, image, status, created_at) VALUES (?, ?, ?, ?, ?, ?, 'pending', ?)").run(
       name,
+      company,
+      role,
       rating,
       text,
       image,
@@ -473,6 +497,30 @@ export function createApp() {
 
   // ---- Tracking (private part) -----------------------------------------
   // The Conversions API token stays on the server; the dashboard only learns whether it is set.
+  // ---- Contact form emails ---------------------------------------------
+  app.get("/api/mail", requireAdmin, (c) => c.json({ mail: publicMailStatus() }))
+
+  app.put("/api/mail", requireAdmin, async (c) => {
+    const body = (await c.req.json().catch(() => ({}))) as Record<string, unknown>
+    const current = mailSettings()
+    const to = str(body.to, 500)
+    const bad = to.split(/[,;\s]+/).filter(Boolean).find((address) => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address))
+    if (bad) return c.json({ error: `“${bad}” is not an email address.` }, 400)
+    const smtpHost = str(body.smtpHost, 200)
+    if (smtpHost && !/^[a-z0-9.-]+$/i.test(smtpHost)) return c.json({ error: "The SMTP server should look like mail.example.com." }, 400)
+    const smtpPort = Math.round(Number(body.smtpPort)) || 465
+    if (smtpPort < 1 || smtpPort > 65535) return c.json({ error: "The SMTP port should be a number such as 465 or 587." }, 400)
+    // smtpPass: a string replaces it, null removes it, missing keeps it.
+    const smtpPass = body.smtpPass === null ? "" : typeof body.smtpPass === "string" ? body.smtpPass.slice(0, 500) : current.smtpPass
+    saveMailSettings({ to, smtpHost, smtpPort, smtpUser: str(body.smtpUser, 200), smtpPass })
+    return c.json({ mail: publicMailStatus() })
+  })
+
+  app.post("/api/mail/test", requireAdmin, async (c) => {
+    await sendTestEmail(requestHost(c))
+    return c.json({ mail: publicMailStatus() })
+  })
+
   app.get("/api/tracking", requireAdmin, (c) => c.json({ meta: publicMetaStatus() }))
 
   app.put("/api/tracking/meta", requireAdmin, async (c) => {

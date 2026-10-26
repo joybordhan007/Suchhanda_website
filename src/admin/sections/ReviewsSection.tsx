@@ -76,6 +76,7 @@ function ReviewDetail({
           <div>
             <p className="text-[13px] text-[var(--admin-muted)]">{formatId("REV", review.id)}</p>
             <h1 className="text-[26px] font-semibold tracking-[-0.02em] text-[var(--admin-text)]">{review.name}</h1>
+            {(review.role || review.company) && <p className="text-[14px] text-[var(--admin-text-2)]">{[review.role, review.company].filter(Boolean).join(" · ")}</p>}
           </div>
         </div>
         <div className="flex flex-wrap gap-[8px]">
@@ -252,6 +253,9 @@ export default function ReviewsSection({ itemId, open, onPendingCount }: Reviews
                 <Avatar review={review} />
                 <span className="min-w-0">
                   <span className="block truncate font-medium text-[var(--admin-text)]">{review.name}</span>
+                  {(review.role || review.company) && (
+                    <span className="block truncate text-[12px] text-[var(--admin-muted)]">{[review.role, review.company].filter(Boolean).join(" · ")}</span>
+                  )}
                   <Stars rating={review.rating} />
                 </span>
               </span>

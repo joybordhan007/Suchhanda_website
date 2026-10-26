@@ -109,6 +109,7 @@ const REVEAL_SELECTOR = [
   ".blog-card",
   ".achievement-card",
   ".home-work-card",
+  ".reviews-marquee",
   ".review-card",
   ".reviews-add",
   ".trusted-logo-window",
@@ -483,7 +484,7 @@ function Site() {
             <Txt k="nav.home" />
           </a>
           <div
-            className={`site-service-navigation${isServiceMenuOpen ? " is-open" : ""}`}
+            className={`site-service-navigation${isServiceMenuOpen ? " is-open" : ""}${path.startsWith("/service") ? " is-current" : ""}`}
           >
             <button
               aria-expanded={isServiceMenuOpen}
@@ -543,6 +544,7 @@ function Site() {
             <Txt k="nav.reviews" />
           </a>
           <a
+            aria-current={path === "/contact" ? "page" : undefined}
             className="site-contact-link"
             data-path="/contact"
             href={withBase("/contact")}

@@ -18,7 +18,9 @@ export default function ReviewModal({ onClose }: { onClose: () => void }) {
   const [text, setText] = useState("")
   const [photo, setPhoto] = useState<File | null>(null)
   const [preview, setPreview] = useState("")
-  const [website, setWebsite] = useState("")
+  const [company, setCompany] = useState("")
+  const [role, setRole] = useState("")
+  const [trap, setTrap] = useState(false)
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle")
   const [error, setError] = useState("")
   const fileInput = useRef<HTMLInputElement>(null)
@@ -55,7 +57,7 @@ export default function ReviewModal({ onClose }: { onClose: () => void }) {
     setStatus("sending")
     setError("")
     try {
-      await submitReview({ name: name.trim(), rating, text: text.trim(), photo, website })
+      await submitReview({ name: name.trim(), company: company.trim(), role: role.trim(), rating, text: text.trim(), photo, trap })
       setStatus("sent")
     } catch (submitError) {
       setStatus("idle")
@@ -148,8 +150,23 @@ export default function ReviewModal({ onClose }: { onClose: () => void }) {
 
             <label className="flex flex-col gap-[6px]">
               <span className="text-[14px] font-semibold text-[#344054]">Name</span>
-              <input autoComplete="name" className={inputClass} maxLength={80} onChange={(event) => setName(event.target.value)} placeholder="Your name or business" value={name} />
+              <input autoComplete="name" className={inputClass} maxLength={80} onChange={(event) => setName(event.target.value)} placeholder="Your name" value={name} />
             </label>
+
+            <div className="grid gap-[16px] sm:grid-cols-2">
+              <label className="flex flex-col gap-[6px]">
+                <span className="text-[14px] font-semibold text-[#344054]">
+                  Company <span className="font-normal text-[#98a2b3]">(optional)</span>
+                </span>
+                <input autoComplete="organization" className={inputClass} maxLength={80} onChange={(event) => setCompany(event.target.value)} placeholder="Company name" value={company} />
+              </label>
+              <label className="flex flex-col gap-[6px]">
+                <span className="text-[14px] font-semibold text-[#344054]">
+                  Your role <span className="font-normal text-[#98a2b3]">(optional)</span>
+                </span>
+                <input autoComplete="organization-title" className={inputClass} maxLength={80} onChange={(event) => setRole(event.target.value)} placeholder="e.g. Founder, CTO" value={role} />
+              </label>
+            </div>
 
             <fieldset className="flex flex-col gap-[6px]">
               <legend className="mb-[6px] text-[14px] font-semibold text-[#344054]">Rating</legend>
@@ -189,8 +206,8 @@ export default function ReviewModal({ onClose }: { onClose: () => void }) {
               />
             </label>
 
-            {/* Hidden field that people never fill in; bots usually do. */}
-            <input aria-hidden="true" autoComplete="off" className="hidden" name="website" onChange={(event) => setWebsite(event.target.value)} tabIndex={-1} value={website} />
+            {/* Hidden checkbox that people never see; bots tick every box. */}
+            <input aria-hidden="true" checked={trap} className="hidden" name="confirm_robot" onChange={(event) => setTrap(event.target.checked)} tabIndex={-1} type="checkbox" />
 
             {error && (
               <p className="rounded-[12px] bg-[#fef3f2] px-[14px] py-[10px] text-[14px] text-[#b42318]" role="alert">

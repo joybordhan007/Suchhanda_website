@@ -148,7 +148,29 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS reviews_status ON reviews(status);
 `)
 
+const reviewColumns = (db.prepare("PRAGMA table_info(reviews)").all() as { name: string }[]).map((column) => column.name)
+if (!reviewColumns.includes("company")) db.exec("ALTER TABLE reviews ADD COLUMN company TEXT NOT NULL DEFAULT ''")
+if (!reviewColumns.includes("role")) db.exec("ALTER TABLE reviews ADD COLUMN role TEXT NOT NULL DEFAULT ''")
+
 // Columns added after the first release; existing databases get them on start-up.
 const adminColumns = (db.prepare("PRAGMA table_info(admins)").all() as { name: string }[]).map((column) => column.name)
 if (!adminColumns.includes("name")) db.exec("ALTER TABLE admins ADD COLUMN name TEXT NOT NULL DEFAULT ''")
 if (!adminColumns.includes("avatar")) db.exec("ALTER TABLE admins ADD COLUMN avatar TEXT NOT NULL DEFAULT ''")
+
+// Private server settings (Meta token, email setup…), stored as JSON by key.
+export function readSetting<T>(key: string, fallback: T): T {
+  const row = db.prepare("SELECT value FROM settings WHERE key = ?").get(key) as { value: string } | undefined
+  if (!row) return fallback
+  try {
+    return { ...fallback, ...JSON.parse(row.value) } as T
+  } catch {
+    return fallback
+  }
+}
+
+export function writeSetting(key: string, value: unknown) {
+  db.prepare("INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").run(
+    key,
+    JSON.stringify(value),
+  )
+}

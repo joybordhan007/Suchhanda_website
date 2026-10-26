@@ -29,7 +29,7 @@ export default function AboutMe() {
                 <HighlightText text={hero.title} />
               </p>
             </div>
-            <div className="font-['Noto_Sans:Regular'] font-normal relative shrink-0 text-[24px] w-full" data-node-id="1:1408" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100', ...fontStyle(hero.descriptionFont) }}>
+            <div className="font-['Noto_Sans:Regular'] font-normal relative shrink-0 text-[20px] w-full" data-node-id="1:1408" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100', ...fontStyle(hero.descriptionFont) }}>
               <p className="leading-[1.4]">
                 <Lines text={hero.description} />
               </p>

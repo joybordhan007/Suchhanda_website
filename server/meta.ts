@@ -2,29 +2,12 @@
 // counted even when ad blockers stop the browser Pixel. The browser and server events
 // share an event ID, which Meta uses to count them once.
 import { createHash } from "node:crypto"
-import { db } from "./db.ts"
+import { db, readSetting, writeSetting } from "./db.ts"
 
 const GRAPH_VERSION = process.env.META_GRAPH_VERSION ?? "v23.0"
 
 type PrivateMetaSettings = { accessToken: string; testEventCode: string }
 export type MetaResult = { ok: boolean; at: string; message: string }
-
-function readSetting<T>(key: string, fallback: T): T {
-  const row = db.prepare("SELECT value FROM settings WHERE key = ?").get(key) as { value: string } | undefined
-  if (!row) return fallback
-  try {
-    return { ...fallback, ...JSON.parse(row.value) } as T
-  } catch {
-    return fallback
-  }
-}
-
-function writeSetting(key: string, value: unknown) {
-  db.prepare("INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").run(
-    key,
-    JSON.stringify(value),
-  )
-}
 
 export const metaSettings = () => readSetting<PrivateMetaSettings>("meta_capi", { accessToken: "", testEventCode: "" })
 

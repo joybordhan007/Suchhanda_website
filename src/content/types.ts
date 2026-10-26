@@ -108,6 +108,9 @@ export type ClientLogo = {
 export type Review = {
   id: number
   name: string
+  // Optional: shown on the card above the review, and under the name.
+  company: string
+  role: string
   rating: number
   text: string
   // Uploaded photo, or "" to show an avatar with the first letter of the name.

@@ -237,13 +237,9 @@ export default function ContactMe() {
           onSubmit={handleSubmit}
         >
           {/* Hidden from people; spam bots fill it in and their message is dropped. */}
-          <input
-            aria-hidden="true"
-            autoComplete="off"
-            className="contact-form-trap"
-            name="website"
-            tabIndex={-1}
-          />
+          {/* Hidden checkbox that people never see; bots tick every box. Browsers never
+              autofill checkboxes, unlike the text field used before. */}
+          <input aria-hidden="true" className="contact-form-trap" name="confirm_robot" tabIndex={-1} type="checkbox" value="1" />
           <div
             className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full"
             data-node-id="1:2132"

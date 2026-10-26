@@ -30,7 +30,7 @@ export default function Work() {
                 <HighlightText text={hero.title} />
               </p>
             </div>
-            <p className="font-['Noto_Sans:Regular'] font-normal leading-[1.4] relative shrink-0 text-[24px] w-full" data-node-id="1:1177" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100', ...fontStyle(hero.descriptionFont) }}>
+            <p className="font-['Noto_Sans:Regular'] font-normal leading-[1.4] relative shrink-0 text-[20px] w-full" data-node-id="1:1177" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100', ...fontStyle(hero.descriptionFont) }}>
               <Lines text={hero.description} />
             </p>
           </div>

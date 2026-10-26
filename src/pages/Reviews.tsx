@@ -26,7 +26,7 @@ export default function Reviews() {
           <p className="font-['Noto_Serif:Bold'] font-bold leading-[0] relative shrink-0 text-[64px] text-center" data-node-id="1:1586" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100', ...fontStyle(hero.titleFont) }}>
             <HighlightText text={hero.title} />
           </p>
-          <p className="font-['Anuphan:Regular'] font-normal leading-[1.3] relative shrink-0 text-[32px] text-center w-full" data-node-id="1:1587" style={fontStyle(hero.descriptionFont)}>
+          <p className="font-['Anuphan:Regular'] font-normal leading-[1.3] relative shrink-0 text-[20px] text-center w-full" data-node-id="1:1587" style={fontStyle(hero.descriptionFont)}>
             <Lines text={hero.description} />
           </p>
           <div className="flex flex-wrap items-center justify-center gap-[24px]">
@@ -54,7 +54,7 @@ export default function Reviews() {
           </div>
         </div>
       </div>
-      <div className="mx-auto flex flex-col gap-[24px] items-start w-[1280px]" data-name="Frame">
+      <div className="reviews-list mx-auto flex flex-col gap-[24px] items-start w-[1280px]" data-name="Frame">
         {loaded && reviews.length === 0 && (
           <p className="w-full rounded-[24px] border border-dashed border-[#d9d9d9] px-[32px] py-[56px] text-center font-['Inter:Regular'] text-[18px] text-[#3e3e3e]">
             <Txt className="leading-[1.5]" k="reviews.empty" />

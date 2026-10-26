@@ -43,6 +43,8 @@ writeFileSync(
         "@hono/node-server": project.dependencies["@hono/node-server"],
         // SQLite for Node.js versions without built-in node:sqlite (cPanel offers Node 20).
         "node-sqlite3-wasm": project.dependencies["node-sqlite3-wasm"],
+        // Email copies of contact form messages.
+        nodemailer: project.dependencies.nodemailer,
       },
     },
     null,

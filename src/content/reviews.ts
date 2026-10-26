@@ -37,15 +37,17 @@ export function useApprovedReviews() {
   return current
 }
 
-export type NewReview = { name: string; rating: number; text: string; photo: File | null; website: string }
+export type NewReview = { name: string; company: string; role: string; rating: number; text: string; photo: File | null; trap: boolean }
 
 // Sends a visitor's review; it shows on the website once approved in the dashboard.
 export async function submitReview(review: NewReview) {
   const body = new FormData()
   body.append("name", review.name)
+  body.append("company", review.company)
+  body.append("role", review.role)
   body.append("rating", String(review.rating))
   body.append("text", review.text)
-  body.append("website", review.website)
+  if (review.trap) body.append("confirm_robot", "1")
   if (review.photo) body.append("photo", review.photo)
   await api("/reviews", { method: "POST", body })
 }
