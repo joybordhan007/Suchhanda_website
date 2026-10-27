@@ -96,7 +96,7 @@ export default function ContactMe() {
               className="absolute left-[-75px] size-[286px] top-[-54px]"
               data-node-id="1:2114"
             >
-              <img
+              <img decoding="async" loading="lazy"
                 alt=""
                 className="absolute block inset-0 max-w-none size-full"
                 src={imgEllipse123}
@@ -126,7 +126,7 @@ export default function ContactMe() {
               data-name="telephone1 1"
             >
               <div className="absolute inset-0 opacity-10 overflow-hidden pointer-events-none">
-                <img
+                <img decoding="async" loading="lazy"
                   alt=""
                   className="absolute h-[161.57%] left-[-42.97%] max-w-none top-[-0.01%] w-[195.38%]"
                   src={imgTelephone11}
@@ -137,7 +137,7 @@ export default function ContactMe() {
               className="absolute left-[251px] size-[138px] top-[584px]"
               data-node-id="1:2119"
             >
-              <img
+              <img decoding="async" loading="lazy"
                 alt=""
                 className="absolute block inset-0 max-w-none size-full"
                 src={imgEllipse121}
@@ -147,7 +147,7 @@ export default function ContactMe() {
               className="absolute left-[295px] size-[269px] top-[608px]"
               data-node-id="1:2120"
             >
-              <img
+              <img decoding="async" loading="lazy"
                 alt=""
                 className="absolute block inset-0 max-w-none size-full"
                 src={imgEllipse122}
@@ -168,7 +168,7 @@ export default function ContactMe() {
                   data-node-id="1:2123"
                   data-name="phone-call-01"
                 >
-                  <img
+                  <img decoding="async" loading="lazy"
                     alt=""
                     className="absolute block inset-0 max-w-none size-full"
                     src={imgPhoneCall01}
@@ -191,7 +191,7 @@ export default function ContactMe() {
                   data-node-id="1:2126"
                   data-name="mail-01"
                 >
-                  <img
+                  <img decoding="async" loading="lazy"
                     alt=""
                     className="absolute block inset-0 max-w-none size-full"
                     src={imgMail01}
@@ -214,7 +214,7 @@ export default function ContactMe() {
                   data-node-id="1:2129"
                   data-name="marker-pin-01"
                 >
-                  <img
+                  <img decoding="async" loading="lazy"
                     alt=""
                     className="absolute block inset-0 max-w-none size-full"
                     src={imgMarkerPin01}
@@ -459,7 +459,7 @@ export default function ContactMe() {
                     data-node-id="1:2160"
                     data-name="clock"
                   >
-                    <img
+                    <img decoding="async" loading="lazy"
                       alt=""
                       className="absolute block inset-0 max-w-none size-full"
                       src={imgClock}

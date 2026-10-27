@@ -137,7 +137,7 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
                   <div className="bg-white content-stretch drop-shadow-[0px_2px_2px_rgba(0,0,0,0.1)] flex flex-[1_0_0] flex-col gap-[16px] items-start min-w-px pb-[32px] pt-[24px] px-[24px] relative rounded-[8px]" key={item.id}>
                     <div className="service-badge bg-[#282828] content-stretch flex items-center p-[20px] relative rounded-[999px] shrink-0">
                       <div className="relative shrink-0 size-[32px]">
-                        {item.icon && <img alt="" className="absolute block inset-0 max-w-none size-full object-contain" src={mediaUrl(item.icon)} />}
+                        {item.icon && <img decoding="async" loading="lazy" alt="" className="absolute block inset-0 max-w-none size-full object-contain" src={mediaUrl(item.icon)} />}
                       </div>
                     </div>
                     <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start justify-center leading-[0] not-italic relative shrink-0 w-full">
@@ -163,7 +163,7 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
       <div className="mx-auto mt-[120px] content-stretch flex gap-[24px] items-center relative w-[1280px]" data-node-id="1:1093" data-name="Frame">
         {detail.processImage && (
           <div className="h-[380px] relative shrink-0 w-[502px] overflow-hidden">
-            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={mediaUrl(detail.processImage)} />
+            <img decoding="async" loading="lazy" alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={mediaUrl(detail.processImage)} />
           </div>
         )}
         <div className="content-stretch flex flex-[1_0_0] flex-col gap-[16px] items-start min-w-px relative">
@@ -186,7 +186,7 @@ export default function ServiceDetails({ slug }: { slug?: string }) {
           <div className="border border-solid border-white content-stretch flex gap-[4px] items-center justify-center p-[16px] relative rounded-[999px] shrink-0" data-name="CTA" data-path="/contact">
             <p className="[word-break:break-word] font-['Anuphan:Medium'] font-medium leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[0.64px] uppercase whitespace-nowrap"><Txt k="service.button" /></p>
             <div className="relative shrink-0 size-[20px]" data-name="arrow-forward">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={asset("b3d9b.svg")} />
+              <img decoding="async" loading="lazy" alt="" className="absolute block inset-0 max-w-none size-full" src={asset("b3d9b.svg")} />
             </div>
           </div>
         </div>

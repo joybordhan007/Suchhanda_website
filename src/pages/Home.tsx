@@ -80,7 +80,7 @@ export default function Home() {
         <div className="absolute contents left-[1160px] top-[190px]" data-node-id="1:360" data-name="Group">
           <div className="absolute border-20 border-[#c7994b] border-solid h-[500px] left-[1200px] top-[230px] w-[400px]" data-node-id="1:361" />
           <div className="absolute h-[500px] left-[1160px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] top-[190px] w-[400px]" data-node-id="1:362">
-            <img alt={content.settings.ownerName} className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={mediaUrl(content.images.homeHero)} />
+            <img alt={content.settings.ownerName} fetchPriority="high" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={mediaUrl(content.images.homeHero)} />
           </div>
         </div>
       </div>
@@ -115,7 +115,7 @@ export default function Home() {
                 href={withBase(`/work#work-${item.id}`)}
                 key={item.id}
               >
-                <img alt="" src={mediaUrl(item.image)} />
+                <img decoding="async" loading="lazy" alt="" src={mediaUrl(item.image)} />
               </a>
             ))}
           </div>
@@ -144,7 +144,7 @@ export default function Home() {
           <Reviews />
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[3355px] w-[1280px]" data-node-id="1:473" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[71px] top-[3446px] w-[1280px]" data-node-id="1:473" data-name="Frame">
         <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-center leading-[0] not-italic relative shrink-0 text-center w-full" data-node-id="1:474" data-name="Frame">
           <div className="flex flex-col font-['Inter:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[40px] text-white w-[min-content]" data-node-id="1:475">
             <p>
@@ -160,11 +160,11 @@ export default function Home() {
         <div className="border border-solid border-white content-stretch flex gap-[4px] items-center justify-center p-[16px] relative rounded-[999px] shrink-0" data-name="CTA" data-path="/contact">
           <p className="[word-break:break-word] font-['Anuphan:Medium'] font-medium leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[0.64px] uppercase whitespace-nowrap" data-node-id="1:478"><Txt k="sections.ctaButton" /></p>
           <div className="relative shrink-0 size-[20px]" data-node-id="1:479" data-name="arrow-forward">
-            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForward1} />
+            <img decoding="async" loading="lazy" alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForward1} />
           </div>
         </div>
       </div>
-      <Footer top={3822} />
+      <Footer top={3913} />
     </div>
   )
 }

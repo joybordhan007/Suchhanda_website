@@ -21,7 +21,7 @@ function BlogCard({ post }: { post: BlogPost }) {
       href={withBase(path)}
     >
       <div className="h-[300px] relative rounded-tl-[8px] rounded-tr-[8px] shrink-0 w-[504px] overflow-hidden" data-name="Image">
-        {post.coverImage && <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-tl-[8px] rounded-tr-[8px] size-full" src={mediaUrl(post.coverImage)} />}
+        {post.coverImage && <img decoding="async" loading="lazy" alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-tl-[8px] rounded-tr-[8px] size-full" src={mediaUrl(post.coverImage)} />}
       </div>
       <div className="content-stretch flex flex-col items-start pb-[24px] px-[24px] relative shrink-0 w-full" data-name="Content">
         <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full">
@@ -57,7 +57,7 @@ function BlogCard({ post }: { post: BlogPost }) {
               </p>
             </div>
             <div className="relative shrink-0 size-[20px]" data-name="arrow-forward">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForward} />
+              <img decoding="async" loading="lazy" alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForward} />
             </div>
           </div>
         </div>

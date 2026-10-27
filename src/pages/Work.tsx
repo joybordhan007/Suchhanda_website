@@ -63,7 +63,7 @@ export default function Work() {
                 key={item.id}
               >
                 <div className="h-[450px] relative rounded-[24px] shrink-0 w-full overflow-hidden">
-                  {item.image && <img alt={item.title} className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[24px] size-full" src={mediaUrl(item.image)} />}
+                  {item.image && <img decoding="async" loading="lazy" alt={item.title} className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[24px] size-full" src={mediaUrl(item.image)} />}
                 </div>
                 <div className="content-stretch flex flex-col items-start pb-[32px] px-[32px] relative shrink-0 w-full" data-name="Frame">
                   <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-start leading-[0] relative shrink-0 w-full" data-name="Frame">

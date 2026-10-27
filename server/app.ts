@@ -1,5 +1,5 @@
 import { createHash, randomBytes } from "node:crypto"
-import { createReadStream, existsSync, rmSync, statSync, writeFileSync } from "node:fs"
+import { createReadStream, existsSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs"
 import { extname, join, resolve, sep } from "node:path"
 import { Readable } from "node:stream"
 import { getConnInfo } from "@hono/node-server/conninfo"
@@ -111,6 +111,33 @@ function sendFile(c: Context, file: string, headers: Record<string, string> = {}
       ...common,
     },
   })
+}
+
+// The built index.html, re-read only when a new build replaces it.
+let indexCache: { mtime: number; html: string } | null = null
+
+// JSON safe to place inside a <script> tag.
+const inlineJson = (json: string) =>
+  json
+    .replace(/</g, "\\u003c")
+    .split(String.fromCharCode(0x2028))
+    .join("\\u2028")
+    .split(String.fromCharCode(0x2029))
+    .join("\\u2029")
+
+// index.html with the saved content and approved reviews already inside, so the first
+// screen needs no further request (src/content/store.ts and reviews.ts pick them up).
+function pageWithContent(indexFile: string) {
+  const mtime = statSync(indexFile).mtimeMs
+  if (indexCache?.mtime !== mtime) indexCache = { mtime, html: readFileSync(indexFile, "utf8") }
+  const content = db.prepare("SELECT json FROM content WHERE id = 1").get() as { json: string } | undefined
+  const reviews = db
+    .prepare(`SELECT ${reviewColumns} FROM reviews WHERE status = 'approved' ORDER BY COALESCE(reviewed_at, created_at) DESC, id DESC LIMIT 500`)
+    .all()
+  const data =
+    `<link rel="preconnect" href="https://static.figma.com" crossorigin>` +
+    `<script>window.__SITE_CONTENT__=${inlineJson(content?.json ?? "null")};window.__SITE_REVIEWS__=${inlineJson(JSON.stringify(reviews))}</script>`
+  return indexCache.html.replace("</head>", `${data}</head>`)
 }
 
 const str = (value: unknown, max: number) => (typeof value === "string" ? value.trim().slice(0, max) : "")
@@ -592,9 +619,16 @@ export function createApp() {
     }
     if (file) {
       const hashed = c.req.path.startsWith("/assets/index-") || /-[A-Za-z0-9_-]{8}\.(js|css)$/.test(file)
-      return sendFile(c, file, { "Cache-Control": hashed ? "public, max-age=31536000, immutable" : "public, max-age=3600" })
+      const cache = hashed ? "public, max-age=31536000, immutable" : "public, max-age=604800, stale-while-revalidate=86400"
+      const photo = /\.(png|jpe?g)$/i.test(file)
+      // Release builds carry a smaller WebP copy beside each PNG/JPG ("x.png.webp"); browsers
+      // that accept WebP get it at the same address, so saved image links never change.
+      if (photo && c.req.header("accept")?.includes("image/webp") && existsSync(`${file}.webp`)) {
+        return sendFile(c, `${file}.webp`, { "Cache-Control": cache, Vary: "Accept" })
+      }
+      return sendFile(c, file, { "Cache-Control": cache, ...(photo ? { Vary: "Accept" } : {}) })
     }
-    return sendFile(c, indexFile, { "Cache-Control": "no-cache" })
+    return c.html(pageWithContent(indexFile), 200, { "Cache-Control": "no-cache" })
   })
 
   return app

@@ -21,7 +21,7 @@ export default function ServiceCard({ title, description, icon, path, actionLabe
       data-path={path}
     >
       <div className="service-card-icon relative shrink-0 h-[80px]">
-        {icon && <img alt="" className="block h-full w-auto max-w-[160px] object-contain" src={mediaUrl(icon)} />}
+        {icon && <img decoding="async" loading="lazy" alt="" className="block h-full w-auto max-w-[160px] object-contain" src={mediaUrl(icon)} />}
       </div>
       <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full">
         <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-full">
@@ -41,7 +41,7 @@ export default function ServiceCard({ title, description, icon, path, actionLabe
             <p className="leading-[1.2]">{actionLabel}</p>
           </div>
           <div className="relative shrink-0 size-[24px]" data-name="arrow-forward">
-            <img alt="" className="absolute block inset-0 max-w-none size-full" src={asset("16a89.svg")} />
+            <img decoding="async" loading="lazy" alt="" className="absolute block inset-0 max-w-none size-full" src={asset("16a89.svg")} />
           </div>
         </div>
       </div>

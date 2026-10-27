@@ -1,4 +1,5 @@
 import { withBase } from "../paths"
+import { shrinkImage } from "./shrinkImage"
 
 export class ApiError extends Error {
   status: number
@@ -26,9 +27,10 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   return data
 }
 
+// Dashboard uploads: large photos are scaled to at most 2400px and saved as WebP first.
 export async function uploadImage(file: File) {
   const body = new FormData()
-  body.append("file", file)
+  body.append("file", await shrinkImage(file, 2400))
   const { url } = await api<{ url: string }>("/uploads", { method: "POST", body })
   return url
 }

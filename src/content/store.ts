@@ -83,7 +83,11 @@ function withDefaults(saved: Partial<SiteContent> | null): SiteContent {
 
 type State = { content: SiteContent; ready: boolean }
 
-let state: State = { content: defaultContent, ready: false }
+// The server puts the saved content into the page (server/app.ts, pageWithContent), so
+// the first screen renders without waiting for a request.
+const embedded = (window as { __SITE_CONTENT__?: Partial<SiteContent> | null }).__SITE_CONTENT__
+
+let state: State = embedded === undefined ? { content: defaultContent, ready: false } : { content: withDefaults(embedded), ready: true }
 const listeners = new Set<() => void>()
 
 function setState(next: State) {
@@ -96,7 +100,7 @@ function subscribe(listener: () => void) {
   return () => listeners.delete(listener)
 }
 
-let loading: Promise<void> | null = null
+let loading: Promise<void> | null = embedded === undefined ? null : Promise.resolve()
 
 // Loads the saved content once. If the API is unreachable the site keeps its built-in content.
 export function loadContent() {

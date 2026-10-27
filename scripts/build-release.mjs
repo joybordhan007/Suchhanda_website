@@ -1,7 +1,7 @@
 // Builds release/: everything a Node.js host (cPanel, VPS) needs to run the website and
 // API, as plain JavaScript. Usage: pnpm build:release
 import { execSync } from "node:child_process"
-import { cpSync, existsSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { cpSync, existsSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 
 const root = fileURLToPath(new URL("..", import.meta.url))
@@ -94,6 +94,23 @@ try {
 }
 `,
 )
+
+// Smaller WebP copies of the site images ("x.png.webp"); the server sends them to browsers
+// that accept WebP, at the same address. Kept only when clearly smaller than the original.
+console.log("Making WebP copies of the images…")
+const { default: sharp } = await import("sharp")
+let saved = 0
+for (const name of readdirSync(`${release}/dist/assets`)) {
+  if (!/\.(png|jpe?g)$/i.test(name)) continue
+  const file = `${release}/dist/assets/${name}`
+  const webp = await sharp(file).webp({ quality: 82, effort: 5 }).toBuffer()
+  const size = statSync(file).size
+  if (webp.length < size * 0.9) {
+    writeFileSync(`${file}.webp`, webp)
+    saved += size - webp.length
+  }
+}
+console.log(`  ${(saved / 1024 / 1024).toFixed(1)} MB smaller for browsers that support WebP`)
 
 cpSync(`${root}DEPLOY-CPANEL.md`, `${release}/DEPLOY-CPANEL.md`)
 

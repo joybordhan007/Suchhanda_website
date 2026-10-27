@@ -29,7 +29,7 @@ export default function CtaBanner({ className = "", nodeId }: { className?: stri
       >
         <p className="[word-break:break-word] font-['Anuphan:Medium'] font-medium leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[0.64px] uppercase whitespace-nowrap"><Txt k="sections.ctaButton" /></p>
         <div className="relative shrink-0 size-[20px]" data-name="arrow-forward">
-          <img alt="" className="absolute block inset-0 max-w-none size-full" src={asset("b3d9b.svg")} />
+          <img decoding="async" loading="lazy" alt="" className="absolute block inset-0 max-w-none size-full" src={asset("b3d9b.svg")} />
         </div>
       </div>
     </div>

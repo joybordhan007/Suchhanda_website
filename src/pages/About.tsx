@@ -66,14 +66,14 @@ export default function AboutMe() {
         <div className="border border-solid border-white content-stretch flex gap-[4px] items-center justify-center p-[16px] relative rounded-[999px] shrink-0" data-name="CTA" data-path="/contact">
           <p className="[word-break:break-word] font-['Anuphan:Medium'] font-medium leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[0.64px] uppercase whitespace-nowrap" data-node-id="1:1432"><Txt k="sections.ctaButton" /></p>
           <div className="relative shrink-0 size-[20px]" data-node-id="1:1433" data-name="arrow-forward">
-            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForward} />
+            <img decoding="async" loading="lazy" alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForward} />
           </div>
         </div>
       </div>
       <Footer top={3369} />
       <div className="-translate-x-1/2 absolute content-stretch flex gap-[50px] items-center left-1/2 top-[984px] w-[1280px]" data-node-id="1:1516" data-name="Frame">
         <div className="h-[698px] relative rounded-[16px] shadow-[0px_2px_8px_0px_rgba(0,0,0,0.1)] shrink-0 w-[600px]" data-node-id="1:1517">
-          <img alt={settings.ownerName} className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[16px] size-full" src={mediaUrl(images.aboutPortrait)} />
+          <img decoding="async" loading="lazy" alt={settings.ownerName} className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[16px] size-full" src={mediaUrl(images.aboutPortrait)} />
         </div>
         <div className="flex flex-row items-center self-stretch" data-node-id="1:1518">
           <div className="bg-white content-stretch drop-shadow-[0px_2px_4px_rgba(0,0,0,0.1)] flex flex-col gap-[24px] h-full items-start justify-center px-[40px] py-[32px] relative rounded-[16px] shrink-0 w-[630px]" data-name="Frame">
@@ -89,7 +89,7 @@ export default function AboutMe() {
               </div>
             ))}
             <div className="absolute inset-[12.75%_24.75%]" data-node-id="1:1522">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup4} />
+              <img decoding="async" loading="lazy" alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup4} />
             </div>
           </div>
         </div>
@@ -102,7 +102,7 @@ export default function AboutMe() {
         </div>
         <div className="featured-row content-stretch flex gap-[24px] items-center justify-center relative shrink-0 w-full" data-node-id="1:1531" data-name="Frame">
           {about.featured.map((item) => {
-            const image = <img alt={item.name} className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[2px] size-full" src={mediaUrl(item.image)} />
+            const image = <img decoding="async" loading="lazy" alt={item.name} className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[2px] size-full" src={mediaUrl(item.image)} />
             const box = "featured-item aspect-[765/677] flex-[1_0_0] max-w-[411px] min-w-px relative rounded-[2px] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.1)]"
             return item.url ? (
               <a
@@ -131,13 +131,13 @@ export default function AboutMe() {
         </div>
         <div className="content-stretch flex gap-[24px] items-center relative shrink-0 w-full" data-node-id="1:1537" data-name="Frame">
           <div className="aspect-[1024/791] flex-[1_0_0] min-w-px relative rounded-[2px] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.1)]" data-node-id="1:1538" data-name="image 4">
-            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[2px] size-full" src={imgImage4} />
+            <img decoding="async" loading="lazy" alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[2px] size-full" src={imgImage4} />
           </div>
           <div className="aspect-[1600/1236] flex-[1_0_0] min-w-px relative rounded-[2px] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.1)]" data-node-id="1:1539" data-name="image 5">
-            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[2px] size-full" src={imgImage5} />
+            <img decoding="async" loading="lazy" alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[2px] size-full" src={imgImage5} />
           </div>
           <div className="aspect-[1024/790] flex-[1_0_0] min-w-px relative rounded-[2px] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.1)]" data-node-id="1:1540" data-name="image 6">
-            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[2px] size-full" src={imgImage6} />
+            <img decoding="async" loading="lazy" alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[2px] size-full" src={imgImage6} />
           </div>
         </div>
       </div>

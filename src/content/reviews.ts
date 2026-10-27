@@ -1,11 +1,15 @@
 import { useEffect, useSyncExternalStore } from "react"
 import { api } from "./api"
+import { shrinkImage } from "./shrinkImage"
 import type { Review } from "./types"
 
 // Approved reviews from the server, loaded once and shared by every page that shows them.
 type State = { reviews: Review[]; loaded: boolean }
 
-let state: State = { reviews: [], loaded: false }
+// Approved reviews the server put into the page (server/app.ts, pageWithContent).
+const embedded = (window as { __SITE_REVIEWS__?: Review[] }).__SITE_REVIEWS__
+
+let state: State = Array.isArray(embedded) ? { reviews: embedded, loaded: true } : { reviews: [], loaded: false }
 let loading: Promise<void> | null = null
 const listeners = new Set<() => void>()
 
@@ -48,6 +52,7 @@ export async function submitReview(review: NewReview) {
   body.append("rating", String(review.rating))
   body.append("text", review.text)
   if (review.trap) body.append("confirm_robot", "1")
-  if (review.photo) body.append("photo", review.photo)
+  // Shown at most 50px wide, so a small copy is plenty.
+  if (review.photo) body.append("photo", await shrinkImage(review.photo, 400))
   await api("/reviews", { method: "POST", body })
 }

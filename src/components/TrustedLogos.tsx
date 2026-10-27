@@ -16,7 +16,7 @@ export default function TrustedLogos({ className = "" }: { className?: string })
           >
             {clientLogos.map((logo) => (
               <div className="trusted-logo" key={logo.id}>
-                <img alt={copy === 0 ? logo.name : ""} src={mediaUrl(logo.image)} />
+                <img decoding="async" loading="lazy" alt={copy === 0 ? logo.name : ""} src={mediaUrl(logo.image)} />
               </div>
             ))}
           </div>

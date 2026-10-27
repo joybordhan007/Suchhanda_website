@@ -66,7 +66,7 @@ export default function Footer({ top }: FooterProps) {
       <div className="site-footer-content">
         <div className="site-footer-brand">
           <div className="site-footer-logo">
-            <img
+            <img decoding="async" loading="lazy"
               alt="Suchhanda Mondol"
               className="h-full w-full object-contain object-left"
               src={asset("5d363.svg")}
@@ -89,7 +89,7 @@ export default function Footer({ top }: FooterProps) {
                 title={social.label}
               >
                 {social.icon ? (
-                  <img alt="" src={mediaUrl(social.icon)} />
+                  <img decoding="async" loading="lazy" alt="" src={mediaUrl(social.icon)} />
                 ) : (
                   <span aria-hidden="true" className="social-fallback-icon">
                     {social.label.trim().charAt(0).toUpperCase() || "?"}

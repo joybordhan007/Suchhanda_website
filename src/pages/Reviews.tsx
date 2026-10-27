@@ -63,7 +63,7 @@ export default function Reviews() {
         {rows.map((row, index) => (
           <div className="reviews-grid grid w-full grid-cols-3 items-stretch gap-[24px]" key={index}>
             {row.map((review) => (
-              <ReviewCard clamp={false} key={review.id} review={review} />
+              <ReviewCard key={review.id} review={review} />
             ))}
           </div>
         ))}

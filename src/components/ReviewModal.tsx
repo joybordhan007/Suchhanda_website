@@ -3,7 +3,7 @@ import { createPortal } from "react-dom"
 import { submitReview } from "../content/reviews"
 import Txt from "./Txt"
 
-const MAX_PHOTO_BYTES = 2 * 1024 * 1024
+const MAX_PHOTO_BYTES = 10 * 1024 * 1024
 const MAX_TEXT = 1000
 
 const inputClass =
@@ -44,7 +44,7 @@ export default function ReviewModal({ onClose }: { onClose: () => void }) {
     setError("")
     if (!file) return
     if (!/^image\/(jpeg|png|webp|gif)$/.test(file.type)) return setError("Please choose a JPG, PNG, WebP or GIF photo.")
-    if (file.size > MAX_PHOTO_BYTES) return setError("The photo must be 2 MB or smaller.")
+    if (file.size > MAX_PHOTO_BYTES) return setError("The photo must be 10 MB or smaller.")
     setPhoto(file)
     setPreview(URL.createObjectURL(file))
   }
@@ -130,7 +130,7 @@ export default function ReviewModal({ onClose }: { onClose: () => void }) {
                 <span className="text-[14px] font-semibold text-[#344054]">
                   Your photo <span className="font-normal text-[#98a2b3]">(optional)</span>
                 </span>
-                <span className="text-[13px] text-[#667085]">JPG, PNG or WebP, up to 2 MB. Without a photo, your initial is shown.</span>
+                <span className="text-[13px] text-[#667085]">JPG, PNG or WebP, up to 10 MB. Without a photo, your initial is shown.</span>
                 {photo && (
                   <button
                     className="self-start text-[13px] font-medium text-[#b42318] hover:underline"
